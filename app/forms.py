@@ -57,40 +57,40 @@ class MemberForm(forms.ModelForm):
         return data
 
 #Formulario cambio de directiva
-class CambioDirectivaForm(forms.ModelForm):
-    class Meta:
-        model = CambioDirectiva
-        fields = ['cantidad_miembros_recibidos', 'fondos_recibidos']
+# class CambioDirectivaForm(forms.ModelForm):
+#     class Meta:
+#         model = CambioDirectiva
+#         fields = ['cantidad_miembros_recibidos', 'fondos_recibidos']
 
-        widgets = {
-            'cantidad_miembros_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
-            'fondos_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
-        }
+#         widgets = {
+#             'cantidad_miembros_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
+#             'fondos_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
+#         }
 
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        cargos = Cargo.objects.all()
-        for cargo in cargos:
-            self.fields[f'cargo_{cargo.id}'] = forms.ModelChoiceField(
-                queryset=Miembro.objects.all(),
-                label=cargo.name,
-                required=False,
-                widget=forms.Select(attrs={'class': 'form-control'})
-            )
+#     def __init__(self, *args, **kwargs):
+#         super().__init__(*args, **kwargs)
+#         cargos = Cargo.objects.all()
+#         for cargo in cargos:
+#             self.fields[f'cargo_{cargo.id}'] = forms.ModelChoiceField(
+#                 queryset=Miembro.objects.all(),
+#                 label=cargo.name,
+#                 required=False,
+#                 widget=forms.Select(attrs={'class': 'form-control'})
+#             )
 
-    def save(self, commit=True):
-        instance = super().save(commit=False)
-        if commit:
-            instance.save()
-        for cargo_id in Cargo.objects.values_list('id', flat=True):
-            miembro = self.cleaned_data.get(f'cargo_{cargo_id}')
-            if miembro:
-                DirectivaCargo.objects.create(
-                    cambio_directiva=instance,
-                    cargo_id=cargo_id,
-                    miembro=miembro
-                )
-        return instance
+#     def save(self, commit=True):
+#         instance = super().save(commit=False)
+#         if commit:
+#             instance.save()
+#         for cargo_id in Cargo.objects.values_list('id', flat=True):
+#             miembro = self.cleaned_data.get(f'cargo_{cargo_id}')
+#             if miembro:
+#                 DirectivaCargo.objects.create(
+#                     cambio_directiva=instance,
+#                     cargo_id=cargo_id,
+#                     miembro=miembro
+#                 )
+#         return instance
 
 # Formulario para crear servicio
 class PersonaWidget(ModelSelect2Widget):
@@ -141,6 +141,9 @@ class AsistenciaForm(forms.ModelForm):
     class Meta:
         model = Attendance
         fields = ['miembro', 'date', 'present']
+
+# Define un formset utilizando el form anterior
+AsistenciaFormSet = modelformset_factory(Attendance, form=AsistenciaForm, extra=0)
 
 
 class TareasForm(forms.ModelForm):

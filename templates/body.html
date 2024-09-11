@@ -7,12 +7,21 @@
 
 <body>
     {% if messages %}
-    <ul>
-        {% for message in messages %}
-        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        {% endfor %}
-    </ul>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            {% for message in messages %}
+            Swal.fire({
+                title: '{% if message.tags %}{{ message.tags|title }}{% else %}Message{% endif %}',
+                text: '{{ message }}',
+                icon: '{% if message.tags == "error" %}error{% elif message.tags == "warning" %}warning{% elif message.tags == "success" %}success{% else %}info{% endif %}',
+                showConfirmButton: false,
+                timer: 1500
+            });
+            {% endfor %}
+        });
+    </script>
     {% endif %}
+    
 </body>
 
 

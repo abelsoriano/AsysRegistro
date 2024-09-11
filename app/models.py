@@ -2,7 +2,7 @@ from datetime import date
 
 from django.db import models
 
-
+from django.contrib.auth.models import User
 from django.forms import model_to_dict
 from django.utils import timezone
 from app.choices import *
@@ -98,24 +98,21 @@ class Miembro(models.Model):
         ordering = ['id']
 
 
-class CambioDirectiva(models.Model):
-    cantidad_miembros_recibidos = models.IntegerField(verbose_name='Cantidad de Miembros Recibidos')
-    fondos_recibidos = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Fondos Recibidos')
-    fecha_cambio = models.DateField(auto_now_add=True, verbose_name='Fecha de Cambio')
+# class CambioDirectiva(models.Model):
+#     cantidad_miembros_recibidos = models.IntegerField(verbose_name='Cantidad de Miembros Recibidos')
+#     fondos_recibidos = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Fondos Recibidos')
+#     fecha_cambio = models.DateField(auto_now_add=True, verbose_name='Fecha de Cambio')
 
-    class Meta:
-        verbose_name = 'Cambio de Directiva'
-        verbose_name_plural = 'Cambios de Directiva'
-        db_table = 'cambio_directiva'
-        ordering = ['fecha_cambio']
+#     class Meta:
+#         verbose_name = 'Cambio de Directiva'
+#         verbose_name_plural = 'Cambios de Directivas'
+#         db_table = 'cambio_directiva'
+#         ordering = ['fecha_cambio']
 
-class DirectivaCargo(models.Model):
-    cambio_directiva = models.ForeignKey(CambioDirectiva, on_delete=models.CASCADE)
-    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-    miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-
-
-
+# class DirectivaCargo(models.Model):
+#     cambio_directiva = models.ForeignKey(CambioDirectiva, on_delete=models.CASCADE)
+#     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+#     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
 
 
 
@@ -162,20 +159,35 @@ class Servicio(models.Model):
         verbose_name_plural = 'Servicios'
 
 
+# class Attendance(models.Model):
+#     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
+#     date = models.DateField(default=timezone.now)
+#     present = models.BooleanField(default=False, null=True, blank=True, verbose_name='PRESENTE')
+#     day_of_week = models.CharField(max_length=10, blank=True, editable=False, verbose_name='DÍA DE LA SEMANA')
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#
+#     def toJSON(self):
+#         data = model_to_dict(self)
+#         data['miembro'] = self.miembro.toJSON() if self.miembro else None
+#         return data
+#
+#     class Meta:
+#         verbose_name = 'Asistencia'
+#         verbose_name_plural = 'Asistencias'
+
 class Attendance(models.Model):
     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-    date = models.DateField(null=True, blank=True, default=timezone.now, verbose_name='FECHA DE SERVICIO')
-    present = models.BooleanField(default=False, null=True, blank=True, verbose_name='PRESENTE')
+    date = models.DateField(default=timezone.now)
+    present = models.BooleanField(default=False)
     day_of_week = models.CharField(max_length=10, blank=True, editable=False, verbose_name='DÍA DE LA SEMANA')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-    def toJSON(self):
-        data = model_to_dict(self)
-        data['miembro'] = self.miembro.toJSON() if self.miembro else None
-        return data
+    def __str__(self):
+        return f"Asistencia de {self.miembro} el {self.date}"
 
-    class Meta:
-        verbose_name = 'Asistencia'
-        verbose_name_plural = 'Asistencias'
+        class Meta:
+            verbose_name = 'Asistencia'
+            verbose_name_plural = 'Asistencias'
 
 
 class MiembroStatus(models.Model):

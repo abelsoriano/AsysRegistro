@@ -28,17 +28,18 @@
             <li><a class="nav-link scrollto" href="{% url 'asys:service_list' %}">Servicios</a></li>
             <li class="dropdown"><a href="#"><span>Asistencia</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
-                <li><a href="{% url 'asys:list_asistencia' %}">General</a>
+                <li><a href="{% url 'asys:list_asistencia_general' %}">General</a>
                 <li><a href="{% url 'asys:list_asistencia' %}">Jovenes</a>
-                <li><a href="{% url 'asys:list_asistencia' %}">Damas</a>
-                <li><a href="{% url 'asys:asistencia-caballero' %}">Caballeros</a>
+                <li><a href="{% url 'asys:list_asistencia_damas' %}">Damas</a>
+                <li><a href="{% url 'asys:list_asistencia_caballeros' %}">Caballeros</a>
                 
               </ul>
             </li>
             <li class="dropdown"><a href="#"><span>Utilidades</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="{% url 'asys:nota_list' %}">Notas</a>
-                <li><a href="{% url 'asys:crear_directiva' %}">Cambio Directiva</a>
+                <li><a href="#">Cambio Directiva</a>
+                <li><a href="{% url 'asys:tarea-lista' %}">Tareas</a>
                 
               </ul>
             </li>
@@ -46,7 +47,9 @@
 
             <li class="dropdown"><a href="#"><span>Configuracion</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
-                <li><a href="#">Drop Down 1</a>
+                <li><a href="#">Agregar Estado</a>
+                <li><a href="#">Agregar Cargos</a>
+                <li><a href="#">Usuarios</a>
                 
               </ul>
             </li>

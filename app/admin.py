@@ -13,13 +13,13 @@ admin.site.register(Tarea)
 
 class AttendanceAdmin(admin.ModelAdmin):
     list_display = ('miembro', 'date', 'present')
-class DirectivaCargoInline(admin.TabularInline):
-    model = DirectivaCargo
-    extra = 1
+# class DirectivaCargoInline(admin.TabularInline):
+#     model = DirectivaCargo
+#     extra = 1
 
-@admin.register(CambioDirectiva)
-class CambioDirectivaAdmin(admin.ModelAdmin):
-    inlines = [DirectivaCargoInline]
+# @admin.register(CambioDirectiva)
+# class CambioDirectivaAdmin(admin.ModelAdmin):
+#     inlines = [DirectivaCargoInline]
 
 
 

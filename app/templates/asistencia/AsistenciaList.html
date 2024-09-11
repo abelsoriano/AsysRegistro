@@ -26,15 +26,22 @@
     <td>{{ asistencia.total_true }}</td>
     <td>{{ asistencia.total_false }}</td>
     <td>{{ asistencia.total }}</td>
+    
     <td>
         <a href="#" class="btn btn-LightSeaGreen btn-flat btnTest text-white show-details"
            data-date="{{ asistencia.fecha|date:'Y-m-d' }}">
             <i class="fas fa-eye"></i>
+            
         </a>
 
-        <a href="" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+        <a href="{% url 'asys:edit_asistencia_group' asistencia.fecha|date:'Y-m-d' %}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
+        
+        
+        
+        
+        
     </td>
 
 </tr>

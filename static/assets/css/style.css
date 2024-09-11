@@ -125,6 +125,16 @@ h6 {
   transition: all 0.5s;
 }
 
+#notas {
+  background: #27dbe1;
+  color: #fff;
+  /* height: 40px; */
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 996;
+  transition: all 0.5s;
+}
+
 #topbar.topbar-scrolled {
   top: -40px;
 }
@@ -141,7 +151,7 @@ h6 {
   background: #fff;
   transition: all 0.5s;
   z-index: 997;
-  padding: 20px 0;
+  padding: 15px 0;
   top: 40px;
   box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);
 }

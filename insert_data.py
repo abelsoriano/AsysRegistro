@@ -1,11 +1,10 @@
 import os
 from django.core.files import File
-
 import django
-
 import random
 import requests
 from faker import Faker
+from django.conf import settings
 
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "setting.settings")
 django.setup()
@@ -47,25 +46,28 @@ def get_random_person_image():
     return None
 
 
-# Obtener una URL de imagen de persona aleatoria
-avatar_url = get_random_person_image()
-# print(avatar_url)
-
-
 def guardar_imagen(url, filename):
     response = requests.get(url)
     response.raise_for_status()
-    with open(filename, 'wb') as f:
+
+    # Asegúrate de que la ruta se construya correctamente dentro de la carpeta media/avatar
+    avatar_folder = os.path.join(settings.MEDIA_ROOT, 'avatar')
+    if not os.path.exists(avatar_folder):
+        os.makedirs(avatar_folder)
+
+    filepath = os.path.join(avatar_folder, filename)
+    with open(filepath, 'wb') as f:
         f.write(response.content)
+
+    return filepath
+
 
 def generate_phone_number():
     prefix = random.choice(['809', '829', '849'])
     suffix = ''.join([str(random.randint(0, 9)) for _ in range(7)])
     return prefix + suffix
-def generar_persona():
-    gender_choices = ['Masculino', 'Femenino']
-    estado_choices = ['Activo', 'Observacion']
-    categori_choices = ['Dama', 'Caballero', 'Joven', 'Adolecente']
+
+
 def generar_miembro():
     name = fake.first_name()
     lastname = fake.last_name()
@@ -78,19 +80,18 @@ def generar_miembro():
     phone = generate_phone_number()
     email = fake.email()
     cargo = random.choice(Cargo.objects.all())
-    image = fake.image_url()
     state = random.choice(Estado.objects.all())
     categori_choices = [choice[0] for choice in Miembro._meta.get_field('category').choices]
     category = random.choice(categori_choices)
 
+    # Obtener la URL de la imagen de la API
     avatar_url = get_random_person_image()
     image_filename = f'{name}_{lastname}.jpg'
 
-    guardar_imagen(avatar_url, image_filename)
-    miembro = Miembro.objects.get(pk=1)
-    image_path = os.path.join('media', 'avatar', f'{name}_{lastname}.jpg')
+    # Guardar la imagen en la carpeta 'media/avatar'
+    image_path = guardar_imagen(avatar_url, image_filename)
 
-
+    # Crear un nuevo miembro y asignar los campos
     miembro = Miembro(
         name=name,
         lastname=lastname,
@@ -102,14 +103,17 @@ def generar_miembro():
         phone=phone,
         email=email,
         cargo=cargo,
-        # image = miembro.read_image(),
         state=state,
         category=category
     )
-    with open(image_filename, "rb") as image_file:
+
+    # Guardar la imagen en el modelo usando la ruta correcta
+    with open(image_path, "rb") as image_file:
         miembro.image.save(os.path.basename(image_path), File(image_file), save=True)
+
     miembro.save()
 
+
 if __name__ == '__main__':
-    for _ in range(20):  # Generar 10 miembros aleatorios con cargos aleatorios
+    for _ in range(20):  # Generar 20 miembros aleatorios con cargos aleatorios
         generar_miembro()

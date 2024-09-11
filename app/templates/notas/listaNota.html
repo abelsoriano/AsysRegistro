@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block contents %}
+
   <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" />
 
@@ -105,14 +106,14 @@
     </div><br />
     <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#crearNota">Agregar Nota</button>
   </div> {% endcomment %}
-
+  <main class="container-fluid">
   <!-- ======Este Bloque contiene el listado de la notas ============= -->
   {% if notas %}
   <div id="nota-container">
     <div class="card-deck">
       {% for nota in notas|slice:':3' %}
-        <div class="card text-white bg-warning mb-3" data-id="{{ nota.id }}">
-          <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card mb-3" id="notas" data-id="{{ nota.id }}">
+          <div class="card-headers d-flex justify-content-between align-items-center">
             <strong>{{ nota.titulo|upper }}</strong>
             <cite class="blockquote-footer text-muted">{{ nota.fecha_creacion }}</cite>
           </div>
@@ -193,7 +194,7 @@
       </div>
     </form>
   </div>
-  
+</main>
 
 
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
