@@ -1,0 +1,127 @@
+{% extends 'body.html' %} {% load static %} {% load custom_tags %} {% block head %} {% block head_list %} {% endblock %} {% endblock %} {% block contents %}
+<main class="container-fluid">
+
+	<!--Modar notificacion-->
+	{% if messages %} {% for message in messages %} {% if 'modal_trigger' in message.extra_tags %}
+	<!-- Este bloque de codigo se utiliza para mostrar el modal de notificacion por inasistencia  -->
+	<div class="modal" id="modal-{{ message.extra_tags.miembro_id }}" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h1 class="modal-title fs-5" id="staticBackdropLabel">Notificación</h1>
+				</div>
+				<form method="post" action="{% url 'asys:guardar_status' %}" onsubmit="return enviarFormulario(event, '{{ message.extra_tags.miembro_id }}');">
+
+					{% csrf_token %}
+					<input type="hidden" name="id" id="id-{{ message.extra_tags.miembro_id }}" value="{{ message.extra_tags|extract_id }}">
+					<div class="modal-body">
+						<p>{{ message.message }}</p>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault1" value="enfermo" checked>
+							<label class="form-check-label" for="flexRadioDefault1">Miembro se encuentra enfermo
+                           </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="visitar">
+							<label class="form-check-label" for="flexRadioDefault2">Miembro necesita ser visitado
+                           </label>
+						</div>
+						<div class="form-check">
+							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault3" value="permiso">
+							<label class="form-check-label" for="flexRadioDefault3">Miembro tiene permiso o excusa
+                           </label>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="btn btn-secondary">Entendido</button>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+	{% endif %} {% endfor %} {% endif %}
+	<script src="{% static 'asistencia/js/asistencia.js' %}"></script>
+	<!--    --------Aqui termina el bloque de inasistencia ---------------------------->
+
+
+	<!--Este Modal muestra el detallaes de asistencia Cuando se hace clic en el hojo o boton de la lista-->
+	<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+		<div class="modal-dialog modal-lg" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title" id="detailsModalLabel">Detalles de Asistencia</h5>
+				</div>
+				<div class="modal-body">
+					<table class="table display table-bordered table-striped table-hover table-sm id stripe row-border order-column nowrap" id="detailsTable">
+						<thead>
+							<tr class="table-primary">
+								<th scope="col">ID</th>
+								<th scope="col">Nombre</th>
+								<th scope="col">Fecha de Registro</th>
+								<th scope="col">Presente</th>
+							</tr>
+						</thead>
+						<tbody></tbody>
+					</table>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!--    Este bloque muestra un detalle en la pantalla de lista de miembro al hacer clic-->
+	<div style="width: 100%; display: flex; justify-content: center;">
+		<div id="detalle" class="card" style="display: none; ">
+			<button type="button" class="close-button">&#x2716;</button>
+			<div class="card-body">
+				<div class="card-img-container">
+					<img src="" id="perfil" alt="Foto de perfil">
+				</div>
+				<div class="card-details">
+					<h2 id="nombre-empleado"></h2>
+					<p id="dni-empleado"></p>
+					<p id="nacimiento-empleado"></p>
+					<p id="genero-mpleado"></p>
+					<p id="telefono-empleado"></p>
+					<p id="direccion-empleado"></p>
+					<p id="ingreso-empleado"></p>
+					<p id="correo-empleado"></p>
+					<p id="estado-empleado"></p>
+					<p id="cargo-empleado"></p>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+	<div class="row px-xl-6">
+        <div class="col-14">
+                <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
+                    <div class="lh-2">
+                        <i class="fa fa-list"></i> {{title}}
+                    </div>
+                </div>
+
+                <div class="my-3 p-3 bg-body rounded shadow-sm">
+                    <table class="table display table-bordered table-striped table-hover table-sm id stripe row-border order-column nowrap" id="data">
+                        <thead>
+                            {% block columns %} {% endblock %}
+                        </thead>
+                        <tbody>
+                            {% block rows %} {% endblock %}
+                        </tbody>
+                    </table>
+
+                    <div class="card-footer">
+                        <a href="{{create_url}}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+                            <i class="fas fa-plus"></i> Nuevo registro
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock %} {% block javascript %} {% endblock %}

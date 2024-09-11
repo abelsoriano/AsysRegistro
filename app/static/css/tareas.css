@@ -1,0 +1,63 @@
+.card-tarea {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 2px;
+    margin-bottom: 16px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    word-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+}
+
+.card-title {
+    font-size: 19px;
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.card-text {
+    margin-bottom: 8px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+}
+
+.card-pendiente {
+    background-color: #e14444;
+    border: 1px solid #0aedb8;
+    color: rgb(241, 247, 241);
+    border-radius: 8px;
+    padding: 2px;
+    margin-bottom: 16px;
+    margin: auto;
+}
+
+.btn {
+    display: inline-block;
+    padding: 8px 16px;
+    border-radius: 4px;
+    text-decoration: none;
+    color: #fff;
+    background-color: #007bff;
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    padding: 4px;
+    margin: 1%;
+}
+
+.card-completado{
+    background-color: #44e17e;
+    border: 1px solid #0aedb8;
+    color: rgb(241, 247, 241);
+    border-radius: 8px;
+    padding: 2px;
+    margin-bottom: 16px;
+    margin: auto;
+
+}

@@ -1,0 +1,23 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'servicio/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+<tr>
+    <th scope="col">Id</th>
+    <th scope="col">Fecha</th>
+    <th scope="col">Dirección</th>
+    <th scope="col">Lectura</th>
+    <th scope="col">Devocional</th>
+    <th scope="col">Director Cultural</th>
+    <th scope="col">Participantes</th>
+    <th scope="col">Opciones</th>
+</tr>
+{% endblock %}
+
+{% block rows %}
+<!-- DataTables se encargará de rellenar las filas -->
+{% endblock %}

@@ -1,0 +1,89 @@
+{% load static %}
+{% load widget_tweaks %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <!------ Include the above in your HEAD tag ---------->
+    <link rel="stylesheet" href="{% static 'login.css' %}">
+</head>
+
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<!------ Include the above in your HEAD tag ---------->
+
+
+
+
+<form class="login-reg-panel" action="." method="post">
+
+    {% csrf_token %}
+    <div class="login-info-box">
+        <h2>¿Tener una cuenta?</h2>
+        <p>Sistema de registro</p>
+        <label id="label-register" for="log-reg-show">Iniciar  sesión</label>
+        <input type="radio" name="active-log-panel" id="log-reg-show" checked="checked">
+    </div>
+
+    <div class="register-info-box">
+        <h2>¿No tienes una cuenta?</h2>
+        <p>Sistema de registro</p>
+        <label id="label-login" for="log-login-show">Register</label>
+        <input type="radio" name="active-log-panel" id="log-login-show">
+    </div>
+
+    <div class="white-panel">
+        <div class="login-show">
+            <h2>LOGIN</h2>
+<!--            {{ login_form }}-->
+            {{ form.username|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su username' }}
+            {{ form.password|add_class:'form-control'|attr:'autocomplete:off'|attr:'placeholder:Ingrese su contraseña' }}
+            {% include 'registration/form_error.html' %}
+            {% include 'registration/messeger.html' %}
+            <input type="submit" value="Login">
+            <a href="">Forgot password?</a>
+        </div>
+
+        <div class="register-show">
+            <h2>REGISTER</h2>
+            {{ register_form.email|add_class:'form-control'|attr:'placeholder:Email' }}
+
+            {{ register_form.firstname|add_class:'form-control'|attr:'placeholder:Nombre' }}
+
+            {{ register_form.lastname|add_class:'form-control'|attr:'placeholder:Apellido' }}
+
+            {{ register_form.username|add_class:'form-control'|attr:'placeholder:Username' }}
+
+            {{ register_form.password1|add_class:'form-control'|attr:'placeholder:Password' }}
+
+            {{ register_form.password2|add_class:'form-control'|attr:'placeholder:Confirm Password' }}
+            <input type="submit" value="Register">
+        </div>
+    </div>
+</form>
+
+<script type="application/javascript">
+    {% if form.errors %}
+        var errors = '';
+        {% for field in form %}
+            {% for error in field.errors %}
+                errors += '{{ error }}\n';
+            {% endfor %}
+        {% endfor %}
+        {% for error in form.non_field_errors %}
+            errors += '{{ error }}\n';
+        {% endfor %}
+        Swal.fire({
+            title: 'Error!',
+            text: errors,
+            icon: 'error'
+        });
+    {% endif %}
+</script>
+
+<script src="{% static 'login.js' %}"></script>
+<script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>

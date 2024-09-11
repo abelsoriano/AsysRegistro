@@ -1,0 +1,95 @@
+{% extends 'form.html' %}
+{% load static %}
+
+{% block campos %}
+<script src="https://cdn.jsdelivr.net/npm/autonumeric@4.1.0/dist/autoNumeric.min.js"></script>
+
+<!-- Incluye jQuery -->
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<!-- Incluye CSS de Select2 -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+
+<!-- Incluye JavaScript de Select2 -->
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+<!-- Incluye JavaScript de django-select2 -->
+<script src="{% static 'django_select2/django_select2.js' %}"></script>
+
+
+<script>
+    function addNewPersona() {
+        var nombre = prompt("Nombre de la nueva persona:");
+        if (nombre) {
+            $.ajax({
+                url: '{% url "asys:add_persona" %}',
+                method: 'POST',
+                data: {
+                    nombre: nombre,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    var newOption = new Option(response.nombre, response.id, false, true);
+                    $('#id_devocional_1').append(newOption).trigger('change');
+                    $('#id_participantes').append(newOption).trigger('change');
+                },
+                error: function() {
+                    alert("Error al agregar la nueva persona.");
+                }
+            });
+        }
+    }
+</script>
+
+<div class="row">
+    <div class="col-md-4">
+        <label>{{ form.fecha.label }}</label>
+        {{ form.fecha }}
+    </div>
+    <div class="col-md-4">
+        <label>{{ form.direccion.label }}</label>
+        {{ form.direccion }}<br>
+    </div>
+    <div class="col-md-4">
+        <label>{{ form.lectura.label }}</label>
+        {{ form.lectura }}
+    </div>
+
+    <div class="col-md-4">
+        <label>{{ form.devocional.label }}</label>
+        {{ form.devocional }}
+    </div>
+
+    <div class="col-md-4 mb-3">
+        <label>{{ form.ofrenda.label }}</label>
+        {{ form.ofrenda }}
+    </div>
+    <div class="col-md-4">
+        <label>{{ form.mensaje.label }}</label>
+        {{ form.mensaje }}
+    </div>
+    {% csrf_token %}
+    <div class="col-md-4">
+        <label for="{{ form.devocional_1.id_for_label }}" class="form-label">{{ form.cultural_1.label }}</label>
+        {{ form.cultural_1 }}
+    </div>
+
+    <div class="col-md-4">
+        <label for="{{ form.participantes.id_for_label }}" class="form-label">{{ form.participantes.label }}</label>
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <button type="button" class="btn btn-outline-secondary" onclick="addNewPersona()">
+                    <i class="fas fa-plus"></i> <!-- Ícono de agregar -->
+                </button>
+            </div>
+            {{ form.participantes }}-
+        </div>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label>{{ form.description.label }}</label>
+        {{ form.description }}
+    </div>
+</div>
+
+
+{% endblock %}

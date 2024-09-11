@@ -1,0 +1,56 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'miembro/js/list.js' %}"></script>
+
+{% endblock %}
+
+{% block columns %}
+<tr data-employee-id="{{ miembro.id }}">
+    <th scope="col">Id</th>
+    <th scope="col">Nombre</th>
+    <th scope="col">Apellidos</th>
+    <th scope="col">Cedula</th>
+    <th scope="col">Estado</th>
+    <th scope="col">Cargo</th>
+    <th scope="col">Telefono</th>
+    <th scope="col">Options</th>
+</tr>
+{% endblock %}
+
+{% block rows %}
+{% for member in members %}
+<tr>
+    <td>{{ member.name }}</td>
+    <td>{{ member.lastname }}</td>
+    <td>{{ member.dni }}</td>
+    <td>{{ member.gender }}</td>
+    <td>{{ member.date_joined }}</td>
+    <td>{{ member.address }}</td>
+    <td>{{ member.fecha_ingreso }}</td>
+    <td>{{ member.phone }}</td>
+    <td>{{ member.email }}</td>
+    <td>{{ member.cargo }}</td>
+    <td>{{ member.state }}</td>
+    <td>{{ member.category }}</td>
+</tr>
+{% endfor %}
+{% endblock %}
+
+
+{% block javascript %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if birthday_members %}
+        Swal.fire({
+            title: '¡Feliz Cumpleaños!',
+            html: '{% for member in birthday_members %}{{ member.name }} {{ member.lastname }} <br/>{% endfor %}',
+            icon: 'info',
+            confirmButtonText: 'Cerrar'
+        });
+        {% endif %}
+    });
+</script>
+{% endblock %}
+

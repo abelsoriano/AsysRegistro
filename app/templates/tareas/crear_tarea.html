@@ -1,0 +1,139 @@
+{% extends 'body.html' %}
+
+{% block contents %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+    <!-- Incluye Flatpickr JS -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+  <main class="container-fluid">
+    <form method="post" action="." enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
+        <div class="lh-2">
+          {% if object %}
+            Editar Tarea
+          {% else %}
+            <i class="far fa-address-book"></i> {{ title }}
+          {% endif %}
+        </div>
+      </div>
+      <div class="my-3 p-3 bg-body rounded shadow-sm">
+        <input type="hidden" name="action" value="{{ action }}" /> {% if form.errors %}
+          <div class="alert alert-danger alert-dismissible">
+            <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+            <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+            <ul>
+              {% for field in form %}
+                {% for error in field.errors %}
+                  <li>{{ error }}</li>
+                {% endfor %}
+              {% endfor %}
+            </ul>
+          </div>
+        {% endif %}
+
+        <div>
+          <label>{{ form.nombre.label }}</label>
+          {{ form.nombre }}
+        </div>
+
+        <div>
+          <label>{{ form.descripcion.label }}</label>
+          {{ form.descripcion }}
+        </div>
+
+        <div>
+          <label>{{ form.fecha.label }}</label>
+          {{ form.fecha }}
+      </div>
+      
+      <div class="form-group">
+          <label for="completado">{{ form.completado.label }}</label>
+          {{ form.completado }}
+      </div>
+      
+
+      </div>
+
+      
+
+      <button type="submit" class="btn btn-LightSeaGreen text-white">
+        {% if object %}
+          Actualizar
+        {% else %}
+          Crear
+        {% endif %}
+      </button>
+      <a class="btn btn-LightSeaGreen text-white" href="{% url 'asys:tarea-lista' %}"><i class="fa-solid fa-backward"></i> Volver a la lista</a>
+    </form>
+  </main>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Inicializa Flatpickr en el campo de fecha
+        flatpickr("input[name='fecha']", {
+            enableTime: true,  // Habilitar selección de hora si es necesario
+            dateFormat: "Y-m-d h:i",  // Formato de fecha y hora (12 horas con AM/PM)
+            time_24hr: false,  // Cambiar a formato de 12 horas
+        });
+    });
+</script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const form = document.querySelector('form')
+      form.addEventListener('submit', function (e) {
+        e.preventDefault()
+    
+        const parameters = new FormData(this)
+        const action = form.querySelector('input[name="action"]').value
+    
+        fetch(window.location.pathname, {
+          method: 'POST',
+          body: parameters,
+          headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+          }
+        })
+          .then((response) => response.json())
+          .then((data) => {
+            if (data.success) {
+              Swal.fire({
+                title: 'Success!',
+                text: action === 'add' ? 'La tarea ha sido creada exitosamente.' : 'La tarea ha sido actualizada exitosamente.',
+                icon: 'success'
+              }).then(() => {
+                window.location.href = '{{ list_url }}'
+              })
+            } else {
+              let errorMessages = 'Se produjo un error al procesar su solicitud.'
+              if (data.errors) {
+                try {
+                  errorMessages = JSON.parse(data.errors)
+                } catch (e) {
+                  errorMessages = data.errors // Si no es JSON, muestra el texto plano
+                }
+              }
+              Swal.fire({
+                title: 'Advertencia',
+                text: errorMessages,
+                icon: 'warning'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  form.submit() // Enviar el formulario si el usuario decide continuar
+                }
+              })
+            }
+          })
+          .catch((error) => {
+            Swal.fire({
+              title: 'Error!',
+              text: 'Se produjo un error al procesar su solicitud.',
+              icon: 'error'
+            })
+          })
+      })
+    })
+  </script>
+{% endblock %}

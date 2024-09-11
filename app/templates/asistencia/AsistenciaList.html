@@ -1,0 +1,45 @@
+{% extends 'list.html' %}
+{% load static %}
+
+{% block head_list %}
+<script src="{% static 'asistencia/list.js' %}"></script>
+{% endblock %}
+
+{% block columns %}
+<tr class="table-primary">
+    <th scope="col">Fecha de Registro</th>
+    <th scope="col">Dia de Registro</th>
+    <th scope="col">Asistencias</th>
+    <th scope="col">Inasistencia</th>
+    <th scope="col">Total de Asistencias</th>
+    <th scope="col">Opciones</th>
+</tr>
+{% endblock %}
+
+
+
+{% block rows %}
+{% for asistencia in asistencias %}
+<tr>
+    <td>{{ asistencia.fecha }}</td>
+    <td>{{ asistencia.weekday_name }}</td>
+    <td>{{ asistencia.total_true }}</td>
+    <td>{{ asistencia.total_false }}</td>
+    <td>{{ asistencia.total }}</td>
+    <td>
+        <a href="#" class="btn btn-LightSeaGreen btn-flat btnTest text-white show-details"
+           data-date="{{ asistencia.fecha|date:'Y-m-d' }}">
+            <i class="fas fa-eye"></i>
+        </a>
+
+        <a href="" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </a>
+    </td>
+
+</tr>
+{% endfor %}
+
+
+{% endblock %}
+

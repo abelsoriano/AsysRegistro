@@ -1,0 +1,108 @@
+{% extends 'form.html' %}
+
+{% block campos %}
+<div class="container-fluid">
+    <div class="row g-3">
+        {{ form.non_field_errors }}
+
+        <div class="col-md-4">
+            <label for="cantidad_miembros_recibidos" class="form-label">{{ form.cantidad_miembros_recibidos.label }}</label>
+            <div class="mb-3">
+                {{ form.cantidad_miembros_recibidos }}
+            </div>
+        </div>
+
+        <div class="col-md-4">
+            <label for="fondos_recibidos" class="form-label">{{ form.fondos_recibidos.label }}</label>
+            <div class="mb-3">
+                {{ form.fondos_recibidos }}
+            </div>
+        </div>
+
+        <div class="col-12">
+            <h4>Directiva Cargos</h4>
+        </div>
+
+        <div id="directiva-cargos-container" class="col-12">
+            <div class="row mb-3 directiva-cargo-entry">
+                <div class="col-md-4">
+                    <label for="cargo_1" class="form-label">Cargo</label>
+                    <select name="cargo_1" class="form-control">
+                        <option value="" disabled selected>Seleccione un cargo</option>
+                        {% for cargo in cargos %}
+                            <option value="{{ cargo.id }}">{{ cargo.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="miembro_1" class="form-label">Miembro</label>
+                    <select name="miembro_1" class="form-control">
+                        <option value="" disabled selected>Seleccione un miembro</option>
+                        {% for miembro in miembros %}
+                            <option value="{{ miembro.id }}">{{ miembro.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn btn-danger btn-remove-cargo">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12">
+            <button type="button" class="btn btn-secondary" id="add-cargo-btn">Agregar Directiva Cargo adicional</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        let cargoCounter = 2;
+
+        document.getElementById('add-cargo-btn').addEventListener('click', function () {
+            const container = document.getElementById('directiva-cargos-container');
+            const newEntry = document.createElement('div');
+            newEntry.classList.add('row', 'mb-3', 'directiva-cargo-entry');
+
+            newEntry.innerHTML = `
+                <div class="col-md-4">
+                    <label for="cargo_${cargoCounter}" class="form-label">Cargo</label>
+                    <select name="cargo_${cargoCounter}" class="form-control">
+                        <option value="" disabled selected>Seleccione un cargo</option>
+                        {% for cargo in cargos %}
+                            <option value="{{ cargo.id }}">{{ cargo.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <label for="miembro_${cargoCounter}" class="form-label">Miembro</label>
+                    <select name="miembro_${cargoCounter}" class="form-control">
+                        <option value="" disabled selected>Seleccione un miembro</option>
+                        {% for miembro in miembros %}
+                            <option value="{{ miembro.id }}">{{ miembro.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <label>&nbsp;</label>
+                    <button type="button" class="btn btn-danger btn-remove-cargo">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
+                </div>
+            `;
+
+            container.appendChild(newEntry);
+
+            // Add event listener to the remove button
+            newEntry.querySelector('.btn-remove-cargo').addEventListener('click', function () {
+                newEntry.remove();
+            });
+
+            cargoCounter++;
+        });
+    });
+</script>
+{% endblock %}

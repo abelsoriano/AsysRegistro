@@ -1,0 +1,123 @@
+{% extends 'form.html' %}
+{% load static %}
+
+{% block campos %}
+
+<div class="text-align">
+    <div class="row" id="miembros-list" style="display: flex; justify-content: center;">
+        <div class="col-md-12">
+            <div class="d-flex flex-wrap">
+                {% for miembro in miembros %}
+                <div class="col-md-2 mb-2 form-check miembro-card">
+                    <input type="checkbox" id="{{ miembro.id }}_present" name="presente_{{miembro.id}}"
+                           value="True"
+                           {% if miembro.presente %} checked {% endif %}>
+                    <label for="{{ miembro.id }}_present">{{ miembro.name }} {{ miembro.lastname }}</label>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<style>
+    .miembro-card {
+  border: 1px solid #F1C40F;
+  border-radius: 4px;
+  padding: 10px;
+  margin-bottom: 10px;
+  box-shadow: 0 1px 3px rgba(241, 196, 15);
+}
+
+.miembro-card input {
+  margin-right: 10px;
+}
+
+.miembro-card label {
+  font-size: 16px;
+  color: #333;
+}
+
+@media (max-width: 768px) {
+  .miembro-card {
+    flex-basis: 100%;
+  }
+}
+
+</style>
+
+<!--    Paginacion-->
+<div class="row col-md-12" id="pagination-container">
+
+
+    {% if miembros.has_other_pages %}
+    <div class="pagination justify-content-end">
+
+            <span class="step-links">
+                {% if miembros.has_previous %}
+                    <a href="?page=1">&laquo; primera</a>
+                    <a href="?page={{ miembros.previous_page_number }}">anterior</a>
+                {% endif %}
+
+                <span class="current">
+                    Página {{ miembros.number }} de {{ miembros.paginator.num_pages }}.
+                </span>
+
+
+                {% if miembros.has_next %}
+                    <a href="?page={{ miembros.next_page_number }}">siguiente</a>
+                    <a href="?page={{ miembros.paginator.num_pages }}">última &raquo;</a>
+                {% endif %}
+            </span>
+    </div>
+    {% endif %}
+</div>
+
+
+<style>
+    #miembros-list .col-md-2 {
+        display: inline-block;
+        margin-bottom: 10px;
+    }
+
+
+    #pagination-container {
+        margin-top: 10px;
+    }
+
+    .pagination li {
+        list-style: none;
+        display: inline-block;
+    }
+
+    .pagination a {
+        display: inline-block;
+        padding: 5px 10px;
+        margin: 2px;
+        border: 1px solid #FFBB00;
+        background-color: #FFBB00;
+        text-decoration: none;
+        color: #333;
+        border-radius: 5px;
+    }
+
+    .pagination .current {
+
+        color: #333;
+        text-align: center;
+
+    }
+</style>
+
+<script>
+    $(document).ready(function() {
+        // Agregar estilos Bootstrap a la paginación
+        $('#pagination-container .pagination').addClass('pagination-sm');
+        $('#pagination-container .pagination a').addClass('page-link');
+
+        // Mover la paginación debajo de la lista
+        $('#pagination-container').appendTo('#miembros-list');
+    });
+</script>
+{% endblock %}

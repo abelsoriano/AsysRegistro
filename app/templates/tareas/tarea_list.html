@@ -1,0 +1,31 @@
+{% extends 'body.html' %}
+{% load static %}
+{% block contents %}
+<link href="{% static 'css/tareas.css' %}" rel="stylesheet" />
+<main class="container-fluid">
+    
+    <h1>Lista de Tareas</h1>
+    <a href="{% url 'asys:tarea-crear' %}" class="btn btn-primary mb-3">Crear nueva tarea</a>
+    <div class="row">
+        {% for tarea in object_list %}
+        <div class="col-md-4 mb-3">
+            <div class="card-tarea">
+                <div class="card-body">
+                    <h5 class="card-title">{{ tarea.nombre }}</h5>
+                    <p class="card-text">{{ tarea.fecha|date:"d M Y H:i" }}</p>
+                    {% if not tarea.completado %}
+                    <p class="card-pendiente ">Pendiente</p>
+                    {% else %}
+                    <p class="card-completado">Completada</p>
+                    {% endif %}
+                    <a href="{% url 'asys:tarea-editar' tarea.pk %}" class="btn btn-secondary">Editar</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</main>
+
+{% endblock %}
+
+
