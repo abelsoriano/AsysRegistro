@@ -2,11 +2,13 @@ from django.urls import path
 
 from app.views.asistencia import views
 from app.views.asistencia.views import *
+from app.views.cargoEstado.views import *
 from app.views.notas.views import *
 from app.views.persona.views import *
 from app.views.servicio.views import *
 from app.views.cambioDirectiva.views import *
 from app.views.tareas.views import *
+
 
 app_name = 'asys'
 
@@ -55,6 +57,21 @@ urlpatterns = [
     path('crear/', TareaCreateView.as_view(), name='tarea-crear'),
     path('lista/', TareaListView.as_view(), name='tarea-lista'),
     path('<int:pk>/editar/', TareaUpdateView.as_view(), name='tarea-editar'),
+
+    #Cargo y Estado
+    path('crearEstado/', ModelEstadoCreateView.as_view(), name='create-estado'),
+    path('listEstado/', ModelEstadoList.as_view(), name='list-estado'),
+    path('getEstado/<int:pk>/', get_estado, name='get_estado'),
+    path('updateEstado/<int:pk>/', EstadoUpdateView.as_view(), name='update-estado'),
+    path('deleteEstado/<int:id>/', delete_estado, name='delete_estado'),
+    # cargo
+    path('cargoList/', CargoList.as_view(), name="list-cargo"),
+    path('createCargo/', CargoCreateView.as_view(), name="create-cargo"),
+    path('getCargo/<int:pk>/', get_cargo, name='get_cargo'),
+    path('updateCargo/<int:pk>/', CargoUpdateView.as_view(), name='update-cargo'),
+
+
+
 
 
 ]

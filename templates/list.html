@@ -96,6 +96,7 @@
 
 	</div>
 
+	{% comment %} Este bloque detalla las tablas  {% endcomment %}
 	<div class="row px-xl-6">
         <div class="col-14">
                 <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
@@ -105,6 +106,8 @@
                 </div>
 
                 <div class="my-3 p-3 bg-body rounded shadow-sm">
+					{% block sweetAlert2 %}
+				    {% endblock sweetAlert2 %}
                     <table class="table display table-bordered table-striped table-hover table-sm id stripe row-border order-column nowrap" id="data">
                         <thead>
                             {% block columns %} {% endblock %}
@@ -114,11 +117,16 @@
                         </tbody>
                     </table>
 
-                    <div class="card-footer">
-                        <a href="{{create_url}}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
-                            <i class="fas fa-plus"></i> Nuevo registro
-                        </a>
-                    </div>
+                   
+				   {% block buttonAdd %}
+				   <div class="card-footer">
+					<a href="{{create_url}}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+						<i class="fas fa-plus"></i> Nuevo registro
+					</a>
+					
+				    </div>
+				   {% endblock buttonAdd %}
+					
                 </div>
             </div>
         </div>

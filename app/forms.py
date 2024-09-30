@@ -159,8 +159,6 @@ class TareasForm(forms.ModelForm):
         }
         
         
-
-
 class NotaForm(forms.ModelForm):
     class Meta:
         model = Nota
@@ -169,3 +167,14 @@ class NotaForm(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el título'}),
             'contenido': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
         }
+
+
+class EstadoForm(forms.ModelForm):
+    class Meta:
+        model = Estado
+        fields = '__all__'
+    
+class CargoForm(forms.ModelForm):
+    class Meta:
+        model = Cargo
+        fields = '__all__'
