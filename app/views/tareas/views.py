@@ -69,6 +69,38 @@ class TareaCreateView(CreateView):
         context['action'] = 'add'
         return context
 
+class CreateViewTareas(CreateView):
+    model = Tarea
+    form_class = TareasForm
+    template_name = 'tareas/tarea_list.html'
+    success_url = reverse_lazy('asys:tarea-lista')
+
+    @method_decorator(login_required)
+    def dispatch(self, request, *args, **kwargs):
+        return super().dispatch(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        data = {}
+        try:
+            form = self.get_form()
+            if form.is_valid():
+                form.save()
+                data['success'] = True
+            else:
+                data['success'] = False
+                data['errors'] = form.errors.as_json()
+        except Exception as e:
+            data['success'] = False
+            data['errors'] = str(e)
+        return JsonResponse(data)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['titulo'] = 'Creando nuevo Cargo'
+        context['entity'] = 'Tarea'
+        context['list_url'] = self.success_url
+        context['action'] = 'add'
+        return context
 
 class TareaUpdateView(UpdateView):
     model = Tarea
@@ -118,3 +150,12 @@ class TareaUpdateView(UpdateView):
         context['list_url'] = self.success_url
         context['action'] = 'edit'
         return context
+
+
+def get_estado(request, pk):
+    try:
+        tarea = Tarea.objects.get(pk=pk)
+        data = {'nombre': tarea.nombre}
+        return JsonResponse(data)
+    except Tarea.DoesNotExist:
+        return JsonResponse({'error': 'El estado no existe'}, status=404)

@@ -55,6 +55,7 @@ urlpatterns = [
 
     #lista de tareas
     path('crear/', TareaCreateView.as_view(), name='tarea-crear'),
+    path('createTareas/', CreateViewTareas.as_view(), name='createTareas'),
     path('lista/', TareaListView.as_view(), name='tarea-lista'),
     path('<int:pk>/editar/', TareaUpdateView.as_view(), name='tarea-editar'),
 
