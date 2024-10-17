@@ -1,6 +1,7 @@
 from datetime import date
 
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from django.contrib.auth.models import User
 from django.forms import model_to_dict
@@ -202,21 +203,49 @@ class Servicio(models.Model):
 #         verbose_name_plural = 'Asistencias'
 
 
+class AttendanceType(models.TextChoices):
+    GENERAL = 'GEN', _('General')
+    YOUTH = 'YTH', _('Jóvenes')
+    LADIES = 'LDS', _('Damas')
+    GENTLEMEN = 'GNT', _('Caballeros')
+
 class Attendance(models.Model):
     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
     date = models.DateField(default=timezone.now)
     present = models.BooleanField(default=False)
     day_of_week = models.CharField(
-        max_length=10, blank=True, editable=False, verbose_name="DÍA DE LA SEMANA"
+        max_length=10, 
+        blank=True, 
+        editable=False, 
+        verbose_name="DÍA DE LA SEMANA"
     )
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    attendance_type = models.CharField(
+        max_length=3,
+        choices=AttendanceType.choices,
+        default=AttendanceType.GENERAL,
+        verbose_name="TIPO DE ASISTENCIA"
+    )
 
     def __str__(self):
-        return f"Asistencia de {self.miembro} el {self.date}"
+        return f"Asistencia de {self.miembro} el {self.date} - {self.get_attendance_type_display()}"
 
-        class Meta:
-            verbose_name = "Asistencia"
-            verbose_name_plural = "Asistencias"
+    @classmethod
+    def get_monthly_absences(cls, miembro, month=None, attendance_type=None):
+        queryset = cls.objects.filter(miembro=miembro, present=False)
+        
+        if month:
+            queryset = queryset.filter(date__month=month)
+        
+        if attendance_type:
+            queryset = queryset.filter(attendance_type=attendance_type)
+        
+        return queryset.count()
+
+    class Meta:
+        verbose_name = "Asistencia"
+        verbose_name_plural = "Asistencias"
+        unique_together = ['miembro', 'date', 'attendance_type']
 
 
 class MiembroStatus(models.Model):

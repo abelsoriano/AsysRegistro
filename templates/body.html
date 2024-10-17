@@ -6,21 +6,7 @@
 
 
 <body>
-    {% if messages %}
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            {% for message in messages %}
-            Swal.fire({
-                title: '{% if message.tags %}{{ message.tags|title }}{% else %}Message{% endif %}',
-                text: '{{ message }}',
-                icon: '{% if message.tags == "error" %}error{% elif message.tags == "warning" %}warning{% elif message.tags == "success" %}success{% else %}info{% endif %}',
-                showConfirmButton: false,
-                timer: 1500
-            });
-            {% endfor %}
-        });
-    </script>
-    {% endif %}
+
     
 </body>
 

@@ -108,6 +108,7 @@ $(function() {
         detalleEmpleado.find('#correo-empleado').text(`Correo: ${email}`);
         detalleEmpleado.find('#estado-empleado').text(`Estado: ${state}`);
         detalleEmpleado.find('#cargo-empleado').text(`Cargo: ${data.cargo.name}`);
+        detalleEmpleado.find('#category-empleado').text(`Categoria: ${data.category}`);
 
         detalleEmpleado.show();
     });

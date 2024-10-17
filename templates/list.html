@@ -2,44 +2,28 @@
 <main class="container-fluid">
 
 	<!--Modar notificacion-->
-	{% if messages %} {% for message in messages %} {% if 'modal_trigger' in message.extra_tags %}
-	<!-- Este bloque de codigo se utiliza para mostrar el modal de notificacion por inasistencia  -->
-	<div class="modal" id="modal-{{ message.extra_tags.miembro_id }}" tabindex="-1" aria-hidden="true">
-		<div class="modal-dialog">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h1 class="modal-title fs-5" id="staticBackdropLabel">Notificación</h1>
-				</div>
-				<form method="post" action="{% url 'asys:guardar_status' %}" onsubmit="return enviarFormulario(event, '{{ message.extra_tags.miembro_id }}');">
+	{% csrf_token %}
 
-					{% csrf_token %}
-					<input type="hidden" name="id" id="id-{{ message.extra_tags.miembro_id }}" value="{{ message.extra_tags|extract_id }}">
-					<div class="modal-body">
-						<p>{{ message.message }}</p>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault1" value="enfermo" checked>
-							<label class="form-check-label" for="flexRadioDefault1">Miembro se encuentra enfermo
-                           </label>
-						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault2" value="visitar">
-							<label class="form-check-label" for="flexRadioDefault2">Miembro necesita ser visitado
-                           </label>
-						</div>
-						<div class="form-check">
-							<input class="form-check-input" type="radio" name="status" id="flexRadioDefault3" value="permiso">
-							<label class="form-check-label" for="flexRadioDefault3">Miembro tiene permiso o excusa
-                           </label>
-						</div>
-					</div>
-					<div class="modal-footer">
-						<button type="submit" class="btn btn-secondary">Entendido</button>
-					</div>
-				</form>
-			</div>
-		</div>
-	</div>
-	{% endif %} {% endfor %} {% endif %}
+	<!-- Al final de tu template, justo antes de cerrar el body -->
+	
+	<!-- Este bloque de codigo se utiliza para mostrar el modal de notificacion por inasistencia  -->
+	<script>
+		let mensajesInasistencia = [];
+		{% if messages %}
+			{% for message in messages %}
+				{% if "modal_trigger" in message.extra_tags %}
+					mensajesInasistencia.push({
+						mensaje: "{{ message.message|escapejs }}",
+						miembroId: "{{ message.extra_tags|extract_id }}"
+					});
+				{% endif %}
+			{% endfor %}
+		{% endif %}
+		
+	</script>
+	
+		
+
 	<script src="{% static 'asistencia/js/asistencia.js' %}"></script>
 	<!--    --------Aqui termina el bloque de inasistencia ---------------------------->
 
@@ -90,6 +74,8 @@
 					<p id="correo-empleado"></p>
 					<p id="estado-empleado"></p>
 					<p id="cargo-empleado"></p>
+					<p id="cargo-empleado"></p>
+					<p id="category-empleado"></p>
 				</div>
 			</div>
 		</div>
