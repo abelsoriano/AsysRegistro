@@ -1,7 +1,6 @@
 let indiceActual = 0;
 
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('Mensajes de inasistencia:', mensajesInasistencia);
     if (mensajesInasistencia.length > 0) {
         mostrarSiguienteAlerta();
     }

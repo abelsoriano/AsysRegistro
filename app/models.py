@@ -300,5 +300,11 @@ class Tarea(models.Model):
         return self.nombre
 
     def toJSON(self):
-        item = model_to_dict(self)
-        return item
+        return {
+            'id': self.id,
+            'nombre': self.nombre,
+            'descripcion': self.descripcion,
+            'fecha': self.fecha.strftime('%Y-%m-%d %H:%M'),
+            'completado': self.completado,
+            'usuario_asignado': f"{self.usuario_asignado.first_name} {self.usuario_asignado.last_name}"
+        }

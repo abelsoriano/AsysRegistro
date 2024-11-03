@@ -1,5 +1,5 @@
 from django.urls import path
-
+from . import views
 from app.views.asistencia import views
 from app.views.asistencia.views import *
 from app.views.cargoEstado.views import *
@@ -41,7 +41,7 @@ urlpatterns = [
     path('guardar-status/', views.guardar_status, name='guardar_status'),
     # path('asistencia/editar/<int:pk>/', AttendaceUpdate.as_view(), name='update_asistencia'),
 
-     path('asistencia/editar/grupal/<date>/', AttendanceUpdateGroup.as_view(), name='edit_asistencia_group'),
+    path('asistencia/editar/grupal/<date>/', AttendanceUpdateGroup.as_view(), name='edit_asistencia_group'),
 
     path('notas/list', NotaView.as_view(), name='nota_list'),
     path('notas/delete/<int:pk>/', NotaDeleteView.as_view(), name='nota_delete'),
@@ -54,10 +54,11 @@ urlpatterns = [
 
 
     #lista de tareas
-    path('crear/', TareaCreateView.as_view(), name='tarea-crear'),
-    path('createTareas/', CreateViewTareas.as_view(), name='createTareas'),
-    path('lista/', TareaListView.as_view(), name='tarea-lista'),
-    path('<int:pk>/editar/', TareaUpdateView.as_view(), name='tarea-editar'),
+
+    path('tareas/', TareaListView.as_view(), name='tareas-list'),
+    path('editar/<int:pk>/', TareaUpdateView.as_view(), name='tarea-editar'),
+    path('obtener/<int:pk>/', obtener_tarea, name='tarea-obtener'),
+    path('completar/<int:pk>/', completar_tarea, name='tarea-completar'),
 
     #Cargo y Estado
     path('crearEstado/', ModelEstadoCreateView.as_view(), name='create-estado'),

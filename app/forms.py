@@ -146,17 +146,40 @@ class AsistenciaForm(forms.ModelForm):
 AsistenciaFormSet = modelformset_factory(Attendance, form=AsistenciaForm, extra=0)
 
 
-class TareasForm(forms.ModelForm):
+
+
+class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
-        fields = ['nombre', 'descripcion', 'fecha', 'completado']
+        fields = ['nombre', 'descripcion', 'fecha']
         widgets = {
-            'nombre': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el título'}),
-            'descripcion': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
-            'fecha': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
-            # 'completado': forms.RadioSelect(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
-
+            'nombre': forms.TextInput(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese el título de la actividad'
+                }
+            ),
+            'descripcion': forms.Textarea(
+                attrs={
+                    'class': 'form-control',
+                    'placeholder': 'Ingrese la descripción',
+                    'rows': '4'
+                }
+            ),
+            'fecha': forms.DateTimeInput(
+                attrs={
+                    'class': 'form-control',
+                    'type': 'datetime-local'
+                }
+            ),
         }
+
+    def clean_fecha(self):
+        fecha = self.cleaned_data.get('fecha')
+        if fecha is None:
+            raise forms.ValidationError("La fecha es requerida")
+        return fecha
+
         
         
 class NotaForm(forms.ModelForm):
