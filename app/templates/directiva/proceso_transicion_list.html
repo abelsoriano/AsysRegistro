@@ -1,0 +1,98 @@
+{% extends 'form.html' %}
+{% load static %}{% block campos %} 
+<link href="{% static 'directiva/style.css' %}" rel="stylesheet" />
+
+<div class="detail-container">
+    <div class="card shadow">
+        
+        <div class="card-header text-white d-flex justify-content-between align-items-center" style="background-color: #4fc3f7">
+            <h2 class="h4 mb-0">Procesos de Transición</h2>
+
+            <div class="btn-group" role="group">
+                <button id="btnGroupDrop1" type="button" class="btn btn-light dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
+                  Nuevo Proceso
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+                  <li><a class="dropdown-item" href="{% url 'asys:proceso_transicion_create' %}">Nuevo Proceso de Transición</a></li>
+                  <li><a class="dropdown-item" href="{% url 'asys:periodo_directiva_list' %}">Nuevo Período</a></li>
+                </ul>
+            </div>
+
+        </div>
+        
+        <div class="card-body">
+            <!-- Filtros -->
+            <div class="mb-4">
+                <form method="get" class="form-inline" id="filtroForm">
+                    <select name="estado" class="form-control mr-2">
+                        <option value="">Todos los estados</option>
+                        {% for estado, nombre in estados_choices %}
+                        <option value="{{ estado }}" {% if estado_seleccionado == estado %}selected{% endif %}>
+                            {{ nombre }}
+                        </option>
+                        {% endfor %}
+                    </select>
+                </form>
+            </div>
+
+            <!-- Tabla -->
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Sección</th>
+                            <th>Período Anterior</th>
+                            <th>Período Nuevo</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for proceso in procesos %}
+                        <tr>
+                            <td>{{ proceso.seccion }}</td>
+                            <td>{{ proceso.periodo_anterior }}</td>
+                            <td>{{ proceso.periodo_nuevo }}</td>
+                            <td>
+                                <span class="badge rounded-pill {% if proceso.estado == 'COMPLETADO' %}bg-success
+                                    {% elif proceso.estado == 'PREPARACION' %}bg-warning text-dark
+                                    {% elif proceso.estado == 'VOTACION' %}bg-primary
+                                    {% elif proceso.estado == 'INSCRIPCION' %}bg-info
+                                    {% elif proceso.estado == 'CONFIRMACION' %}bg-info text-dark
+                                    {% else %}bg-secondary{% endif %}">
+                                    {{ proceso.get_estado_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{% url 'asys:proceso_transicion_detail' proceso.id %}" 
+                                   class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i> Ver Detalles
+                                </a>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No hay procesos de transición disponibles</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% block botones %}{% endblock %}
+{% endblock %}
+{% block javascript %}
+<script>
+    function cambiarEstado(estado) {
+        let url = new URL(window.location.href);
+        if (estado) {
+            url.searchParams.set('estado', estado);
+        } else {
+            url.searchParams.delete('estado');
+        }
+        window.location.href = url.toString();
+    }
+    </script>
+{% endblock %}

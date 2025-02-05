@@ -1,0 +1,102 @@
+<!-- proceso_transicion_detail.html -->
+{% extends 'form.html' %}{% load static %}{% block campos %} 
+<link href="{% static 'directiva/style.css' %}" rel="stylesheet" />
+
+<div class="detail-container">
+    <div class="card shadow">
+        
+        <div class="card-header bg-primary text-white">
+            <h1 class="h3 mb-0">Detalles del Proceso de Transición</h1>
+        </div>
+
+        <div class="card-body">
+            <h5 class="text-primary">Información del Proceso</h5>
+            <div class="row">
+                <div class="col-md-6">
+                    <p><strong>Sección:</strong> {{ proceso.seccion }}</p>
+                    <p><strong>Período Anterior:</strong> {{ proceso.periodo_anterior }}</p>
+                    <p><strong>Estado:</strong> {{ proceso.get_estado_display }}</p>
+                </div>
+
+                <div class="col-md-6">
+                    <p><strong>Período Nuevo:</strong> {{ proceso.periodo_nuevo }}</p>
+                    <p><strong>Fecha Inicio:</strong> {{ proceso.fecha_inicio }}</p>
+                    <p><strong>Fecha Fin Planeada:</strong> {{ proceso.fecha_fin_planeada }}</p>
+                </div>
+            </div>
+        
+            <form method="post" action="{% url 'asys:proceso_transicion_detail' proceso.id %}">
+                {% csrf_token %}
+                <label for="estado" class="form-label mt-2">Cambiar Estado:</label>
+                <select name="nuevo_estado" id="estado" class="form-select">
+                    {% for estado, descripcion in proceso.ESTADO_CHOICES %}
+                        <option value="{{ estado }}" {% if estado == proceso.estado %}selected{% endif %}>
+                            {{ descripcion }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary mt-2">Actualizar Estado</button>
+            </form>
+
+    </div>
+        
+
+    <div class="card shadow mt-4">
+        <div class="card-header bg-success text-white">
+            <h2 class="h4 mb-0">Candidatos</h2>
+        </div>
+        <div class="card-body">
+            <a href="{% url 'asys:registrar_candidato' proceso.id %}" class="btn btn-success mb-3">
+                Registrar Nuevo Candidato
+            </a>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Miembro</th>
+                            <th>Cargo Postulado</th>
+                            <th>Votos</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for candidato in candidatos %}
+                        <tr>
+                            <td>{{ candidato.miembro }}</td>
+                            <td>{{ candidato.cargo_postulado }}</td>
+                            <td>{{ candidato.votos }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="3" class="text-center">No hay candidatos registrados.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% if proceso.estado == 'VOTACION' %}
+            <a href="{% url 'asys:iniciar_votacion' proceso.id %}" class="btn btn-primary mt-3">
+                Iniciar Votación
+            </a>
+            {% endif %}
+
+            {% if proceso.estado == 'COMPLETADO' %}
+            <a href="{% url 'asys:finalizar_list' proceso.id %}" class="btn btn-secondary mt-3">
+                Registro de Finanzas
+            </a>
+            {% endif %}
+
+        </div>
+        
+    </div>
+ 
+</div>
+<div>
+    <a href="{% url 'asys:proceso_transicion_list' %}" class="btn btn-success mt-3">
+        <i class="fas fa-arrow-left"></i> Regresar
+    </a>
+</div>
+
+{% block botones %}{% endblock %}
+
+
+{% endblock %}

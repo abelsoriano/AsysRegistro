@@ -1,0 +1,55 @@
+{% extends 'body.html' %}
+
+{% block content %}
+{% load static %}
+
+<main class="container-fluid">
+    <div class="row px-xl-6">
+        <div class="col-12">
+            <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
+                <div class="lh-2">
+                    <h4 class="h4 mb-0">{% if object %}Editar{% else %}Nuevo{% endif %} Periodo Directiva</h4>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <form class="was-validated" method="post">
+        {% csrf_token %}
+        
+        <div class="my-3 p-3 bg-body rounded shadow-sm" id="data">
+
+            <!-- Fila para los campos -->
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.seccion.id_for_label }}">{{ form.seccion.label }}</label>
+                    {{ form.seccion }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.fecha_inicio.id_for_label }}">{{ form.fecha_inicio.label }}</label>
+                    {{ form.fecha_inicio }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.fecha_fin.id_for_label }}">{{ form.fecha_fin.label }}</label>
+                    {{ form.fecha_fin }}
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label" for="{{ form.estado.id_for_label }}">{{ form.estado.label }}</label>
+                    {{ form.estado }}
+                </div>
+            </div>
+
+            <div class="d-grid mt-3">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-2"></i>{% if object %}Guardar Cambios{% else %}Crear Periodo{% endif %}
+                </button>
+            </div>
+
+        </div>
+    </form>
+
+</main>
+{% endblock %}

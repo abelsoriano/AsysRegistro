@@ -1,121 +1,118 @@
-{% extends 'body.html' %} {% load static %} {% load custom_tags %} {% block head %} {% block head_list %} {% endblock %} {% endblock %} {% block contents %}
+{% extends 'body.html' %}
+{% load static %}
+{% load custom_tags %}
+
+{% block head %}
+    {% block head_list %}{% endblock %}
+    <style>
+        
+    </style>
+{% endblock %}
+
+{% block content %}
 <main class="container-fluid">
-
-	<!--Modar notificacion-->
-	{% csrf_token %}
-
-	<!-- Al final de tu template, justo antes de cerrar el body -->
-	
-	<!-- Este bloque de codigo se utiliza para mostrar el modal de notificacion por inasistencia  -->
-	<script>
-		let mensajesInasistencia = [];
-		{% if messages %}
-			{% for message in messages %}
-				{% if "modal_trigger" in message.extra_tags %}
-					mensajesInasistencia.push({
-						mensaje: "{{ message.message|escapejs }}",
-						miembroId: "{{ message.extra_tags|extract_id }}"
-					});
-				{% endif %}
-			{% endfor %}
-		{% endif %}
-		
-	</script>
-	
-		
-
-	<script src="{% static 'asistencia/js/asistencia.js' %}"></script>
-	<!--    --------Aqui termina el bloque de inasistencia ---------------------------->
-
-
-	<!--Este Modal muestra el detallaes de asistencia Cuando se hace clic en el hojo o boton de la lista-->
-	<div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
-		<div class="modal-dialog modal-lg" role="document">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h5 class="modal-title" id="detailsModalLabel">Detalles de Asistencia</h5>
-				</div>
-				<div class="modal-body">
-					<table class="table display table-bordered table-striped table-hover table-sm id stripe row-border order-column nowrap" id="detailsTable">
-						<thead>
-							<tr class="table-primary">
-								<th scope="col">ID</th>
-								<th scope="col">Nombre</th>
-								<th scope="col">Fecha de Registro</th>
-								<th scope="col">Presente</th>
-							</tr>
-						</thead>
-						<tbody></tbody>
-					</table>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-				</div>
-			</div>
-		</div>
-	</div>
-
-	<!--    Este bloque muestra un detalle en la pantalla de lista de miembro al hacer clic-->
-	<div style="width: 100%; display: flex; justify-content: center;">
-		<div id="detalle" class="card" style="display: none; ">
-			<button type="button" class="close-button">&#x2716;</button>
-			<div class="card-body">
-				<div class="card-img-container">
-					<img src="" id="perfil" alt="Foto de perfil">
-				</div>
-				<div class="card-details">
-					<h2 id="nombre-empleado"></h2>
-					<p id="dni-empleado"></p>
-					<p id="nacimiento-empleado"></p>
-					<p id="genero-mpleado"></p>
-					<p id="telefono-empleado"></p>
-					<p id="direccion-empleado"></p>
-					<p id="ingreso-empleado"></p>
-					<p id="correo-empleado"></p>
-					<p id="estado-empleado"></p>
-					<p id="cargo-empleado"></p>
-					<p id="cargo-empleado"></p>
-					<p id="category-empleado"></p>
-				</div>
-			</div>
-		</div>
-
-	</div>
-
-	{% comment %} Este bloque detalla las tablas  {% endcomment %}
-	<div class="row px-xl-6">
+    {% csrf_token %}
+    
+    <!-- Header del contenido -->
+    <div class="row px-xl-6">
         <div class="col-14">
-                <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
-                    <div class="lh-2">
-                        <i class="fa fa-list"></i> {{title}}
-                    </div>
+            <div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
+                <div class="lh-2">
+                    <i class="fa fa-list"></i> {{title}}
                 </div>
+            </div>
 
-                <div class="my-3 p-3 bg-body rounded shadow-sm">
-					{% block sweetAlert2 %}
-				    {% endblock sweetAlert2 %}
-                    <table class="table display table-bordered table-striped table-hover table-sm id stripe row-border order-column nowrap" id="data">
+            {% block sweetAlert2 %}{% endblock %}
+
+            <!-- Tabla principal -->
+            <div class="table-container">
+                <table class="table table-hover table-sm" id="data">
+                    <thead>
+                        {% block columns %}{% endblock %}
+                    </thead>
+                    <tbody>
+                        {% block rows %}{% endblock %}
+                    </tbody>
+                </table>
+                
+                {% block buttonAdd %}
+                <div class="card-footer">
+                    <a href="{{create_url}}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+                        <i class="fas fa-plus"></i> Nuevo registro
+                    </a>
+                </div>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de detalles de Asistencia-->
+    <div class="modal fade" id="detailsModal" tabindex="-1" role="dialog" aria-labelledby="detailsModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detailsModalLabel">Detalles de Asistencia</h5>
+                </div>
+                <div class="modal-body">
+                    <table class="table display table-bordered table-striped table-hover table-sm" id="detailsTable">
                         <thead>
-                            {% block columns %} {% endblock %}
+                            <tr class="table-primary">
+                                <th scope="col">ID</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Fecha de Registro</th>
+                                <th scope="col">Presente</th>
+                            </tr>
                         </thead>
-                        <tbody>
-                            {% block rows %} {% endblock %}
-                        </tbody>
+                        <tbody></tbody>
                     </table>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-                   
-				   {% block buttonAdd %}
-				   <div class="card-footer">
-					<a href="{{create_url}}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
-						<i class="fas fa-plus"></i> Nuevo registro
-					</a>
-					
-				    </div>
-				   {% endblock buttonAdd %}
-					
+    <!-- Card de detalles Miembro-->
+    <div style="width: 100%; display: flex; justify-content: center;">
+        <div id="detalle" class="card-miembro" style="display: none;">
+            <button type="button" class="close-button">&#x2716;</button>
+            <div class="card-body-miembro">
+                <div class="card-img-container">
+                    <img src="" id="perfil" alt="Foto de perfil">
+                </div>
+                <div class="card-details">
+                    <h2 id="nombre-empleado"></h2>
+                    <p id="dni-empleado"></p>
+                    <p id="nacimiento-empleado"></p>
+                    <p id="genero-mpleado"></p>
+                    <p id="telefono-empleado"></p>
+                    <p id="direccion-empleado"></p>
+                    <p id="ingreso-empleado"></p>
+                    <p id="correo-empleado"></p>
+                    <p id="estado-empleado"></p>
+                    <p id="cargo-empleado"></p>
+                    <p id="category-empleado"></p>
                 </div>
             </div>
         </div>
     </div>
 </main>
-{% endblock %} {% block javascript %} {% endblock %}
+{% endblock %}
+
+{% block javascript %}
+<script>
+    let mensajesInasistencia = [];
+    {% if messages %}
+        {% for message in messages %}
+            {% if "modal_trigger" in message.extra_tags %}
+                mensajesInasistencia.push({
+                    mensaje: "{{ message.message|escapejs }}",
+                    miembroId: "{{ message.extra_tags|extract_id }}"
+                });
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</script>
+<script src="{% static 'asistencia/js/asistencia.js' %}"></script>
+{% endblock %}

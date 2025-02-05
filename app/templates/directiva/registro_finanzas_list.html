@@ -1,0 +1,69 @@
+{% extends 'body.html' %}
+{% block content %}
+{% load static %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">Registros de Finanzas</h2>
+            <a href="{% url 'asys:registro_finanzas_create' proceso_id %}" class="btn btn-light">
+                <i class="fas fa-plus"></i> Nuevo Registro
+            </a>
+        </div>
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Periodo</th>
+                            <th>Total Miembros</th>
+                            <th class="text-right">Total Fondos</th>
+                            <th>Fecha</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for registro in registros %}
+                        <tr>
+                            <td>{{ registro.periodo }}</td>
+                            <td>{{ registro.total_miembros_recibidos }}</td>
+                            <td class="text-right">$ {{ registro.total_fondos_recibidos|floatformat:2 }}</td>
+                            <td>{{ registro.fecha_registro|date:"d/m/Y" }}</td>
+                            <td>
+                                <div class="btn-group">
+                                    <!-- Botón Editar -->
+                                    <a href="{% url 'asys:registro_finanzas_edit' proceso_id=proceso_id pk=registro.id %}" class="btn btn-sm btn-warning">
+                                        <i class="fas fa-edit"></i> Editar
+                                    </a>
+                                    
+                                    <!-- Botón Eliminar -->
+                                    <form action="{% url 'asys:registro_finanzas_delete' proceso_id=proceso_id pk=registro.id %}" method="post" style="display:inline;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de que deseas eliminar este registro?');">
+                                            <i class="fas fa-trash"></i> Eliminar
+                                        </button>
+                                    </form>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-4">
+                                <p class="text-muted mb-0">No hay registros financieros disponibles</p>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="mt-3">
+        <a href="{% url 'asys:proceso_transicion_detail' proceso_id %}" 
+           class="btn btn-secondary">
+            <i class="fas fa-arrow-left"></i> Volver al Proceso
+        </a>
+    </div>
+</div>
+{% endblock %}

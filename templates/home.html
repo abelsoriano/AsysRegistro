@@ -1,95 +1,86 @@
 {% load static %}
+{% load livereload_tags %}
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="csrf-token" content="{{ csrf_token }}">
     <title>Sistema de Registro</title>
-    <meta content="" name="description" />
-    <meta content="" name="keywords" />
 
     <!-- Favicons -->
-    <link href="{% static 'assets/img/favicon.png' %}" rel="icon" />
-    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon" />
+    <link href="{% static 'assets/img/favicon.png' %}" rel="icon">
+    <link href="{% static 'assets/img/apple-touch-icon.png' %}" rel="apple-touch-icon">
+
+    <!-- CSS Principal -->
+    <!-- Bootstrap CSS -->
+    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+
+    <!-- Select2 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" rel="stylesheet"/>
 
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Roboto:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Roboto:300,400,500,700|Poppins:300,400,500,600,700&display=swap" rel="stylesheet">
 
-    <!-- Vendor CSS Files -->
-    <link href="{% static 'assets/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/animate.css/animate.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/aos/aos.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/glightbox/css/glightbox.min.css' %}" rel="stylesheet" />
-    <link href="{% static 'assets/vendor/swiper/swiper-bundle.min.css' %}" rel="stylesheet" />
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-    <!-- Bootstrap Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" />
+    <!-- DataTables CSS -->
+    <link href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+    <link href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" rel="stylesheet">
 
-    <!-- Manejar los errores -->
-    <link rel="stylesheet" href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" />
-    <link href="{% static 'css/helper.css' %}" rel="stylesheet" />
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
+    <!-- Otros estilos -->
+    <link href="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.css' %}" rel="stylesheet">
+    <link href="{% static 'css/helper.css' %}" rel="stylesheet">
+    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet">
+    <link href="{% static 'css/estiloTabla.css' %}" rel="stylesheet">
 
-    <!-- Data table -->
-    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/css/dataTables.bootstrap4.min.css' %}" />
-    <link rel="stylesheet" href="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/css/responsive.bootstrap4.min.css' %}" />
+    <!-- Media de Django (para formularios) -->
+    {{ form.media.css }}
 
-    <!-- Template MainMain CSS File -->
-    <link href="{% static 'assets/css/style.css' %}" rel="stylesheet" />
+    {% block head %}{% endblock %}
+</head>
 
-  </head>
-  {% block head %}
-
-  {% endblock %}
-
-  <body class="bg-light">
-    <!-- =================main====================== -->
-    <body >
-      {% block body %}
-
-      {% endblock %}
-    </body>
+<body class="bg-light">
+    {% block body %}{% endblock %}
 
     <div id="preloader"></div>
-    <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="bi bi-arrow-up-short"></i>
+    </a>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.6/jquery.inputmask.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    {% comment %} <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script> {% endcomment %}
-    <script src="{% static 'js/offcanvas.js' %}"></script>
+    <!-- JavaScript Principal -->
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 
-    <!-- Bootstrap Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <!-- Manejo de errores -->
-    <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
-    <script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
-    <script src="{% static 'js/functions.js' %}"></script>
+    <!-- Select2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
-    <!-- Data Table -->
+    <!-- Bootstrap JS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- DataTables y sus plugins -->
     <script src="{% static 'lib/datatables-1.10.20/js/jquery.dataTables.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/js/dataTables.bootstrap4.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/dataTables.responsive.min.js' %}"></script>
     <script src="{% static 'lib/datatables-1.10.20/plugins/responsive-2.2.3/js/responsive.bootstrap4.min.js' %}"></script>
 
-    <!-- Vendor JS Files -->
-    <script src="{% static 'assets/vendor/purecounter/purecounter_vanilla.js' %}"></script>
-    <script src="{% static 'assets/vendor/aos/aos.js' %}"></script>
-    <script src="{% static 'assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/glightbox/js/glightbox.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/swiper/swiper-bundle.min.js' %}"></script>
-    <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
+    <!-- Otros scripts -->
+    <script src="{% static 'lib/jquery-confirm-v3.3.4/jquery-confirm.min.js' %}"></script>
+    <script src="{% static 'lib/sweetalert2-9.10.0/sweetalert2.all.min.js' %}"></script>
 
-    <!-- Template Main JS File -->
+    <!-- Django Select2 JS -->
+    <script src="{% static 'django_select2/django_select2.js' %}"></script>
+
+    <!-- Scripts personalizados -->
+    <script src="{% static 'js/functions.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'js/offcanvas.js' %}"></script>
 
-    {% block javascript %}
 
-    {% endblock %}
-  </body>
+    {% block javascript %}{% endblock %}
+</body>
+{% livereload_script %}
 </html>

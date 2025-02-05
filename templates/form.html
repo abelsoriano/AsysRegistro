@@ -1,19 +1,9 @@
-{% extends 'body.html' %} {% load widget_tweaks %} {% block contents %}
+{% extends 'body.html' %} {% load widget_tweaks %} {% block content %}{% load static %}
 
 <main class="container-fluid">
-
-	<div class="row px-xl-6">
-		<div class="col-14">
 			<form class="was-validated" method="post" action="." enctype="multipart/form-data">
 				{% csrf_token %}
-				<div class="d-flex align-items-center p-2 my-3 text-white bg-LightSeaGreen rounded shadow-sm">
-					<div class="lh-2">
-						{% if action == 'add' %}
-						<i class="fa fa-user-plus"></i> {% else %}
-						<i class="fas fa-edit"></i> {% endif %} {{ title }}
-					</div>
-				</div>
-				<div class="my-3 p-3 bg-body rounded shadow-sm">
+				<div class="my-3 p-3 bg-body rounded shadow-sm" id="data">
 					<input type="hidden" name="action" value="{{ action }}"> {% if form.errors %}
 					<div class="alert alert-danger alert-dismissible">
 						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
@@ -26,12 +16,18 @@
 					</div>
 					{% endif %} {% block campos %} {% endblock %}
 				</div>
+                
 
-				<button class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar</button>
-				<button href="{{create_url}}" class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar y agregar otro</button>
+                {% block botones %}
+                <button class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar</button>
+				{% comment %} <button href="{{create_url}}" class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar y agregar otro</button> {% endcomment %}
 				<a href="{{list_url}}" class="btn btn-danger btn-flat">
 					<i class="fas fa-times"></i> Cancelar
 				</a>
+
+                {% endblock %}
+ 
+				
             </form>
 		</div>
 	</div>
@@ -40,6 +36,9 @@
 
 </main><br>
 
+
+
+{% block javascript %}
 
 <script>
 	document.addEventListener('DOMContentLoaded', function () {
@@ -98,34 +97,14 @@
         Inputmask("999-999-9999").mask(document.querySelector('[name="phone"]'));
 
         // Initialize datepickers
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            autoclose: true,
-            todayHighlight: true
-        });
+       // $('.datepicker').datepicker({
+      //      format: 'dd/mm/yyyy',
+        //    autoclose: true,
+          //  todayHighlight: true
+        
+        
     });
-</script>
-
-
-
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        new AutoNumeric('.money-input', {
-            currencySymbol: '$',
-            digitGroupSeparator: ',',
-            decimalCharacter: '.',
-            decimalPlaces: 2,
-            minimumValue: '0',
-            maximumValue: '9999999999.99'
-        });
-    });
-
 
 </script>
 
-
-
-{% block javascript %}
-<!-- Aquí puedes añadir JavaScript adicional si es necesario -->
 {% endblock %} {% endblock %}

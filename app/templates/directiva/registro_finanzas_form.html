@@ -1,0 +1,77 @@
+{% extends 'form.html' %}
+{% block campos %}
+{% load static %}
+{% load widget_tweaks %}
+
+<!-- Bootstrap Icons -->
+<div class="container py-5">
+    <div class="row g-0 shadow-lg rounded overflow-hidden">
+        <!-- Columna de Imagen -->
+        <div class="col-md-6 d-none d-md-block" style="background-color: #f8f9fa;">
+            <div style="position: relative; height: 100%; overflow: hidden;">
+                <img src="{% static 'directiva/finanza.jpg' %}" 
+                     alt="Finanzas" 
+                     style="position: absolute; 
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            min-width: 100%;
+                            min-height: 100%;
+                            object-fit: cover;
+                            width: 100%;
+                            height: 100%;">
+            </div>
+        </div>
+        
+        <!-- Columna de Formulario -->
+        <div class="col-md-6 bg-light p-5">
+            <div class="text-center mb-4">
+                <h2 class="fw-bold text-primary">Registro de Finanzas</h2>
+                <p class="text-muted">Ingresa tus datos financieros</p>
+            </div>
+            
+            <form method="post">
+                {% csrf_token %}
+                
+                {% for field in form %}
+                <div class="mb-3">
+                    <label for="{{ field.id_for_label }}" class="form-label">
+                        {{ field.label }}
+                    </label>
+                    
+                    <div class="input-group">
+                        <span class="input-group-text">
+                            <i class="bi {% if 'monto' in field.name|lower %}bi-cash
+                                      {% elif 'fecha' in field.name|lower %}bi-calendar
+                                      {% else %}bi-pencil{% endif %}"></i>
+                        </span>
+                        {{ field|add_class:"form-control" }}
+                    </div>
+                    
+                    {% if field.errors %}
+                    <div class="text-danger small mt-1">
+                        {% for error in field.errors %}
+                            {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+                
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary btn-lg">
+                        <i class="bi bi-save me-2"></i>Registrar Finanzas
+                    </button>
+                </div>
+                <div class="d-grid mt-2">
+                    <a href="{% url 'asys:finalizar_list' proceso_id=proceso_id %}" class="btn btn-secondary btn-lg">
+                        <i class="bi bi-x-circle me-2"></i>Cancelar
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% block botones %}{% endblock %}
+
+{% endblock %}

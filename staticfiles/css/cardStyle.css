@@ -1,0 +1,23 @@
+/* Estilos para las tarjetas */
+.card {
+    background-color: #f8f9fa; /* Color de fondo */
+    border: 1px solid #dee2e6; /* Borde */
+    border-radius: 10px; /* Borde redondeado */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    transition: box-shadow 0.3s ease; /* Transición de la sombra */
+}
+
+.card:hover {
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.2); /* Aumentar la sombra al pasar el mouse */
+}
+
+/* Estilos para el texto del encabezado de la tarjeta */
+.card-header {
+    background-color: #007bff; /* Color de fondo del encabezado */
+    color: #fff; /* Color del texto */
+}
+
+/* Estilos para el texto del cuerpo de la tarjeta */
+.card-body {
+    color: #333; /* Color del texto */
+}

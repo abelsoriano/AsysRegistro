@@ -18,8 +18,7 @@
       <div class="container d-flex align-items-center">
   
         <a href="{% url 'index' %}" class="logo me-auto"><img src="{% static 'assets/img/logo.png' %}" alt=""></a>
-        <!-- Uncomment below if you prefer to use an image logo -->
-        <!-- <h1 class="logo me-auto"><a href="index.html">Medicio</a></h1> -->
+
   
         <nav id="navbar" class="navbar order-last order-lg-0">
           <ul>
@@ -38,7 +37,7 @@
             <li class="dropdown"><a href="#"><span>Utilidades</span> <i class="bi bi-chevron-down"></i></a>
               <ul>
                 <li><a href="{% url 'asys:nota_list' %}">Notas</a>
-                <li><a href="#">Cambio Directiva</a>
+                <li><a href="{% url 'asys:proceso_transicion_list' %}">Cambio Directiva</a>
                 <li><a href="{% url 'asys:tareas-list' %}">Tareas</a>
                 
               </ul>

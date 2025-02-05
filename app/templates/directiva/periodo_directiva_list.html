@@ -1,0 +1,61 @@
+{% extends 'body.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h2 class="h4 mb-0">Periodos Directiva</h2>
+            <a href="{% url 'asys:periodo_directiva_create' %}" class="btn btn-light">
+                <i class="fas fa-plus"></i> Nuevo Periodo
+            </a>
+        </div>
+        
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Sección</th>
+                            <th>Fecha Inicio</th>
+                            <th>Fecha Fin</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for periodo in periodos %}
+                        <tr>
+                            <td>{{ periodo.seccion }}</td>
+                            <td>{{ periodo.fecha_inicio|date:"d/m/Y" }}</td>
+                            <td>
+                                {% if periodo.fecha_fin %}
+                                    {{ periodo.fecha_fin|date:"d/m/Y" }}
+                                {% else %}
+                                    Actual
+                                {% endif %}
+                            </td>
+                            <td>{{ periodo.get_estado_display }}</td>
+                            <td>
+                                <a href="{% url 'asys:periodo_directiva_edit' pk=periodo.pk %}" class="btn btn-sm btn-warning">
+                                    <i class="fas fa-edit"></i> Editar
+                                </a>
+                                <form action="{% url 'asys:periodo_directiva_delete' pk=periodo.pk %}" method="post" style="display:inline;">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de eliminar este periodo?');">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center">No hay periodos directivos disponibles.</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

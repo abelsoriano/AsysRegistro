@@ -1,30 +1,31 @@
 {% extends 'home.html' %}
+{% load static %}
+
+{% block head %}
+    <!-- Aquí va cualquier CSS adicional específico de esta página -->
+{% endblock head %}
 
 {% block body %}
-<!-- Incluye el Header -->
-{% include 'header.html' %}
 
+    <!-- Header -->
+    {% include 'header.html' %}
 
-<body>
+    <!-- Contenido Principal -->
+    <div>
+        <div class="row">
+            <div class="col-12">
+                <!-- Aquí va el contenido específico de cada página -->
+                {% block content %}
+                {% endblock content %}
+            </div>
+        </div>
+    </div>
 
-    
-</body>
+    <!-- Footer -->
+    {% comment %} {% include 'footer.html' %} {% endcomment %}
+{% endblock body %}
 
-
-{% block contents %}
-
-<!-- Contenido del cuerpo -->
-{% endblock %}
-
-
-
-
-{% block javascript  %}
-<!--Java script static-->
-{% endblock %}
-
-<!-- Footer -->
-
-
+{% block javascript %}
+    <!-- Aquí va el JavaScript específico de esta página -->
 
 {% endblock %}

@@ -1,0 +1,108 @@
+<!-- proceso_transicion_form.html -->
+{% extends 'form.html' %}{% load static %}{% block campos %} 
+<link href="{% static 'directiva/style.css' %}" rel="stylesheet" />
+
+
+<div class="form-container">
+    <div class="image-side"></div>
+
+    <div class="form-side">
+        <h1>Nuevo Proceso de Transición</h1>
+
+
+		<div class="row g-3">
+			
+			<div class="col-md-6">
+				<label class="form-label">{{ form.seccion.label }}</label> {{ form.seccion }}
+			</div> 
+
+			<div class="col-md-6">
+				<label class="form-label">{{ form.periodo_anterior.label }}</label> {{ form.periodo_anterior }}
+			</div>
+
+            <div class="col-md-6">
+				<label class="form-label">{{ form.periodo_nuevo.label }}</label> {{ form.periodo_nuevo }}
+			</div>
+
+            <div class="col-md-6">
+				<label class="form-label">{{ form.fecha_inicio.label }}</label> {{ form.fecha_inicio }}
+			</div>
+
+            <div class="col-md-6">
+				<label class="form-label">{{ form.fecha_fin_planeada.label }}</label> {{ form.fecha_fin_planeada }}
+			</div>
+
+            <div class="col-md-6">
+				<label class="form-label">{{ form.observaciones.label }}</label> {{ form.observaciones }}
+			</div>
+
+
+	
+			<button type="submit" class="btn btn-primary">
+				Crear Proceso de Transición
+			</button>
+
+
+			<a href="{% url  'asys:proceso_transicion_list'%}" class="btn btn-danger btn-flat">
+				<i class="fas fa-times"></i> Cancelar
+			</a>
+	
+
+
+        </div>
+		
+
+    </div>
+
+</div>
+
+{% block botones %}{% endblock %}
+
+{% block javascript %}
+<script>
+	function cargarPeriodos(seccionId) {
+		if (!seccionId) {
+			// Limpiar los campos si no hay sección seleccionada
+			document.getElementById('id_periodo_anterior').innerHTML = '<option value="">Seleccione período anterior</option>';
+			document.getElementById('id_periodo_nuevo').innerHTML = '<option value="">Seleccione período nuevo</option>';
+			return;
+		}
+		
+		// Cargar períodos activos
+		fetch(`/asys/api/periodos-activos/${seccionId}/`)
+			.then(response => response.json())
+			.then(data => {
+				const periodoAnteriorSelect = document.getElementById('id_periodo_anterior');
+				periodoAnteriorSelect.innerHTML = '<option value="">Seleccione período anterior</option>';
+				data.forEach(periodo => {
+					periodoAnteriorSelect.innerHTML += `<option value="${periodo.id}">${periodo.descripcion}</option>`;
+				});
+			})
+			.catch(error => console.error('Error:', error));
+	
+		// Cargar períodos planeados
+		fetch(`/asys/api/periodos-planeados/${seccionId}/`)
+			.then(response => response.json())
+			.then(data => {
+				const periodoNuevoSelect = document.getElementById('id_periodo_nuevo');
+				periodoNuevoSelect.innerHTML = '<option value="">Seleccione período nuevo</option>';
+				data.forEach(periodo => {
+					periodoNuevoSelect.innerHTML += `<option value="${periodo.id}">${periodo.descripcion}</option>`;
+				});
+			})
+			.catch(error => console.error('Error:', error));
+	}
+	
+	// Ejecutar la carga inicial si hay una sección seleccionada
+	document.addEventListener('DOMContentLoaded', function() {
+		const seccionSelect = document.getElementById('id_seccion');
+		if (seccionSelect.value) {
+			cargarPeriodos(seccionSelect.value);
+		}
+	});
+	</script>
+{% endblock %}
+
+
+{% endblock %}
+
