@@ -1,4 +1,5 @@
 import datetime
+import logging
 
 from django.shortcuts import render
 from django.views.generic import *
@@ -16,14 +17,14 @@ from django.http import JsonResponse
 def members_list(request):
     today = datetime.today().strftime('%m-%d')
     birthday_members = Miembro.objects.filter(date_joined__strftime='%m-%d' == today)
-    return render(request, 'persona/list.html', {
+    return render(request, 'persona/MiembroList.html', {
         'birthday_members': birthday_members,
         'members': Miembro.objects.all(),
     })
 
 class MembersListView(ListView):
     model = Miembro
-    template_name = 'persona/list.html'
+    template_name = 'persona/MiembroList.html'
 
     @method_decorator(login_required)
     @method_decorator(csrf_exempt)
@@ -132,6 +133,10 @@ class MembersUpdate(UpdateView):
         context['action'] = 'edit'
         return context
 
+
+
+logger = logging.getLogger(__name__)
+
 class MembersDelete(DeleteView):
     model = Miembro
     template_name = 'persona/delete.html'
@@ -162,6 +167,9 @@ class MembersDelete(DeleteView):
         context['list_url'] = self.success_url
         context['action'] = 'delete'
         return context
+
+    
+
 
 
 

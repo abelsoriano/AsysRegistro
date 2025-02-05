@@ -11,43 +11,25 @@ from django.shortcuts import redirect
 from django.contrib.auth.mixins import UserPassesTestMixin
 
 
-# @receiver(post_save, sender=CambioDirectiva)
-# def update_miembros_cargo(sender, instance, **kwargs):
-#     cargos = {
-#         'presidente': instance.presidente,
-#         'vicepresidente': instance.vicepresidente,
-#         'secretario': instance.secretario,
-#         'sub_secretario': instance.sub_secretario,
-#         'tesorero': instance.tesorero,
-#         'primer_vocal': instance.primer_vocal,
-#     }
+# asys/signals.py
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from django.utils import timezone
+from .models import ProcesoTransicion
 
-#     try:
-#         cargo_miembro_default = Cargo.objects.get(name="Miembro")
-#     except Cargo.DoesNotExist:
-#         print("El cargo 'Miembro' no existe en la base de datos.")
-#         return
+@receiver(post_save, sender=ProcesoTransicion)
+def actualizar_estados_periodos(sender, instance, **kwargs):
+    if instance.estado == 'COMPLETADO':
+        # Actualizar el período anterior a FINALIZADO
+        periodo_anterior = instance.periodo_anterior
+        periodo_anterior.estado = 'FINALIZADO'
+        periodo_anterior.fecha_fin = timezone.now()
+        periodo_anterior.save()
 
-#     for cargo_name, miembro in cargos.items():
-#         if miembro:
-#             cargo = Cargo.objects.get(name=cargo_name.capitalize())
-
-#             # Ensure no other member in the same category has this role
-#             Miembro.objects.filter(cargo=cargo, category=miembro.category).update(cargo=cargo_miembro_default)
-
-#             # Assign the new role to the current member
-#             miembro.cargo = cargo
-#             miembro.save()
-
-#     # Update roles for outgoing members to "Miembro"
-#     miembros_salientes = Miembro.objects.filter(cargo__name__in=cargos.keys()).exclude(
-#         id__in=[miembro.id for miembro in cargos.values() if miembro is not None])
-
-#     for miembro in miembros_salientes:
-#         miembro.cargo = cargo_miembro_default
-#         miembro.save()
-
-
+        # Actualizar el período nuevo a ACTIVO
+        periodo_nuevo = instance.periodo_nuevo
+        periodo_nuevo.estado = 'ACTIVO'
+        periodo_nuevo.save()
 
 
 def role_required(group_name):

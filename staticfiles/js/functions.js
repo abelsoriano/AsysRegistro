@@ -1,3 +1,6 @@
+// functions.js
+
+// Función para mostrar mensajes de error
 function message_error(obj) {
     var html = '';
     if (typeof (obj) === 'object') {
@@ -16,6 +19,7 @@ function message_error(obj) {
     });
 }
 
+// Función para enviar peticiones AJAX con confirmación
 function submit_with_ajax(url, title, content, parameters, callback) {
     $.confirm({
         theme: 'material',
@@ -33,7 +37,7 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                 btnClass: 'btn-primary',
                 action: function () {
                     $.ajax({
-                        url: url, //window.location.pathname
+                        url: url,
                         type: 'POST',
                         data: parameters,
                         dataType: 'json',
@@ -48,49 +52,16 @@ function submit_with_ajax(url, title, content, parameters, callback) {
                         message_error(data.error);
                     }).fail(function (jqXHR, textStatus, errorThrown) {
                         alert(textStatus + ': ' + errorThrown);
-                    }).always(function (data) {
-
-                    });
+                    }).always(function (data) {});
                 }
             },
             danger: {
                 text: "No",
                 btnClass: 'btn-red',
-                action: function () {
-
-                }
+                action: function () {}
             },
         }
-    })
+    });
 }
 
-function alert_action(title, content, callback, cancel) {
-    $.confirm({
-        theme: 'material',
-        title: title,
-        icon: 'fa fa-info',
-        content: content,
-        columnClass: 'small',
-        typeAnimated: true,
-        cancelButtonClass: 'btn-primary',
-        draggable: true,
-        dragWindowBorder: false,
-        buttons: {
-            info: {
-                text: "Si",
-                btnClass: 'btn-primary',
-                action: function () {
-                    callback();
-                }
-            },
-            danger: {
-                text: "No",
-                btnClass: 'btn-red',
-                action: function () {
-                    cancel();
-                }
-            },
-        }
-    })
-}
 

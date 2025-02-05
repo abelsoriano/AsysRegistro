@@ -2,12 +2,12 @@
 {% load static %}
 
 {% block head_list %}
-<script src="{% static 'asistencia/list.js' %}"></script>
+
 
 {% endblock %}
 
 {% block columns %}
-<tr class="table-primary">
+<tr>
     <th scope="col">Fecha de Registro</th>
     <th scope="col">Dia de Registro</th>
     <th scope="col">Asistencias</th>
@@ -35,9 +35,15 @@
             
         </a>
 
-        <a href="{% url 'asys:edit_asistencia_group' asistencia.fecha|date:'Y-m-d' %}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+        {% comment %} <a href="{% url 'asys:edit_asistencia_group' asistencia.fecha|date:'Y-m-d' attendance_type %}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
+            <i class="fa-solid fa-pen-to-square"></i>
+        </a> {% endcomment %}
+
+        <a href="{% url 'asys:edit_asistencia_group' asistencia.fecha|date:'Y-m-d' attendance_type %}" class="btn btn-LightSeaGreen btn-flat btnTest text-white">
             <i class="fa-solid fa-pen-to-square"></i>
         </a>
+        
+        
         
     </td>
 
@@ -48,4 +54,10 @@
 
 
 {% endblock %}
+
+{% block javascript %}
+{{ block.super }} 
+<script src="{% static 'asistencia/list.js' %}"></script>
+{% endblock %}
+
 

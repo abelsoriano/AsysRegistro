@@ -39,16 +39,17 @@ INSTALLED_APPS = [
 
     # Libs
     'widget_tweaks',
-    'rest_framework',
     'bootstrap4',
     'django_select2',
+    'livereload',
 
 
     # Apps
-    'app',
+    'app.apps.AppConfig',
     'login.apps.LoginConfig'
 
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -58,6 +59,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'livereload.middleware.LiveReloadScript',
 ]
 
 ROOT_URLCONF = 'setting.urls'
@@ -123,8 +125,16 @@ USE_I18N = True
 
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/4.1/howto/static-files/
+# Configuración de Select2
+DJANGO_SELECT2_AJAX = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'unique-snowflake',
+    }
+}
+SELECT2_CACHE_BACKEND = 'default'
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')

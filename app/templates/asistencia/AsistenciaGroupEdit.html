@@ -2,123 +2,147 @@
 {% load static %}
 
 {% block campos %}
-
-{% load custom_filters %}
- 
 <div class="text-align">
-    <div class="row" id="miembros-list" style="display: flex; justify-content: center;">
+    <div class="row" id="miembros-list">
         <div class="col-md-12">
-            <div class="d-flex flex-wrap">
-                    {% for attendance in attendances %}
-                    <div class="col-md-2 mb-2 form-check miembro-card">
-                        <input type="checkbox" id="{{ attendance.miembro.id }}_present" name="presente_{{attendance.miembro.id}}"
-                               value="True"
-                               {% if attendance.present %} checked {% endif %}>
-                        <label for="{{ attendance.miembro.id }}_present">{{ attendance.miembro.name }} {{ attendance.miembro.lastname }}</label>
+            <!-- Buscador -->
+            <div class="mb-3">
+                <input type="text" id="searchMiembro" class="form-control" placeholder="Buscar miembro...">
+            </div>
+            
+            <!-- Controles en grupo -->
+            <div class="mb-3">
+                <button type="button" class="btn btn-secondary btn-sm" id="selectAll">Seleccionar Todos</button>
+                <button type="button" class="btn btn-secondary btn-sm" id="deselectAll">Deseleccionar Todos</button>
+            </div>
+
+            <div class="d-flex flex-wrap" id="miembros-container">
+                {% for attendance in attendances %}
+                <div class="col-md-2 mb-2 form-check miembro-card" data-nombre="{{ attendance.miembro.name|lower }} {{ attendance.miembro.lastname|lower }}">
+                    <div class="card">
+                        <div class="card-body p-2">
+                            <div class="form-check">
+                                <input type="checkbox" 
+                           class="form-check-input attendance-checkbox" 
+                           id="{{ attendance.miembro.id }}_present" 
+                           name="presente_{{ attendance.miembro.id }}"
+                           value="True"
+                           {% if attendance.present %} checked {% endif %}>
+                    <label class="form-check-label" for="{{ attendance.miembro.id }}_present">
+                        {{ attendance.miembro.name }} {{ attendance.miembro.lastname }}
+                    </label>
+                            </div>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
+                {% endfor %}
             </div>
         </div>
     </div>
+</div>
 
-<style>
-    .miembro-card {
-  border: 1px solid #F1C40F;
-  border-radius: 4px;
-  padding: 10px;
-  margin-bottom: 10px;
-  box-shadow: 0 1px 3px rgba(241, 196, 15);
-}
-
-.miembro-card input {
-  margin-right: 10px;
-}
-
-.miembro-card label {
-  font-size: 16px;
-  color: #333;
-}
-
-@media (max-width: 768px) {
-  .miembro-card {
-    flex-basis: 100%;
-  }
-}
-
-</style>
-
-<!--    Paginacion-->
-<div class="row col-md-12" id="pagination-container">
-
-
+<!-- Paginación -->
+<div class="row" id="pagination-container">
     {% if miembros.has_other_pages %}
-    <div class="pagination justify-content-end">
-
-            <span class="step-links">
+    <div class="col-12">
+        <nav aria-label="Navegación de páginas">
+            <ul class="pagination justify-content-center">
                 {% if miembros.has_previous %}
-                    <a href="?page=1">&laquo; primera</a>
-                    <a href="?page={{ miembros.previous_page_number }}">anterior</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">&laquo; Primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ miembros.previous_page_number }}">Anterior</a>
+                </li>
                 {% endif %}
 
-                <span class="current">
-                    Página {{ miembros.number }} de {{ miembros.paginator.num_pages }}.
-                </span>
-
+                <li class="page-item active">
+                    <span class="page-link">
+                        Página {{ miembros.number }} de {{ miembros.paginator.num_pages }}
+                    </span>
+                </li>
 
                 {% if miembros.has_next %}
-                    <a href="?page={{ miembros.next_page_number }}">siguiente</a>
-                    <a href="?page={{ miembros.paginator.num_pages }}">última &raquo;</a>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ miembros.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ miembros.paginator.num_pages }}">Última &raquo;</a>
+                </li>
                 {% endif %}
-            </span>
+            </ul>
+        </nav>
     </div>
     {% endif %}
 </div>
 
-
 <style>
-    #miembros-list .col-md-2 {
-        display: inline-block;
-        margin-bottom: 10px;
-    }
+.miembro-card {
+    transition: all 0.3s ease;
+}
 
+.miembro-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(241, 196, 15, 0.2);
+}
 
-    #pagination-container {
-        margin-top: 10px;
-    }
+.miembro-card .card {
+    border: 1px solid #F1C40F;
+    border-radius: 4px;
+}
 
-    .pagination li {
-        list-style: none;
-        display: inline-block;
-    }
+.miembro-card .card-body {
+    padding: 0.5rem;
+}
 
-    .pagination a {
-        display: inline-block;
-        padding: 5px 10px;
-        margin: 2px;
-        border: 1px solid #FFBB00;
-        background-color: #FFBB00;
-        text-decoration: none;
-        color: #333;
-        border-radius: 5px;
-    }
+.form-check-input:checked {
+    background-color: #F1C40F;
+    border-color: #F1C40F;
+}
 
-    .pagination .current {
+#searchMiembro {
+    border-color: #F1C40F;
+}
 
-        color: #333;
-        text-align: center;
-
-    }
+.hidden {
+    display: none !important;
+}
 </style>
 
+{% block javascript %}
+{{ block.super }} 
 <script>
-    $(document).ready(function() {
-        // Agregar estilos Bootstrap a la paginación
-        $('#pagination-container .pagination').addClass('pagination-sm');
-        $('#pagination-container .pagination a').addClass('page-link');
-
-        // Mover la paginación debajo de la lista
-        $('#pagination-container').appendTo('#miembros-list');
+$(document).ready(function() {
+    // Función de búsqueda
+    $('#searchMiembro').on('keyup', function() {
+        let searchText = $(this).val().toLowerCase();
+        $('.miembro-card').each(function() {
+            let nombre = $(this).data('nombre');
+            $(this).toggleClass('hidden', !nombre.includes(searchText));
+        });
     });
+
+    // Seleccionar/Deseleccionar todos
+    $('#selectAll').click(function() {
+        $('.attendance-checkbox:visible').prop('checked', true);
+    });
+
+    $('#deselectAll').click(function() {
+        $('.attendance-checkbox:visible').prop('checked', false);
+    });
+
+    // Prevenir envíos duplicados
+    let submitInProgress = false;
+    $('form').submit(function(e) {
+        if (submitInProgress) {
+            e.preventDefault();
+            return;
+        }
+        submitInProgress = true;
+        setTimeout(function() {
+            submitInProgress = false;
+        }, 3000);
+    });
+});
 </script>
-{% endblock %}
+{% endblock %}{% endblock %}

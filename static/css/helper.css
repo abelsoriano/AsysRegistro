@@ -1,36 +1,63 @@
 
-.card {
-  display: flex;
-    width: 50%;
-    margin: 10px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-
-}
-
-.card-body {
+.card-miembro {
     display: flex;
-    padding: 5px;
-    align-items: center;
-}
+    width: 50%;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+  }
+  
+  .card-body-miembro {
+      display: flex;
+      padding: 5px;
+      align-items: center;
+  }
+  
+  .card-img-container {
+      width: 500px;
+      height: 500px;
+      margin-right: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+  }
+  
+  .card-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+  
+  .card-details {
+      margin: 8px 0;
+      color: #333;
+  }
 
-.card-img-container {
-    width: 500px;
-    height: 500px;
-    margin-right: 20px;
+#detalle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
     border-radius: 10px;
-    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 1050;
+    display: none;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
-.card-img-container img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.card-details {
-    flex-grow: 1;
+#detalle::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(240, 235, 235, 0.966);
+    z-index: -1;
 }
 
 .close-button {
@@ -46,17 +73,22 @@
     background: transparent;
 }
 
-
-
-
-.notificacion .card-body {
-padding: 10px;
+#nombre-empleado {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #70c9c6;
+    margin-bottom: 15px;
 }
 
-.notificacion .card-title {
+
+/* .notificacion .card-body {
+padding: 10px;
+} */
+
+/* .notificacion .card-title {
 font-size: 18px;
 font-weight: bold;
-}
+} */
 
 .notificacion .card-text {
 font-size: 14px;
@@ -190,3 +222,9 @@ body {
     margin-right: 8px;
 }
 
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da; /* Coincide con el estilo de Bootstrap */
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem; /* Ajusta el padding para que se parezca a un input */
+    min-height: 38px; /* Asegúrate de que tenga la misma altura */
+}

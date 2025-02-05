@@ -25,6 +25,7 @@
                                 {{ field.label }}
                             </label>
                         </div>
+                        
                         {% else %} {{ field|add_class:'form-control' }} {% endif %} {% if field.errors %}
                         <div class="invalid-feedback d-block">
                             {% for error in field.errors %} {{ error }} {% endfor %}

@@ -64,7 +64,7 @@ const mostrarSiguienteAlerta = () => {
     }
   }
 
-function guardarStatus(miembroId, status) {
+  function guardarStatus(miembroId, status) {
     console.log('Iniciando guardado de estado:', { miembroId, status });
     
     const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
@@ -73,36 +73,24 @@ function guardarStatus(miembroId, status) {
         return;
     }
 
-    const requestData = {
-        id: miembroId,
-        status: status
-    };
-    
-    console.log('Enviando datos:', requestData);
-
-    fetch('/asys/guardar-status/', {
+    fetch('/asys/guardar-status/', {  // Asegúrate que esta URL coincida con tu configuración de urls.py
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',
             'X-CSRFToken': csrftoken
         },
-        body: JSON.stringify(requestData)
+        body: JSON.stringify({
+            id: miembroId,
+            status: status
+        })
     })
     .then(response => {
-        console.log('Respuesta del servidor:', response.status);
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            return response.json().then(data => {
+                throw new Error(data.error || `Error del servidor: ${response.status}`);
+            });
         }
-        return response.text();
-    })
-    .then(text => {
-        console.log('Texto de respuesta:', text);
-        try {
-            return JSON.parse(text);
-        } catch (error) {
-            console.error('Error al parsear respuesta:', text);
-            throw new Error('Error al parsear respuesta del servidor');
-        }
+        return response.json();
     })
     .then(data => {
         console.log('Datos procesados:', data);
@@ -126,10 +114,6 @@ function guardarStatus(miembroId, status) {
             icon: 'error',
             title: 'Error',
             text: 'Hubo un error al guardar el estado: ' + error.message
-        }).then(() => {
-            // Opcional: decidir si quieres pasar al siguiente en caso de error
-            // indiceActual++;
-            // mostrarSiguienteAlerta();
         });
     });
 }

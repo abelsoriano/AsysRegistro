@@ -1,14 +1,17 @@
 from datetime import date
-
+from django.core.exceptions import ValidationError
 from django.db import models
+from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
-
-from django.contrib.auth.models import User
+from django.db.models.signals import post_save
 from django.forms import model_to_dict
 from django.utils import timezone
 from app.choices import *
 from setting.settings import MEDIA_URL
 from django.contrib.auth.models import User
+
+
+
 
 
 class Estado(models.Model):
@@ -27,51 +30,43 @@ class Estado(models.Model):
         db_table = "estado"
         ordering = ["id"]
 
+class SeccionIglesia(models.Model):
+    nombre = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES', unique=True)
+    
+    def __str__(self):
+        return self.get_nombre_display()
+    
 
 class Cargo(models.Model):
-    name = models.CharField(max_length=50, verbose_name="Nombre")
-
+    """Cargos dinámicos para cada sección"""
+    nombre = models.CharField(max_length=50, verbose_name="Nombre del Cargo")
+    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE, related_name='cargos')
+    es_cargo_principal = models.BooleanField(default=False)
+    orden_jerarquico = models.IntegerField(default=0)
+    
     def __str__(self):
-        return self.name
-
+        return f"{self.nombre} - {self.seccion}"
+    
     def toJSON(self):
         item = model_to_dict(self)
         return item
-
-    class Meta:
-        verbose_name = "Cargo"
-        verbose_name_plural = "Cargos"
-        db_table = "cargo"
-        ordering = ["id"]
 
 
 # Crearte miembros
 class Miembro(models.Model):
     name = models.CharField(max_length=50, verbose_name="NOMBRE")
     lastname = models.CharField(max_length=50, verbose_name="APELLIDOS")
-    dni = models.CharField(
-        max_length=13, verbose_name="CEDULA", unique=True, null=True, blank=True
-    )
-    gender = models.CharField(
-        max_length=15, choices=gender_choices, verbose_name="GENERO"
-    )
+    dni = models.CharField(max_length=13, verbose_name="CEDULA", unique=True, null=True, blank=True)
+    gender = models.CharField(max_length=15, choices=gender_choices, verbose_name="GENERO"    )
     date_joined = models.DateField(verbose_name="FECHA DE NACIMIENTO")
     address = models.CharField(max_length=150, verbose_name="DIRECCION")
     fecha_ingreso = models.DateField(verbose_name="FECHA DE INGRESO")
-    phone = models.CharField(
-        max_length=12, null=True, blank=True, verbose_name="TELEFONO"
-    )
-    email = models.CharField(
-        max_length=30, null=True, blank=True, verbose_name="CORREO ELECTRONICO"
-    )
+    phone = models.CharField(max_length=12, null=True, blank=True, verbose_name="TELEFONO")
+    email = models.CharField(max_length=30, null=True, blank=True, verbose_name="CORREO ELECTRONICO")
     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE, verbose_name="CARGO")
-    image = models.ImageField(
-        upload_to="avatar", null=True, blank=True, verbose_name="IMAGEN"
-    )
+    image = models.ImageField(upload_to="avatar", null=True, blank=True, verbose_name="IMAGEN")
     state = models.ForeignKey(Estado, on_delete=models.CASCADE, verbose_name="ESTADO")
-    category = models.CharField(
-        max_length=20, choices=category_choices, verbose_name="CATEGORIA"
-    )
+    category = models.CharField(max_length=20, choices=category_choices, verbose_name="CATEGORIA")
 
     def is_birthday_today(self):
         return (
@@ -110,23 +105,6 @@ class Miembro(models.Model):
         ordering = ["id"]
 
 
-# class CambioDirectiva(models.Model):
-#     cantidad_miembros_recibidos = models.IntegerField(verbose_name='Cantidad de Miembros Recibidos')
-#     fondos_recibidos = models.DecimalField(max_digits=10, decimal_places=2, verbose_name='Fondos Recibidos')
-#     fecha_cambio = models.DateField(auto_now_add=True, verbose_name='Fecha de Cambio')
-
-#     class Meta:
-#         verbose_name = 'Cambio de Directiva'
-#         verbose_name_plural = 'Cambios de Directivas'
-#         db_table = 'cambio_directiva'
-#         ordering = ['fecha_cambio']
-
-# class DirectivaCargo(models.Model):
-#     cambio_directiva = models.ForeignKey(CambioDirectiva, on_delete=models.CASCADE)
-#     cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
-#     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-
-
 class Notification(models.Model):
     message = models.CharField(max_length=255)
     created_at = models.DateTimeField(auto_now_add=True)
@@ -137,72 +115,60 @@ class Notification(models.Model):
 
 
 class Persona(models.Model):
-    nombre = models.CharField(max_length=100, verbose_name="Nombre")
+    nombre = models.CharField(max_length=100, verbose_name="NOMBRE")
+    apellido = models.CharField(max_length=100, verbose_name="APELLIDO")
+    
+    class Meta:
+        verbose_name = "Persona"
+        verbose_name_plural = "Personas"
+        ordering = ['nombre', 'apellido']
+        unique_together = ['nombre', 'apellido']
+    
+    def clean(self):
+        if Persona.objects.filter(
+            nombre__iexact=self.nombre,
+            apellido__iexact=self.apellido
+        ).exists() and not self.pk:  # Añadido check para edición
+            raise ValidationError('Ya existe una persona con este nombre y apellido')
+    
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f"{self.nombre} {self.apellido}"
+
+class Servicio(models.Model):
+    tipo_servicio = models.CharField(max_length=20, choices=secciones_choices, verbose_name="TIPO DE SERVICIO")
+    fecha = models.DateField(default=timezone.now, verbose_name="FECHA DE SERVICIO" )
+    direccion = models.CharField(max_length=50, verbose_name="DIRECCIÓN DEL CULTO")
+    lectura = models.TextField(max_length=50, verbose_name="LECTURA DE LA PALABRA")
+    devocional = models.TextField(max_length=50, verbose_name="DEVOCIONAL")
+    director_cultural = models.ForeignKey(Persona, on_delete=models.PROTECT, related_name='servicios_dirigidos', verbose_name="DIRECTOR DEL CULTURAL")
+    participantes = models.ManyToManyField(Persona, related_name="eventos_participados", blank=True, verbose_name="PARTICIPANTES DEL CULTURAL")
+    mensaje = models.TextField(max_length=50, verbose_name="MENSAJE DE LA PALABRA")
+    ofrenda = models.CharField(max_length=13, verbose_name="OFRENDA")
+    descripcion = models.TextField(blank=True, null=True, verbose_name="DESCRIPCIÓN")
 
     def __str__(self):
-        return self.nombre
+        return f"Servicio {self.get_tipo_servicio_display()} - {self.fecha}"
 
     def toJSON(self):
         item = model_to_dict(self)
+        item['tipo_servicio'] = self.get_tipo_servicio_display()
+        item['director_cultural'] = str(self.director_cultural)
+        # Corregir la forma de obtener los participantes
+        item['participantes'] = ", ".join(str(p) for p in self.participantes.all())
+        item['fecha'] = self.fecha.strftime('%Y-%m-%d')
+        item['ofrenda'] = float(self.ofrenda)
         return item
-
-
-class Servicio(models.Model):
-    fecha = models.DateField(default=timezone.now, verbose_name="FECHA DE SERVICIO")
-    direccion = models.CharField(
-        max_length=50, verbose_name="DIRECCION DEL CULTO DE ALTAR"
-    )
-    lectura = models.TextField(max_length=50, verbose_name="LECTURA DE LA PALABRAS")
-    devocional = models.TextField(max_length=50, verbose_name="DEVOCIONAL")
-    cultural_1 = models.ForeignKey(
-        "Persona",
-        on_delete=models.CASCADE,
-        related_name="eventos_dirigidos",
-        verbose_name="Director del Cultural",
-    )
-    participantes = models.ManyToManyField(
-        "Persona",
-        related_name="eventos_participados",
-        blank=True,
-        verbose_name="Participantes del Cultural",
-    )
-    mensaje = models.TextField(max_length=50, verbose_name="MENSAJE DE LAS PALABRAS")
-    ofrenda = models.CharField(max_length=13, verbose_name="OFRENDA")
-    description = models.TextField(blank=True, null=True, verbose_name="DESCRIPCION")
-
-    def __str__(self):
-        return f"Evento dirigido por {self.cultural_1}"
-
-    def toJSON(self):
-        data = model_to_dict(self)
-        data["cultural_1"] = self.cultural_1.toJSON() if self.cultural_1 else None
-        data["participantes"] = [
-            p.nombre for p in self.participantes.all()
-        ]  # Asegúrate de que `Persona` tenga un método `toJSON`
-        return data
 
     class Meta:
         verbose_name = "Servicio"
         verbose_name_plural = "Servicios"
+        ordering = ['-fecha']
 
-
-# class Attendance(models.Model):
-#     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-#     date = models.DateField(default=timezone.now)
-#     present = models.BooleanField(default=False, null=True, blank=True, verbose_name='PRESENTE')
-#     day_of_week = models.CharField(max_length=10, blank=True, editable=False, verbose_name='DÍA DE LA SEMANA')
-#     user = models.ForeignKey(User, on_delete=models.CASCADE)
-#
-#     def toJSON(self):
-#         data = model_to_dict(self)
-#         data['miembro'] = self.miembro.toJSON() if self.miembro else None
-#         return data
-#
-#     class Meta:
-#         verbose_name = 'Asistencia'
-#         verbose_name_plural = 'Asistencias'
-
-
+ 
 class AttendanceType(models.TextChoices):
     GENERAL = 'GEN', _('General')
     YOUTH = 'YTH', _('Jóvenes')
@@ -210,62 +176,72 @@ class AttendanceType(models.TextChoices):
     GENTLEMEN = 'GNT', _('Caballeros')
 
 class Attendance(models.Model):
-    miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-    date = models.DateField(default=timezone.now)
-    present = models.BooleanField(default=False)
-    day_of_week = models.CharField(
-        max_length=10, 
-        blank=True, 
-        editable=False, 
-        verbose_name="DÍA DE LA SEMANA"
-    )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    attendance_type = models.CharField(
-        max_length=3,
-        choices=AttendanceType.choices,
-        default=AttendanceType.GENERAL,
-        verbose_name="TIPO DE ASISTENCIA"
-    )
+    miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE, verbose_name="Miembro")
+    date = models.DateField(default=timezone.now, verbose_name="Fecha")
+    present = models.BooleanField(default=False, verbose_name="Presente")
+    day_of_week = models.CharField(max_length=10, blank=True, editable=False, verbose_name="Día de la Semana")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
+    attendance_type = models.CharField(max_length=3, choices=AttendanceType.choices, default=AttendanceType.GENERAL, verbose_name="Tipo de Asistencia")
+    reason = models.TextField(blank=True, null=True, verbose_name="Motivo de Inasistencia")
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
+    updated_at = models.DateTimeField(auto_now=True, verbose_name="Última Actualización")
 
-    def __str__(self):
-        return f"Asistencia de {self.miembro} el {self.date} - {self.get_attendance_type_display()}"
+    def save(self, *args, **kwargs):
+        # Actualizar el día de la semana automáticamente
+        if not self.day_of_week:
+            self.day_of_week = self.date.strftime('%A')
+        super().save(*args, **kwargs)
 
     @classmethod
-    def get_monthly_absences(cls, miembro, month=None, attendance_type=None):
+    def get_monthly_absences(cls, miembro, month=None, year=None, attendance_type=None):
         queryset = cls.objects.filter(miembro=miembro, present=False)
         
-        if month:
-            queryset = queryset.filter(date__month=month)
+        if month and year:
+            queryset = queryset.filter(date__year=year, date__month=month)
+        elif month:
+            current_year = timezone.now().year
+            queryset = queryset.filter(date__year=current_year, date__month=month)
         
         if attendance_type:
             queryset = queryset.filter(attendance_type=attendance_type)
         
         return queryset.count()
 
+    def get_absence_alert(self):
+        """
+        Retorna un mensaje de alerta si el miembro tiene más de 2 faltas en el mes actual
+        """
+        current_month = self.date.month
+        current_year = self.date.year
+        absences = self.get_monthly_absences(
+            self.miembro, 
+            month=current_month,
+            year=current_year,
+            attendance_type=self.attendance_type
+        )
+        
+        if absences >= 2:
+            return {
+                'alert': True,
+                'message': f"{self.miembro.name} tiene {absences} faltas en el culto de {self.get_attendance_type_display()} este mes.",
+                'absences': absences
+            }
+        return None
+
+    def __str__(self):
+        return f"Asistencia de {self.miembro} el {self.date} - {self.get_attendance_type_display()}"
+
     class Meta:
         verbose_name = "Asistencia"
         verbose_name_plural = "Asistencias"
         unique_together = ['miembro', 'date', 'attendance_type']
+        ordering = ['-date', 'miembro']
+        indexes = [
+            models.Index(fields=['date', 'attendance_type']),
+            models.Index(fields=['miembro', 'date']),
+            models.Index(fields=['present', 'date']),
+        ]
 
-
-class MiembroStatus(models.Model):
-    miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE)
-    status = models.CharField(
-        max_length=100,
-        choices=(
-            ("enfermo", "Miembro se encuentra enfermo"),
-            ("visitar", "Miembro necesita ser visitado"),
-            ("permiso", "Miembro tiene permiso o excusa"),
-        ),
-    )
-    created_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.miembro.name} - {self.status}"
-
-    class Meta:
-        verbose_name = "StatusMiembro"
-        verbose_name_plural = "StatusMiembros"
 
 
 class Nota(models.Model):
@@ -290,6 +266,7 @@ class Nota(models.Model):
 
 
 class Tarea(models.Model):
+    
     nombre = models.CharField(max_length=200, verbose_name="Titulo de la actividad")
     descripcion = models.TextField(blank=True, null=True)
     fecha = models.DateTimeField(verbose_name="Ingresa la fecha de la actividad")
@@ -308,3 +285,98 @@ class Tarea(models.Model):
             'completado': self.completado,
             'usuario_asignado': f"{self.usuario_asignado.first_name} {self.usuario_asignado.last_name}"
         }
+
+
+#create directiva model 
+
+class PeriodoDirectiva(models.Model):
+    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE)
+    fecha_inicio = models.DateField()
+    fecha_fin = models.DateField(null=True, blank=True)  
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PLANEANDO')
+    
+    def __str__(self):
+        return f"{self.seccion} - {self.fecha_inicio} a {self.fecha_fin or 'Actual'} ({self.get_estado_display()})"
+
+class AsignacionDirectiva(models.Model):
+    """Asignación de miembros a cargos en un período específico"""
+    miembro = models.ForeignKey('Miembro', on_delete=models.CASCADE)
+    cargo = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    periodo = models.ForeignKey(PeriodoDirectiva, on_delete=models.CASCADE)
+    fecha_asignacion = models.DateField(default=timezone.now)
+    fecha_fin = models.DateField(null=True, blank=True)
+    
+    class Meta:
+        unique_together = ['miembro', 'cargo', 'periodo']
+    
+    def __str__(self):
+        return f"{self.miembro} - {self.cargo} ({self.periodo})"
+
+class ProcesoTransicion(models.Model):
+    """Proceso de cambio de directiva"""
+    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE)
+    periodo_anterior = models.ForeignKey(PeriodoDirectiva, related_name='transicion_anterior', on_delete=models.CASCADE)
+    periodo_nuevo = models.ForeignKey(PeriodoDirectiva, related_name='transicion_nuevo', on_delete=models.CASCADE)
+    
+    ESTADO_CHOICES = [
+        ('PREPARACION', 'En Preparación'),
+        ('INSCRIPCION', 'Inscripción de Candidatos'),
+        ('VOTACION', 'Proceso de Votación'),
+        ('CONFIRMACION', 'Confirmación'),
+        ('COMPLETADO', 'Proceso Completado')
+    ]
+    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PREPARACION')
+    
+    fecha_inicio = models.DateField()
+    fecha_fin_planeada = models.DateField()
+    observaciones = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"Transición {self.seccion} - {self.fecha_inicio}"
+    
+@receiver(post_save, sender=ProcesoTransicion)
+def actualizar_estados_periodos(sender, instance, **kwargs):
+    if instance.estado == 'COMPLETADO':
+        # Actualizar el período anterior a FINALIZADO
+        periodo_anterior = instance.periodo_anterior
+        periodo_anterior.estado = 'FINALIZADO'
+        periodo_anterior.fecha_fin = timezone.now()
+        periodo_anterior.save()
+
+        # Actualizar el período nuevo a ACTIVO
+        periodo_nuevo = instance.periodo_nuevo
+        periodo_nuevo.estado = 'ACTIVO'
+        periodo_nuevo.save()
+
+class CandidatoTransicion(models.Model):
+    """Candidatos para cargos en el proceso de transición"""
+    proceso_transicion = models.ForeignKey(ProcesoTransicion, on_delete=models.CASCADE)
+    miembro = models.ForeignKey('Miembro', on_delete=models.CASCADE)
+    cargo_postulado = models.ForeignKey(Cargo, on_delete=models.CASCADE)
+    votos = models.IntegerField(default=0)
+    
+    class Meta:
+        unique_together = ['proceso_transicion', 'miembro', 'cargo_postulado']
+    
+    def __str__(self):
+        return f"{self.miembro} - Candidato a {self.cargo_postulado}"
+    
+    def toJSON(self):
+        item = model_to_dict(self)
+        return item
+
+class RegistroFinanzas(models.Model):
+    """Registro de finanzas por período de directiva"""
+    periodo = models.ForeignKey(PeriodoDirectiva, on_delete=models.CASCADE)
+    total_miembros_recibidos = models.IntegerField(default=0)
+    total_fondos_recibidos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    
+    fecha_registro = models.DateField(default=timezone.now)
+    observaciones = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"Registro Financiero {self.periodo}"
+
+
+
+

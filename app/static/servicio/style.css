@@ -40,3 +40,16 @@
     background-color: #f8f9fa;
     border: 1px solid #ddd;
   }
+
+  .select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+}
+.btn-LightSeaGreen {
+    background-color: #20B2AA;
+    border-color: #20B2AA;
+}
+.btn-LightSeaGreen:hover {
+    background-color: #1b9690;
+    border-color: #1b9690;
+}

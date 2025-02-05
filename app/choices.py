@@ -19,8 +19,23 @@ asistencia_choices = (
 )
 
 category_choices = (
-        ('joven', 'Joven'),
-        ('dama', 'Dama'),
-        ('caballero', 'Caballero'),
-        ('adolecente', 'Adolecente'),
+    ('joven', 'Joven'),
+    ('dama', 'Dama'),
+    ('caballero', 'Caballero'),
+    ('adolecente', 'Adolecente'),
 )
+
+secciones_choices = (
+    ('JOVENES', 'Sociedad de Jóvenes'),
+    ('CABALLEROS', 'Sociedad de Caballeros'),
+    ('DAMAS', 'Sociedad de Damas'),
+    ('GENERAL', 'Servicio General')
+)
+
+ESTADO_CHOICES = [
+        ('ACTIVO', 'Período Activo'),
+        ('FINALIZADO', 'Período Finalizado'),
+        ('PLANEANDO', 'En Planificación')
+    ]
+ 
+ 

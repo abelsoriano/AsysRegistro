@@ -2,7 +2,7 @@
 from django.forms import *
 from django import forms
 from app.models import *
-from django_select2.forms import ModelSelect2Widget, ModelSelect2MultipleWidget
+from django_select2.forms import  ModelSelect2Widget, ModelSelect2MultipleWidget
 
 
 
@@ -12,6 +12,9 @@ class MemberForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['name'].widget.attrs['autofocus'] = True
 
+    cargo = forms.ModelChoiceField(queryset=Cargo.objects.all(), label="Cargos", empty_label="Seleccione un cargo", widget=forms.Select(attrs={'class': 'form-control'}))
+    
+
     class Meta:
         model = Miembro
         fields = '__all__'
@@ -20,15 +23,15 @@ class MemberForm(forms.ModelForm):
             'lastname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su apellido'}),
             'dni': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su numero de identidad'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
-            'date_joined': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control datepicker', 'placeholder': 'mm/dd/yyyy'}),
+            'date_joined': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control ', 'type': 'date', 'placeholder': 'mm/dd/yyyy'}),
             'state': forms.Select(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Direccion'}),
-            'fecha_ingreso': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control datepicker', 'placeholder': 'mm/dd/yyyy'}),
-            'phone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese sin guión'}),
-            'email': forms.EmailInput(attrs={'class': 'form-control', 'placeholder': 'email'}),
-            'cargo': forms.Select(attrs={'class': 'form-control'}),
+            'fecha_ingreso': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'mm/dd/yyyy'}),
+            'phone': forms.TextInput(attrs={'class': 'form-control', 'type': 'phone','placeholder':  'Ingrese sin guión'}),
+            'email': forms.EmailInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'email'}),
+            # 'cargo': forms.Select(attrs={'class': 'form-control'}),
             'category': forms.Select(attrs={'class': 'form-control'}),
-            'image': forms.FileInput(attrs={'class': 'form-control'})
+            'image': forms.FileInput(attrs={'class': 'form-control', 'type': 'file'})
         }
 
 
@@ -56,86 +59,151 @@ class MemberForm(forms.ModelForm):
             data['error'] = str(e)
         return data
 
-#Formulario cambio de directiva
-# class CambioDirectivaForm(forms.ModelForm):
-#     class Meta:
-#         model = CambioDirectiva
-#         fields = ['cantidad_miembros_recibidos', 'fondos_recibidos']
-
-#         widgets = {
-#             'cantidad_miembros_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
-#             'fondos_recibidos': forms.NumberInput(attrs={'class': 'form-control'}),
-#         }
-
-#     def __init__(self, *args, **kwargs):
-#         super().__init__(*args, **kwargs)
-#         cargos = Cargo.objects.all()
-#         for cargo in cargos:
-#             self.fields[f'cargo_{cargo.id}'] = forms.ModelChoiceField(
-#                 queryset=Miembro.objects.all(),
-#                 label=cargo.name,
-#                 required=False,
-#                 widget=forms.Select(attrs={'class': 'form-control'})
-#             )
-
-#     def save(self, commit=True):
-#         instance = super().save(commit=False)
-#         if commit:
-#             instance.save()
-#         for cargo_id in Cargo.objects.values_list('id', flat=True):
-#             miembro = self.cleaned_data.get(f'cargo_{cargo_id}')
-#             if miembro:
-#                 DirectivaCargo.objects.create(
-#                     cambio_directiva=instance,
-#                     cargo_id=cargo_id,
-#                     miembro=miembro
-#                 )
-#         return instance
-
 # Formulario para crear servicio
-class PersonaWidget(ModelSelect2Widget):
-    search_fields = [
-        'nombre__icontains',
-    ]
+class PersonaSelect2Widget(ModelSelect2Widget):
+    model = Persona
+    search_fields = ['nombre__icontains', 'apellido__icontains']
+
+    def get_queryset(self):
+        return Persona.objects.all()
+    
+    def label_from_instance(self, obj):
+        return f"{obj.nombre} {obj.apellido}"
+
+class ParticipantesSelect2Widget(ModelSelect2MultipleWidget):
+    model = Persona
+    search_fields = ['nombre__icontains', 'apellido__icontains']
+
+    def get_queryset(self):
+        return Persona.objects.all()
+    
+    def label_from_instance(self, obj):
+        return f"{obj.nombre} {obj.apellido}"
+
 class ServicioForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # Hacer campos opcionales
+        self.fields['descripcion'].required = False
+        
+        # Agregar clases CSS y placeholders
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({
+                'class': 'form-control'
+            })
+            
+
     class Meta:
         model = Servicio
         fields = '__all__'
         widgets = {
             'fecha': DateInput(
-                format='%d/%m/%Y',
-                attrs={'autocomplete': 'off', 'id': 'datepicker2', 'class': 'form-control datepicker', 'placeholder': 'dd/mm/yyyy'}),
-            'direccion': TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Ingrese un nombre'}),
-            'lectura': TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Ingrese la lectura'}),
-            'devocional': TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Ingrese un libro'}),
-            'cultural_1': forms.Select(attrs={'class': 'form-control'}),
-            'participantes': ModelSelect2MultipleWidget(model=Persona, search_fields=['nombre__icontains'], attrs={'class': 'form-control', 'placeholder': 'Ingrese una dirección'}),
-            'cultural': TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Ingrese un cultural'}),
-            'mensaje': TextInput(attrs={'type': 'text', 'class': 'form-control', 'placeholder': 'Ingrese el mensaje'}),
-            'ofrenda': forms.NumberInput(attrs={'type': 'text', 'class': 'money-input form-control', 'step': '0.01', 'min': '0', 'placeholder': 'Ingrese un valor'}),
-            'description': Textarea(attrs={'class': 'form-control', 'placeholder': 'opcional', 'rows': 3, 'style': 'resize:none;'}),
+                format='%Y-%m-%d',
+                attrs={
+                    'type': 'date',
+                    'class': 'form-control',
+                    'placeholder': 'Seleccione fecha'
+                }
+            ),
+            'tipo_servicio': Select(
+                attrs={
+                    'class': 'form-control select2',
+                    'placeholder': 'Seleccione tipo de servicio'
+                }
+            ),
+            'direccion': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la dirección del culto'
+                }
+            ),
+            'lectura': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese la lectura bíblica'
+                }
+            ),
+            'devocional': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el devocional'
+                }
+            ),
+            # 'director_cultural': PersonaSelect2Widget(
+            #     attrs={
+            #         'class': 'form-control select2',
+            #         # 'data-placeholder': 'Seleccione el director',
+            #         'data-allow-clear': 'true'
+            #     }
+            # ),
+            # 'participantes': ParticipantesSelect2Widget(
+            #     attrs={
+            #         'class': 'form-control select2',
+            #         'data-placeholder': 'Seleccione los participantes',
+            #         'data-allow-clear': 'true',
+            #         'data-maximum-selection-length': '3',
+            #         # 'style': 'width: 100%'  # Impor
+            #     }
+            # ),
+            'mensaje': TextInput(
+                attrs={
+                    'placeholder': 'Ingrese el mensaje'
+                }
+            ),
+            'ofrenda': TextInput(
+                attrs={
+                    'type': 'text',
+                    'class': 'form-control money-input',
+                    'placeholder': 'Ingrese el monto de la ofrenda'
+                }
+            ),
+            'descripcion': Textarea(
+                attrs={
+                    'rows': 3,
+                    'placeholder': 'Descripción (opcional)',
+                    'style': 'resize: none;'
+                }
+            ),
         }
 
-    def __init__(self, *args, **kwargs):
-        super(ServicioForm, self).__init__(*args, **kwargs)
-        self.fields['participantes'].widget.attrs.update({
-            'class': 'form-control',
-            'placeholder': 'Ingrese una dirección'
-        })
+    def clean_ofrenda(self):
+        """Validación para el campo ofrenda"""
+        ofrenda = self.cleaned_data.get('ofrenda')
+        try:
+            # Convertir la cadena a float, manejando el formato de moneda
+            ofrenda = float(str(ofrenda).replace('$', '').replace(',', ''))
+            if ofrenda < 0:
+                raise forms.ValidationError('La ofrenda no puede ser negativa.')
+            return ofrenda
+        except ValueError:
+            raise forms.ValidationError('Por favor ingrese un valor válido para la ofrenda.')
 
     def clean_participantes(self):
+        """Validación para el campo participantes"""
         participantes = self.cleaned_data.get('participantes')
-        if participantes.count() > 3:
+        if participantes and participantes.count() > 3:
             raise forms.ValidationError('Solo puede seleccionar hasta 3 participantes.')
         return participantes
 
+    def clean(self):
+        """Validación general del formulario"""
+        cleaned_data = super().clean()
+        director = cleaned_data.get('director_cultural')
+        participantes = cleaned_data.get('participantes')
+
+        if director and participantes and director in participantes:
+            raise forms.ValidationError(
+                'El director cultural no puede ser también un participante.'
+            )
+
+        return cleaned_data
+
     def save(self, commit=True):
-        form = super(ServicioForm, self).save(commit=False)
-        data = {}
+        """Sobreescribir el método save para manejar el guardado correctamente"""
+        instance = super().save(commit=False)
+        
         if commit:
-            form.save()
-            self.save_m2m()
-        return data
+            instance.save()
+            self.save_m2m()  # Guardar relaciones many-to-many
+            
+        return instance
 
 class AsistenciaForm(forms.ModelForm):
     class Meta:
@@ -144,8 +212,6 @@ class AsistenciaForm(forms.ModelForm):
 
 # Define un formset utilizando el form anterior
 AsistenciaFormSet = modelformset_factory(Attendance, form=AsistenciaForm, extra=0)
-
-
 
 
 class TareaForm(forms.ModelForm):
@@ -179,8 +245,6 @@ class TareaForm(forms.ModelForm):
         if fecha is None:
             raise forms.ValidationError("La fecha es requerida")
         return fecha
-
-        
         
 class NotaForm(forms.ModelForm):
     class Meta:
@@ -191,7 +255,6 @@ class NotaForm(forms.ModelForm):
             'contenido': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
         }
 
-
 class EstadoForm(forms.ModelForm):
     class Meta:
         model = Estado
@@ -200,4 +263,150 @@ class EstadoForm(forms.ModelForm):
 class CargoForm(forms.ModelForm):
     class Meta:
         model = Cargo
-        fields = '__all__'
+        fields = ['nombre', 'seccion', 'es_cargo_principal', 'orden_jerarquico']
+
+        required = {
+            'orden_jerarquico': False,
+        }
+    def __init__(self, *args, **kwargs):
+        super(CargoForm, self).__init__(*args, **kwargs)
+        
+        # Establecer valores por defecto para algunos campos
+        self.fields['seccion'].initial = 'JOVENES'  # Valor por defecto para 'seccion'
+        self.fields['es_cargo_principal'].initial = False  # Valor por defecto para 'es_cargo_principal'
+        self.fields['orden_jerarquico'].initial = 0  # Valor por defecto para 'orden_jerarquico'
+        
+        # Hacer que 'nombre' sea el único campo requerido
+        self.fields['nombre'].required = True
+        self.fields['seccion'].required = False
+        self.fields['es_cargo_principal'].required = False
+        self.fields['orden_jerarquico'].required = False
+
+
+#form cambio de directiva
+class ProcesoTransicionForm(forms.ModelForm):
+    seccion = forms.ModelChoiceField(
+        queryset=SeccionIglesia.objects.all(),
+        label="Sección",
+        empty_label="Seleccione una sección",
+        widget=forms.Select(attrs={
+            'class': 'form-control',
+            'onchange': 'cargarPeriodos(this.value)'
+        })
+    )
+
+    periodo_anterior = forms.ModelChoiceField(
+        queryset=PeriodoDirectiva.objects.all(),
+        label="Período Anterior",
+        empty_label="Seleccione período anterior",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    periodo_nuevo = forms.ModelChoiceField(
+        queryset=PeriodoDirectiva.objects.all(),
+        label="Período Nuevo",
+        empty_label="Seleccione período nuevo",
+        widget=forms.Select(attrs={'class': 'form-control'})
+    )
+
+    class Meta:
+        model = ProcesoTransicion
+        fields = [
+            'seccion',
+            'periodo_anterior',
+            'periodo_nuevo',
+            'fecha_inicio',
+            'fecha_fin_planeada',
+            'observaciones'
+        ]
+        widgets = {
+            'fecha_inicio': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'fecha_fin_planeada': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'observaciones': forms.Textarea(attrs={'class': 'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        
+        # Obtener datos del POST si existen
+        data = kwargs.get('data', None)
+        
+        if data and 'seccion' in data:
+            try:
+                seccion_id = int(data.get('seccion'))
+                # Actualizar querysets basados en la sección seleccionada
+                self.fields['periodo_anterior'].queryset = PeriodoDirectiva.objects.filter(
+                    seccion_id=seccion_id,
+                    estado='ACTIVO'
+                )
+                self.fields['periodo_nuevo'].queryset = PeriodoDirectiva.objects.filter(
+                    seccion_id=seccion_id,
+                    estado='PLANEANDO'
+                )
+            except (ValueError, TypeError):
+                self.fields['periodo_anterior'].queryset = PeriodoDirectiva.objects.none()
+                self.fields['periodo_nuevo'].queryset = PeriodoDirectiva.objects.none()
+
+    def clean(self):
+        cleaned_data = super().clean()
+        seccion = cleaned_data.get('seccion')
+        periodo_anterior = cleaned_data.get('periodo_anterior')
+        periodo_nuevo = cleaned_data.get('periodo_nuevo')
+
+        if seccion:
+            # Validar que los períodos pertenezcan a la sección
+            if periodo_anterior and periodo_anterior.seccion != seccion:
+                self.add_error('periodo_anterior', 'El período anterior debe pertenecer a la sección seleccionada')
+            
+            if periodo_nuevo and periodo_nuevo.seccion != seccion:
+                self.add_error('periodo_nuevo', 'El período nuevo debe pertenecer a la sección seleccionada')
+
+            # Validar estados
+            if periodo_anterior and periodo_anterior.estado != 'ACTIVO':
+                self.add_error('periodo_anterior', 'El período anterior debe estar en estado ACTIVO')
+            
+            if periodo_nuevo and periodo_nuevo.estado != 'PLANEANDO':
+                self.add_error('periodo_nuevo', 'El período nuevo debe estar en estado PLANEANDO')
+
+        return cleaned_data
+    
+class CandidatoTransicionForm(forms.ModelForm):
+    class Meta:
+        model = CandidatoTransicion
+        fields = ['miembro', 'cargo_postulado']
+        widgets = {
+            'miembro': forms.Select(attrs={'class': 'form-control'}),
+            'cargo_postulado': forms.Select(attrs={'class': 'form-control'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        proceso_transicion = kwargs.pop('proceso_transicion', None)
+        super().__init__(*args, **kwargs)
+        
+        if proceso_transicion:
+            # Filtrar miembros y cargos basados en el proceso de transición
+            self.fields['miembro'].queryset = Miembro.objects.filter(
+                state__nombre='ACTIVO',
+                category=proceso_transicion.seccion.nombre
+            )
+            
+            self.fields['cargo_postulado'].queryset = Cargo.objects.filter(
+                seccion=proceso_transicion.seccion
+            )
+    class Meta:
+        model = CandidatoTransicion
+        fields = ['miembro', 'cargo_postulado']
+
+
+class PeriodoDirectivaForm(forms.ModelForm):
+    class Meta:
+        model = PeriodoDirectiva
+        fields = '__all__'  # Esto incluirá todos los campos del modelo
+
+        widgets = {
+            'seccion': forms.Select(attrs={'class': 'form-control'}),
+            'fecha_inicio': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'fecha_fin': forms.DateInput(attrs={'class': 'form-control', 'type': 'date'}),
+            'estado': forms.Select(attrs={'class': 'form-control'}),
+        }
+

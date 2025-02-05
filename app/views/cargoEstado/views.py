@@ -171,7 +171,7 @@ def delete_estado(request, id):
 # Este bloque es para la parte de cargo
 class CargoList(ListView):
     model = Cargo
-    template_name='cargoEstado/cargoList.html'
+    template_name='cargoEstado/cargoFormList.html'
 
     @method_decorator(login_required)
     @method_decorator(csrf_exempt)
@@ -186,7 +186,8 @@ class CargoList(ListView):
                 for cargo in Cargo.objects.all():
                     data.append({
                         'id': cargo.id,
-                        'name': cargo.name,
+                        'nombre': cargo.nombre,
+                        # 'seccion': cargo.seccion,
                         'desc': cargo.desc if hasattr(cargo, 'desc') else ''
                     })
             else:
@@ -208,7 +209,7 @@ class CargoList(ListView):
 class CargoCreateView(CreateView):
     model = Cargo
     form_class = CargoForm
-    template_name = 'cargoEstado/cargoList.html'
+    template_name = 'cargoEstado/cargoFormList.html'
     success_url = reverse_lazy('asys:list-cargo')
 
     @method_decorator(login_required)

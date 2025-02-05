@@ -2,22 +2,75 @@
 {% load static %}
 
 {% block head_list %}
+    <!-- Moment.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    
+    <!-- DateRangePicker -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css">
+{% endblock %}
+
+{% block content %}
+    <div class="card">
+        <div class="card-header">
+            <div class="row">
+                <div class="col-md-8">
+                    <h3>{{ title }}</h3>
+                </div>
+               
+            </div>
+        </div>
+        <div class="card-body">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Rango de Fechas:</label>
+                        <input type="text" class="form-control" name="date_range" />
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Tipo de Servicio:</label>
+                        <select class="form-control" name="tipo_servicio">
+                            <option value="">Todos</option>
+                            {% for key, value in tipos_servicio.items %}
+                                <option value="{{ key }}">{{ value }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="form-group">
+                        <label>Búsqueda:</label>
+                        <input type="text" class="form-control" name="search" placeholder="Ingrese término de búsqueda">
+                    </div>
+                </div>
+            </div>
+            <table class="table table-bordered" id="data">
+                <thead>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Tipo</th>
+                        <th>Dirección</th>
+                        <th>Director Cultural</th>
+                        <th>Participantes</th>
+                        <th>Ofrenda</th>
+                        <th>Mensaje</th>
+                        <th>Opciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <div class="col-md-4 text-right">
+                <a href="{{ create_url }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nuevo Registro
+                </a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascript %}
+<script src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
 <script src="{% static 'servicio/list.js' %}"></script>
-{% endblock %}
-
-{% block columns %}
-<tr>
-    <th scope="col">Id</th>
-    <th scope="col">Fecha</th>
-    <th scope="col">Dirección</th>
-    <th scope="col">Lectura</th>
-    <th scope="col">Devocional</th>
-    <th scope="col">Director Cultural</th>
-    <th scope="col">Participantes</th>
-    <th scope="col">Opciones</th>
-</tr>
-{% endblock %}
-
-{% block rows %}
-<!-- DataTables se encargará de rellenar las filas -->
 {% endblock %}

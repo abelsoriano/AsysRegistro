@@ -1,11 +1,11 @@
 from datetime import timedelta, datetime
 import json
-import logging
+from django.http import JsonResponse
 from django.utils.translation import gettext as _
 from django.contrib.auth.decorators import login_required
-
+from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
-from django.db.models import Count, Q, Subquery
+from django.db.models import Count, Q
 from django.db.models.functions import Trunc, Concat, ExtractWeekDay
 
 from django.db.models import Value, CharField
@@ -28,211 +28,236 @@ from django.shortcuts import get_object_or_404
 from app.signals import *
 
 
+# views.py
 class BaseAttendanceCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Attendance
     form_class = AsistenciaForm
     template_name = 'asistencia/AsistenciaCreate.html'
+    items_per_page = 90  # Definimos aquí el número de items por página
 
     def process_attendance(self, request, miembros, attendance_type):
-        response_data = {'success': False}
+        response_data = {'success': False, 'alerts': [], 'updated': 0, 'created': 0}
         try:
             current_day = date.today().strftime('%A')
-            current_month = timezone.now().month
+            current_date = timezone.now().date()
+            current_month = current_date.month
 
             for miembro in miembros:
                 try:
                     present = request.POST.get(f'presente_{miembro.id}', 'False') == 'True'
                     
-                    # Crear la asistencia
-                    Attendance.objects.create(
+                    # Intentar obtener registro existente o crear uno nuevo
+                    attendance, created = Attendance.objects.get_or_create(
                         miembro=miembro,
-                        present=present,
-                        date=timezone.now().date(),
-                        day_of_week=current_day,
-                        user=request.user,
-                        attendance_type=attendance_type
+                        date=current_date,
+                        attendance_type=attendance_type,
+                        defaults={
+                            'present': present,
+                            'day_of_week': current_day,
+                            'user': request.user
+                        }
                     )
-                    
+
+                    if not created:
+                        # Actualizar registro existente
+                        attendance.present = present
+                        attendance.user = request.user
+                        attendance.save()
+                        response_data['updated'] += 1
+                    else:
+                        response_data['created'] += 1
+
                     # Verificar faltas este mes
                     if not present:
                         monthly_absences = Attendance.objects.filter(
                             miembro=miembro,
                             attendance_type=attendance_type,
                             date__month=current_month,
+                            date__year=current_date.year,
                             present=False
                         ).count()
-                        
+
                         if monthly_absences >= 2:
                             attendance_type_display = dict(AttendanceType.choices)[attendance_type]
-                            miembro_id_tag = f"miembro_id:{miembro.id}"
+                            alert = {
+                                'miembro_id': miembro.id,
+                                'name': f"{miembro.name} {miembro.lastname}",
+                                'absences': monthly_absences,
+                                'type': attendance_type_display
+                            }
+                            response_data['alerts'].append(alert)
                             messages.warning(
                                 request,
-                                f"{miembro.name} {miembro.lastname} tiene {monthly_absences} faltas este mes en los culto de {attendance_type_display}.",
-                                extra_tags=f"modal_trigger {miembro_id_tag}"
+                                f"{miembro.name} {miembro.lastname} tiene {monthly_absences} faltas este mes en {attendance_type_display}.",
+                                extra_tags=f"modal_trigger miembro_id:{miembro.id}"
                             )
-                    
+
                 except Exception as e:
-                    messages.error(request, f"Error al registrar asistencia para {miembro.name}: {str(e)}")
-            
+                    messages.error(request, f"Error al procesar asistencia para {miembro.name}: {str(e)}")
+
             response_data['success'] = True
-            
+            if response_data['updated'] > 0:
+                messages.info(request, f"Se actualizaron {response_data['updated']} registros existentes.")
+            if response_data['created'] > 0:
+                messages.success(request, f"Se crearon {response_data['created']} nuevos registros.")
+
         except Exception as e:
             messages.error(request, f"Error general: {str(e)}")
             response_data['error'] = str(e)
-        
+
         return response_data
+
+    def get_paginated_members(self, queryset):
+        paginator = Paginator(queryset, self.items_per_page)
+        page = self.request.GET.get('page')
+        try:
+            return paginator.page(page)
+        except PageNotAnInteger:
+            return paginator.page(1)
+        except EmptyPage:
+            return paginator.page(paginator.num_pages)
 
 
 class AttendanceCreateViewGeneral(GeneralAccessMixin, BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia_general')
-
+    
     def post(self, request, *args, **kwargs):
         miembros = Miembro.objects.all()
         response_data = self.process_attendance(request, miembros, AttendanceType.GENERAL)
+        response_data['redirect_url'] = str(self.success_url)
         return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        miembros = Miembro.objects.all()
         context.update({
             'entity': 'Attendance',
             'title': 'Creando Asistencia General',
             'list_url': self.success_url,
             'action': 'add',
-            'miembros': Miembro.objects.all()
+            'miembros': self.get_paginated_members(miembros),
+            'total_miembros': miembros.count(),
         })
         return context
 
 
-class AttendanceCreateViewJovenes(JovenesAccessMixin, BaseAttendanceCreateView):
+class AttendanceCreateViewJovenes(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia')
-
+    
     def post(self, request, *args, **kwargs):
         miembros = Miembro.objects.filter(category='joven')
         response_data = self.process_attendance(request, miembros, AttendanceType.YOUTH)
+        response_data['redirect_url'] = str(self.success_url)
         return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        miembros = Miembro.objects.filter(category='joven')
         context.update({
             'entity': 'Attendance',
             'title': 'Creando Asistencia de Jóvenes',
             'list_url': self.success_url,
             'action': 'add',
-            'miembros': Miembro.objects.filter(category='joven')
+            'miembros': self.get_paginated_members(miembros),
+            'total_miembros': miembros.count()
         })
-        
-
-        # Paginación
-        miembros = Miembro.objects.filter(category='joven')
-        paginator = Paginator(miembros, 90)  # Dividir en páginas de 90 miembros cada una
-        page_number = self.request.GET.get('page')
-        try:
-            miembros_pagina = paginator.page(page_number)
-        except PageNotAnInteger:
-            miembros_pagina = paginator.page(1)
-        except EmptyPage:
-            miembros_pagina = paginator.page(paginator.num_pages)
-        context['miembros'] = miembros_pagina
-
         return context
 
-
-class AttendanceCreateViewCaballeros(CaballerosAccessMixin, BaseAttendanceCreateView):
+class AttendanceCreateViewCaballeros(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia_caballeros')
-
+    
     def post(self, request, *args, **kwargs):
         miembros = Miembro.objects.filter(category='caballero')
         response_data = self.process_attendance(request, miembros, AttendanceType.GENTLEMEN)
+        response_data['redirect_url'] = str(self.success_url)
         return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        miembros = Miembro.objects.filter(category='caballero')
         context.update({
             'entity': 'Attendance',
             'title': 'Creando Asistencia de Caballero',
             'list_url': self.success_url,
             'action': 'add',
-            'miembros': Miembro.objects.filter(category='caballero')
+            'miembros': self.get_paginated_members(miembros),
+            'total_miembros': miembros.count()
         })
-        
-
-        # Paginación
-        miembros = Miembro.objects.filter(category='caballero')
-        paginator = Paginator(miembros, 90)  # Dividir en páginas de 90 miembros cada una
-        page_number = self.request.GET.get('page')
-        try:
-            miembros_pagina = paginator.page(page_number)
-        except PageNotAnInteger:
-            miembros_pagina = paginator.page(1)
-        except EmptyPage:
-            miembros_pagina = paginator.page(paginator.num_pages)
-        context['miembros'] = miembros_pagina
-
         return context
 
 
-class AttendanceCreateViewDamas(DamasAccessMixin,BaseAttendanceCreateView):
+class AttendanceCreateViewDamas(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia_damas')
-
+    
     def post(self, request, *args, **kwargs):
         miembros = Miembro.objects.filter(category='dama')
         response_data = self.process_attendance(request, miembros, AttendanceType.LADIES)
+        response_data['redirect_url'] = str(self.success_url)
         return JsonResponse(response_data)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        miembros = Miembro.objects.filter(category='dama')
         context.update({
             'entity': 'Attendance',
-            'title': 'Creando Asistencia de Jóvenes',
+            'title': 'Creando Asistencia de Damas',
             'list_url': self.success_url,
             'action': 'add',
-            'miembros': Miembro.objects.filter(category='dama')
+            'miembros': self.get_paginated_members(miembros),
+            'total_miembros': miembros.count()
         })
         return context
 
 
+
+
+@require_http_methods(["POST"])
 @csrf_exempt
-def guardar_status(request):
-    print("Recibida petición para guardar status")  # Añadir este print
-    if request.method == 'POST':
-        try:
-            data = json.loads(request.body)
-            print("Datos recibidos:", data)  # Añadir este print
-            miembro_id = data.get('id')
-            status = data.get('status')
-            
-            if not miembro_id or not status:
-                return JsonResponse({
-                    'error': 'ID del miembro y status son requeridos'
-                }, status=400)
-            
-            miembro = get_object_or_404(Miembro, id=int(miembro_id))
-            
-            MiembroStatus.objects.create(
-                miembro=miembro,
-                status=status
-            )
-            
+def update_attendance_reason(request):
+    try:
+        data = json.loads(request.body)
+        miembro_id = data.get('id')
+        status = data.get('status')
+        
+        if not miembro_id or not status:
             return JsonResponse({
-                'success': True,
-                'message': 'Estado guardado exitosamente'
-            })
-            
-        except json.JSONDecodeError:
-            return JsonResponse({
-                'error': 'Datos JSON inválidos'
+                'error': 'Se requiere ID del miembro y estado'
             }, status=400)
-        except Exception as e:
-            return JsonResponse({
-                'error': str(e)
-            }, status=500)
+        
+        # Obtener la asistencia más reciente del miembro
+        attendance = Attendance.objects.filter(
+            miembro_id=miembro_id,
+            date=timezone.now().date()
+        ).latest('created_at')
+        
+        # Mapear los estados a razones más descriptivas
+        status_reasons = {
+            'enfermo': 'Miembro se encuentra enfermo',
+            'visitar': 'Miembro necesita ser visitado',
+            'permiso': 'Miembro tiene permiso o excusa'
+        }
+        
+        attendance.reason = status_reasons.get(status, status)
+        attendance.save()
+        
+        return JsonResponse({
+            'success': True,
+            'message': 'Estado actualizado exitosamente'
+        })
     
-    return JsonResponse({
-        'error': 'Método no permitido'
-    }, status=405)
+    except Attendance.DoesNotExist:
+        return JsonResponse({
+            'error': 'No se encontró registro de asistencia para este miembro'
+        }, status=404)
+    except json.JSONDecodeError:
+        return JsonResponse({
+            'error': 'Datos JSON inválidos'
+        }, status=400)
+    except Exception as e:
+        return JsonResponse({
+            'error': str(e)
+        }, status=500)
 
-
-# return redirect('asys:list_asistencia')
 
 class BaseAttendanceListView(ListView):
     model = Attendance
@@ -295,7 +320,7 @@ class BaseAttendanceListView(ListView):
             entry['weekday_name'] = weekdays_mapping.get(entry['weekday_name'], 'Desconocido')
         return queryset
 
-class AttendanceListJovenes(JovenesAccessMixin, BaseAttendanceListView):
+class AttendanceListJovenes( BaseAttendanceListView):
     attendance_type = AttendanceType.YOUTH
     permission_required = 'app.can_view_joven_attendances'
 
@@ -310,7 +335,8 @@ class AttendanceListJovenes(JovenesAccessMixin, BaseAttendanceListView):
             'create_url': reverse_lazy('asys:crear_asistencia'),
             'list_url': reverse_lazy('asys:list_asistencia'),
             'entity': 'Jóvenes',
-            'inattendance_count': self.get_inattendance_count()
+            'inattendance_count': self.get_inattendance_count(),
+            'attendance_type': self.attendance_type 
         })
         return context
 
@@ -329,7 +355,8 @@ class AttendanceListCaballeros(CaballerosAccessMixin, BaseAttendanceListView):
             'create_url': reverse_lazy('asys:create_asistencia-caballero'),
             'list_url': reverse_lazy('asys:list_asistencia_caballeros'),
             'entity': 'Jóvenes',
-            'inattendance_count': self.get_inattendance_count()
+            'inattendance_count': self.get_inattendance_count(),
+            'attendance_type': self.attendance_type 
         })
         return context
 
@@ -349,7 +376,8 @@ class AttendanceListDamas(DamasAccessMixin, BaseAttendanceListView):
             'create_url': reverse_lazy('asys:create_asistencia_damas'),
             'list_url': reverse_lazy('asys:list_asistencia_damas'),
             'entity': 'Jóvenes',
-            'inattendance_count': self.get_inattendance_count()
+            'inattendance_count': self.get_inattendance_count(),
+            'attendance_type': self.attendance_type 
         })
         return context
 
@@ -369,7 +397,8 @@ class AttendanceListGeneral(GeneralAccessMixin, BaseAttendanceListView):
             'create_url': reverse_lazy('asys:create_asistencia_general'),
             'list_url': reverse_lazy('asys:list_asistencia_general'),
             'entity': 'Miembros',
-            'inattendance_count': self.get_inattendance_count()
+            'inattendance_count': self.get_inattendance_count(),
+            'attendance_type': self.attendance_type 
         })
         return context
 
@@ -389,104 +418,154 @@ class AttendanceDetailsView(View):
 
         return JsonResponse({'details': details})
 
-
-class AttendaceUpdate(UpdateView):
-    model = Attendance
-    form_class = AsistenciaForm
-    template_name = 'asistencia/AsistenciaCreate.html'
-    success_url = reverse_lazy('asys:list_asistencia')
-
-    def get_object(self, queryset=None):
-        obj = super().get_object(queryset)
-        # Opcional: imprimir para depuración
-        print(f'Editing object with id: {obj.id}')
-        return obj
-
-    @method_decorator(login_required)
-    def dispatch(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        return super().dispatch(request, *args, **kwargs)
-
-    def post(self, request, *args, **kwargs):
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            data = {}
-            try:
-                form = self.get_form()
-                if form.is_valid():
-                    form.save()
-                    data['success'] = True
-                else:
-                    data['success'] = False
-                    data['errors'] = form.errors
-            except Exception as e:
-                data['error'] = str(e)
-            return JsonResponse(data)
-        else:
-            return super().post(request, *args, **kwargs)
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Editar Asistencia'
-        context['entity'] = 'Attendance'
-        context['list_url'] = self.success_url
-        context['action'] = 'edit'
-        return context
-
-
 class AttendanceUpdateGroup(TemplateView):
     template_name = 'asistencia/AsistenciaGroupEdit.html'
-    success_url = reverse_lazy('asys:list_asistencia_caballeros')
+
+    def get_success_url(self, attendance_type=None):
+        # Determinar la URL de redirección basada en el tipo de asistencia
+        if attendance_type == AttendanceType.YOUTH:
+            return reverse_lazy('asys:list_asistencia')
+        elif attendance_type == AttendanceType.LADIES:
+            return reverse_lazy('asys:list_asistencia_damas')
+        elif attendance_type == AttendanceType.GENTLEMEN:
+            return reverse_lazy('asys:list_asistencia_caballeros')
+        elif attendance_type == AttendanceType.GENERAL:
+            return reverse_lazy('asys:list_asistencia_general')
+        return reverse_lazy('asys:list_asistencia')  # URL por defecto
 
     def get(self, request, *args, **kwargs):
         date_str = self.kwargs.get('date')
+        attendance_type = self.kwargs.get('type')  # Obtener el tipo de la URL
         date = datetime.strptime(date_str, '%Y-%m-%d').date()
         day_of_week = date.strftime('%A')
 
-        attendances = Attendance.objects.filter(date=date)
+        # Filtrar por fecha y tipo de asistencia
+        attendances = Attendance.objects.filter(
+            date=date,
+            attendance_type=attendance_type
+        )
 
         if not attendances.exists():
-            miembros = Miembro.objects.all()
+            # Filtrar miembros según el tipo de asistencia
+            if attendance_type == AttendanceType.YOUTH:
+                miembros = Miembro.objects.filter(category='joven')
+            elif attendance_type == AttendanceType.LADIES:
+                miembros = Miembro.objects.filter(category='dama')
+            elif attendance_type == AttendanceType.GENERAL:
+                miembros = Miembro.objects.all()
+            elif attendance_type == AttendanceType.GENTLEMEN:
+                miembros = Miembro.objects.filter(category='caballero')
+            else:
+                miembros = Miembro.objects.all()
+
             for miembro in miembros:
                 Attendance.objects.create(
                     miembro=miembro,
                     date=date,
                     present=False,
-                    day_of_week=day_of_week
+                    day_of_week=day_of_week,
+                    attendance_type=attendance_type
                 )
-            attendances = Attendance.objects.filter(date=date)
+            attendances = Attendance.objects.filter(
+                date=date,
+                attendance_type=attendance_type
+            )
 
-        context = self.get_context_data(attendances=attendances, date=date_str)
+        context = self.get_context_data(
+            attendances=attendances, 
+            date=date_str,
+            attendance_type=attendance_type
+        )
         return self.render_to_response(context)
 
     def post(self, request, *args, **kwargs):
         date_str = self.kwargs.get('date')
+        attendance_type = self.kwargs.get('type')
         date = datetime.strptime(date_str, '%Y-%m-%d').date()
 
-        attendances = Attendance.objects.filter(date=date)
+        attendances = Attendance.objects.filter(
+            date=date,
+            attendance_type=attendance_type
+        )
 
-        # Si es una solicitud AJAX, devolver JSONResponse
-        if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-            data = {'success': True}
-            try:
-                for attendance in attendances:
-                    attendance.present = request.POST.get(f'presente_{attendance.miembro.id}') == 'True'
-                    attendance.save()
-            except Exception as e:
-                data['success'] = False
-                data['errors'] = str(e)
-            return JsonResponse(data)
+        success_url = self.get_success_url(attendance_type)
 
-        # Si no es AJAX, redirigir de forma tradicional
-        for attendance in attendances:
-            attendance.present = request.POST.get(f'presente_{attendance.miembro.id}') == 'True'
-            attendance.save()
+        try:
+            for attendance in attendances:
+                attendance.present = request.POST.get(f'presente_{attendance.miembro.id}') == 'True'
+                attendance.save()
 
-        return redirect(self.success_url)
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': success_url
+                })
+            return redirect(success_url)
+
+        except Exception as e:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': str(e)
+                }, status=400)
+            messages.error(request, f'Error al actualizar la asistencia: {str(e)}')
+            return redirect(success_url)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['title'] = 'Editar Asistencia'
-        context['entity'] = 'Attendance'
-        context['list_url'] = self.success_url
-        context['action'] = 'edit'
+        attendance_type = kwargs.get('attendance_type')
+        
+        # Determinar el título según el tipo de asistencia
+        title_map = {
+            AttendanceType.YOUTH: 'Editar Asistencia de Jóvenes',
+            AttendanceType.LADIES: 'Editar Asistencia de Damas',
+            AttendanceType.GENTLEMEN: 'Editar Asistencia de Caballeros',
+            AttendanceType.GENERAL: 'Editar Asistencia General'
+        }
+
+        # Cambiar a `attendances` en lugar de `miembros`
+        attendances = kwargs.get('attendances')
+        
+        context.update({
+            'title': title_map.get(attendance_type, 'Editar Asistencia'),
+            'entity': 'Attendance',
+            'list_url': self.get_success_url(attendance_type),
+            'action': 'edit',
+            'attendances': attendances,
+            'miembros': kwargs.get('attendances'),
+            'date': kwargs.get('date')
+        })
         return context
+
+class AttendanceDeleteView(LoginRequiredMixin, DeleteView):
+    model = Attendance
+    template_name = 'asistencia/delete.html'
+    
+    def get_success_url(self):
+        # Determinar la URL de redirección basada en el tipo de asistencia
+        attendance_type = self.object.attendance_type
+        if attendance_type == AttendanceType.YOUTH:
+            return reverse_lazy('asys:list_asistencia_jovenes')
+        elif attendance_type == AttendanceType.LADIES:
+            return reverse_lazy('asys:list_asistencia_damas')
+        elif attendance_type == AttendanceType.GENTLEMEN:
+            return reverse_lazy('asys:list_asistencia_caballeros')
+        return reverse_lazy('asys:list_asistencia')  # URL por defecto
+
+    def delete(self, request, *args, **kwargs):
+        try:
+            response = super().delete(request, *args, **kwargs)
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': True,
+                    'redirect_url': self.get_success_url()
+                })
+            return response
+        except Exception as e:
+            if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+                return JsonResponse({
+                    'success': False,
+                    'error': str(e)
+                }, status=400)
+            messages.error(request, f'Error al eliminar la asistencia: {str(e)}')
+            return redirect(self.get_success_url())
