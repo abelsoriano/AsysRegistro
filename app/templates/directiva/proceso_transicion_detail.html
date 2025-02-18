@@ -29,7 +29,7 @@
                 {% csrf_token %}
                 <label for="estado" class="form-label mt-2">Cambiar Estado:</label>
                 <select name="nuevo_estado" id="estado" class="form-select">
-                    {% for estado, descripcion in proceso.ESTADO_CHOICES %}
+                    {% for estado, descripcion in estado_choices %}
                         <option value="{{ estado }}" {% if estado == proceso.estado %}selected{% endif %}>
                             {{ descripcion }}
                         </option>

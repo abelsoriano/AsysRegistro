@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.db import IntegrityError
-from django.http import HttpResponseForbidden, JsonResponse
+from django.http import  JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
@@ -29,7 +29,7 @@ class ProcesoTransicionListView(LoginRequiredMixin, ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['estados_choices'] = ProcesoTransicion.ESTADO_CHOICES
+        context['estados_choices'] = TRANSACION_CHOICES
         context['estado_seleccionado'] = self.request.GET.get('estado', '')
         return context
 
@@ -51,11 +51,11 @@ class ProcesoTransicionCreateView(LoginRequiredMixin, CreateView):
         elif self.request.method == 'POST' and 'seccion' in self.request.POST:
             seccion_id = self.request.POST.get('seccion')
             form.fields['periodo_anterior'].queryset = PeriodoDirectiva.objects.filter(
-                seccion_id=seccion_id,
+                seccion=seccion_id,
                 estado='ACTIVO'
             )
             form.fields['periodo_nuevo'].queryset = PeriodoDirectiva.objects.filter(
-                seccion_id=seccion_id,
+                seccion=seccion_id,
                 estado='PLANEANDO'
             )
             
@@ -69,7 +69,7 @@ class ProcesoTransicionCreateView(LoginRequiredMixin, CreateView):
 # Vistas API para cargar los períodos
 def get_periodos_activos(request, seccion_id):
     periodos = PeriodoDirectiva.objects.filter(
-        seccion_id=seccion_id,
+        seccion=seccion_id,
         estado='ACTIVO'
     ).values('id', 'fecha_inicio', 'fecha_fin')
     periodos_list = list(periodos)
@@ -82,7 +82,7 @@ def get_periodos_activos(request, seccion_id):
 
 def get_periodos_planeados(request, seccion_id):
     periodos = PeriodoDirectiva.objects.filter(
-        seccion_id=seccion_id,
+        seccion=seccion_id,
         estado='PLANEANDO'
     ).values('id', 'fecha_inicio', 'fecha_fin')
     periodos_list = list(periodos)
@@ -100,6 +100,11 @@ class ProcesoTransicionDetailView(LoginRequiredMixin, DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        # Obtener las opciones del campo 'estado'
+        estado_choices = self.model._meta.get_field('estado').choices
+        context['estado_choices'] = estado_choices
+
+        # Otros datos del contexto (candidatos, total de votos, etc.)
         candidatos = CandidatoTransicion.objects.filter(proceso_transicion=self.object)
         context['candidatos'] = candidatos
         context['total_votos'] = sum(c.votos for c in candidatos)
@@ -113,7 +118,7 @@ class ProcesoTransicionDetailView(LoginRequiredMixin, DetailView):
                 proceso = self.get_object()
                 nuevo_estado = request.POST.get('nuevo_estado')
                 
-                if nuevo_estado not in dict(ProcesoTransicion.ESTADO_CHOICES).keys():
+                if nuevo_estado not in dict(TRANSACION_CHOICES).keys():
                     raise ValueError("Estado inválido")
                 
                 # Si el nuevo estado es COMPLETADO, actualizamos los períodos

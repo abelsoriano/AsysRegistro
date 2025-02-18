@@ -46,9 +46,7 @@ urlpatterns = [
 
     # Notas
     path('notas/list', NotaView.as_view(), name='nota_list'),
-    path('notas/delete/<int:pk>/', NotaDeleteView.as_view(), name='nota_delete'),
-    path('notas/cargar_mas/', cargar_mas_notas, name='cargar_mas_notas'),
-    path('notas/update/<int:pk>/', NotaUpdateView.as_view(), name='nota_update'),
+    path('notas/delete/<int:pk>/', nota_delete, name='nota_delete'),
 
     #lista de tareas
     path('tareas/', TareaListView.as_view(), name='tareas-list'),
@@ -83,8 +81,8 @@ urlpatterns = [
     path('periodos/nuevo_periodo/', PeriodoDirectivaCreateView.as_view(), name='periodo_directiva_create'),
     path('periodos/<int:pk>/editar/', PeriodoDirectivaUpdateView.as_view(), name='periodo_directiva_edit'),
     path('periodos/<int:pk>/eliminar/', PeriodoDirectivaDeleteView.as_view(), name='periodo_directiva_delete'),
-    path('api/periodos-activos/<int:seccion_id>/', get_periodos_activos, name='api_periodos_activos'),
-    path('api/periodos-planeados/<int:seccion_id>/', get_periodos_planeados, name='api_periodos_planeados'),
+    path('api/periodos-activos/<str:seccion_id>/', get_periodos_activos, name='api_periodos_activos'),
+    path('api/periodos-planeados/<str:seccion_id>/', get_periodos_planeados, name='api_periodos_planeados'),
 
 
 

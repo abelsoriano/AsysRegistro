@@ -11,9 +11,6 @@ from setting.settings import MEDIA_URL
 from django.contrib.auth.models import User
 
 
-
-
-
 class Estado(models.Model):
     name = models.CharField(max_length=50, verbose_name="Estado")
 
@@ -30,22 +27,22 @@ class Estado(models.Model):
         db_table = "estado"
         ordering = ["id"]
 
-class SeccionIglesia(models.Model):
-    nombre = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES', unique=True)
+# class SeccionIglesia(models.Model):
+#     nombre = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES', unique=True)
     
-    def __str__(self):
-        return self.get_nombre_display()
+#     def __str__(self):
+#         return self.get_nombre_display()
     
 
 class Cargo(models.Model):
     """Cargos dinámicos para cada sección"""
     nombre = models.CharField(max_length=50, verbose_name="Nombre del Cargo")
-    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE, related_name='cargos')
+    # seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE, related_name='cargos')
     es_cargo_principal = models.BooleanField(default=False)
     orden_jerarquico = models.IntegerField(default=0)
     
     def __str__(self):
-        return f"{self.nombre} - {self.seccion}"
+        return f"{self.nombre} "
     
     def toJSON(self):
         item = model_to_dict(self)
@@ -242,8 +239,6 @@ class Attendance(models.Model):
             models.Index(fields=['present', 'date']),
         ]
 
-
-
 class Nota(models.Model):
     titulo = models.CharField(max_length=100)
     contenido = models.TextField()
@@ -266,7 +261,6 @@ class Nota(models.Model):
 
 
 class Tarea(models.Model):
-    
     nombre = models.CharField(max_length=200, verbose_name="Titulo de la actividad")
     descripcion = models.TextField(blank=True, null=True)
     fecha = models.DateTimeField(verbose_name="Ingresa la fecha de la actividad")
@@ -286,11 +280,9 @@ class Tarea(models.Model):
             'usuario_asignado': f"{self.usuario_asignado.first_name} {self.usuario_asignado.last_name}"
         }
 
-
-#create directiva model 
-
+#create directiva model
 class PeriodoDirectiva(models.Model):
-    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE)
+    seccion = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES')
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField(null=True, blank=True)  
     estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PLANEANDO')
@@ -314,18 +306,10 @@ class AsignacionDirectiva(models.Model):
 
 class ProcesoTransicion(models.Model):
     """Proceso de cambio de directiva"""
-    seccion = models.ForeignKey(SeccionIglesia, on_delete=models.CASCADE)
+    seccion = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES')
     periodo_anterior = models.ForeignKey(PeriodoDirectiva, related_name='transicion_anterior', on_delete=models.CASCADE)
     periodo_nuevo = models.ForeignKey(PeriodoDirectiva, related_name='transicion_nuevo', on_delete=models.CASCADE)
-    
-    ESTADO_CHOICES = [
-        ('PREPARACION', 'En Preparación'),
-        ('INSCRIPCION', 'Inscripción de Candidatos'),
-        ('VOTACION', 'Proceso de Votación'),
-        ('CONFIRMACION', 'Confirmación'),
-        ('COMPLETADO', 'Proceso Completado')
-    ]
-    estado = models.CharField(max_length=20, choices=ESTADO_CHOICES, default='PREPARACION')
+    estado = models.CharField(max_length=20, choices=TRANSACION_CHOICES, default='PREPARACION')
     
     fecha_inicio = models.DateField()
     fecha_fin_planeada = models.DateField()

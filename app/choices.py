@@ -36,6 +36,11 @@ ESTADO_CHOICES = [
         ('ACTIVO', 'Período Activo'),
         ('FINALIZADO', 'Período Finalizado'),
         ('PLANEANDO', 'En Planificación')
-    ]
- 
- 
+] 
+TRANSACION_CHOICES = [
+        ('PREPARACION', 'En Preparación'),
+        ('INSCRIPCION', 'Inscripción de Candidatos'),
+        ('VOTACION', 'Proceso de Votación'),
+        ('CONFIRMACION', 'Confirmación'),
+        ('COMPLETADO', 'Proceso Completado')
+]

@@ -1,13 +1,13 @@
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from django.views.generic import CreateView, ListView, DeleteView, UpdateView
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from django.core import serializers
-
+from django.views.decorators.http import require_http_methods
 from app.forms import NotaForm
 from app.models import Nota
 
@@ -47,27 +47,18 @@ class NotaView(CreateView, ListView):
         context['entity'] = 'Nota'
         return context
 
-@method_decorator(csrf_exempt, name='dispatch')
-class NotaDeleteView(DeleteView):
-    model = Nota
-    success_url = reverse_lazy('asys:nota_list')
+@require_http_methods(["POST"])
+def nota_delete(request, pk):
+    try:
+        nota = Nota.objects.get(pk=pk)
+        nota.delete()
+        return JsonResponse({'success': True})
+    except Nota.DoesNotExist:
+        return JsonResponse({'success': False, 'error': 'Nota no encontrada'}, status=404)
+    except Exception as e:
+        return JsonResponse({'success': False, 'error': str(e)}, status=500)
 
-    def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
-        self.object.delete()
-        return JsonResponse({'success': True})  
 
-
-class NotaUpdateView(UpdateView):
-    model = Nota
-    form_class = NotaForm
-    template_name = 'notas/listaNota.html'
-    success_url = reverse_lazy('asys:nota_list')
-
-    
-
-@csrf_exempt
-def cargar_mas_notas(request):
     if request.method == 'POST':
         offset = int(request.POST.get('offset', 0))
         limit = 3

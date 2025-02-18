@@ -50,9 +50,11 @@
         <i class="bi bi-arrow-up-short"></i>
     </a>
 
-    <!-- JavaScript Principal -->
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+  <!-- jQuery primero -->
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+
+<!-- Usa esta versión específica de Inputmask -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.8/jquery.inputmask.min.js"></script>
 
     <!-- Select2 JS -->
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
@@ -78,6 +80,8 @@
     <script src="{% static 'js/functions.js' %}"></script>
     <script src="{% static 'assets/js/main.js' %}"></script>
     <script src="{% static 'js/offcanvas.js' %}"></script>
+    
+
 
 
     {% block javascript %}{% endblock %}

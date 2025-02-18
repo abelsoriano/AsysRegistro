@@ -263,32 +263,31 @@ class EstadoForm(forms.ModelForm):
 class CargoForm(forms.ModelForm):
     class Meta:
         model = Cargo
-        fields = ['nombre', 'seccion', 'es_cargo_principal', 'orden_jerarquico']
+        fields = ['nombre',  'es_cargo_principal', 'orden_jerarquico']
 
         required = {
             'orden_jerarquico': False,
         }
+
     def __init__(self, *args, **kwargs):
         super(CargoForm, self).__init__(*args, **kwargs)
         
-        # Establecer valores por defecto para algunos campos
-        self.fields['seccion'].initial = 'JOVENES'  # Valor por defecto para 'seccion'
+        # Obtener una instancia válida de SeccionIglesia para el valor por defecto
+        
         self.fields['es_cargo_principal'].initial = False  # Valor por defecto para 'es_cargo_principal'
         self.fields['orden_jerarquico'].initial = 0  # Valor por defecto para 'orden_jerarquico'
         
         # Hacer que 'nombre' sea el único campo requerido
         self.fields['nombre'].required = True
-        self.fields['seccion'].required = False
         self.fields['es_cargo_principal'].required = False
         self.fields['orden_jerarquico'].required = False
 
 
 #form cambio de directiva
 class ProcesoTransicionForm(forms.ModelForm):
-    seccion = forms.ModelChoiceField(
-        queryset=SeccionIglesia.objects.all(),
+    seccion = forms.ChoiceField(
+        choices=secciones_choices,
         label="Sección",
-        empty_label="Seleccione una sección",
         widget=forms.Select(attrs={
             'class': 'form-control',
             'onchange': 'cargarPeriodos(this.value)'
@@ -328,22 +327,20 @@ class ProcesoTransicionForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         
-        # Obtener datos del POST si existen
         data = kwargs.get('data', None)
         
         if data and 'seccion' in data:
-            try:
-                seccion_id = int(data.get('seccion'))
-                # Actualizar querysets basados en la sección seleccionada
+            seccion = data.get('seccion')
+            if seccion:
                 self.fields['periodo_anterior'].queryset = PeriodoDirectiva.objects.filter(
-                    seccion_id=seccion_id,
+                    seccion=seccion,
                     estado='ACTIVO'
                 )
                 self.fields['periodo_nuevo'].queryset = PeriodoDirectiva.objects.filter(
-                    seccion_id=seccion_id,
+                    seccion=seccion,
                     estado='PLANEANDO'
                 )
-            except (ValueError, TypeError):
+            else:
                 self.fields['periodo_anterior'].queryset = PeriodoDirectiva.objects.none()
                 self.fields['periodo_nuevo'].queryset = PeriodoDirectiva.objects.none()
 
@@ -354,22 +351,20 @@ class ProcesoTransicionForm(forms.ModelForm):
         periodo_nuevo = cleaned_data.get('periodo_nuevo')
 
         if seccion:
-            # Validar que los períodos pertenezcan a la sección
             if periodo_anterior and periodo_anterior.seccion != seccion:
                 self.add_error('periodo_anterior', 'El período anterior debe pertenecer a la sección seleccionada')
-            
+
             if periodo_nuevo and periodo_nuevo.seccion != seccion:
                 self.add_error('periodo_nuevo', 'El período nuevo debe pertenecer a la sección seleccionada')
 
-            # Validar estados
             if periodo_anterior and periodo_anterior.estado != 'ACTIVO':
                 self.add_error('periodo_anterior', 'El período anterior debe estar en estado ACTIVO')
-            
+
             if periodo_nuevo and periodo_nuevo.estado != 'PLANEANDO':
                 self.add_error('periodo_nuevo', 'El período nuevo debe estar en estado PLANEANDO')
 
         return cleaned_data
-    
+
 class CandidatoTransicionForm(forms.ModelForm):
     class Meta:
         model = CandidatoTransicion
