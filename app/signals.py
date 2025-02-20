@@ -39,45 +39,45 @@ def role_required(group_name):
 
 
 
-class JovenesAccessMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.groups.filter(name='Jovenes_Secretary').exists()
+# class JovenesAccessMixin(UserPassesTestMixin):
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='Jovenes_Secretary').exists()
 
-    def handle_no_permission(self):
-        messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
-        return redirect('index')
+#     def handle_no_permission(self):
+#         messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
+#         return redirect('index')
 
 
-class CaballerosAccessMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.groups.filter(name='Caballeros_Secretary').exists()
+# class CaballerosAccessMixin(UserPassesTestMixin):
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='Caballeros_Secretary').exists()
 
-    def handle_no_permission(self):
-        messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
-        return redirect('index')
+#     def handle_no_permission(self):
+#         messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
+#         return redirect('index')
     
-class DamasAccessMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.groups.filter(name='Damas_Secretary').exists()
+# class DamasAccessMixin(UserPassesTestMixin):
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='Damas_Secretary').exists()
 
-    def handle_no_permission(self):
-        messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
-        return redirect('index')
-
-
-class GeneralAccessMixin(UserPassesTestMixin):
-    def test_func(self):
-        return self.request.user.groups.filter(name='General_Secretary').exists()
-
-    def handle_no_permission(self):
-        messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
-        return redirect('index')
+#     def handle_no_permission(self):
+#         messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
+#         return redirect('index')
 
 
-def create_permissions():
-    content_type = ContentType.objects.get_for_model(Attendance)
-    Permission.objects.create(
-        codename='can_view_all_attendances',
-        name='Can view all attendances',
-        content_type=content_type
-    )
+# class GeneralAccessMixin(UserPassesTestMixin):
+#     def test_func(self):
+#         return self.request.user.groups.filter(name='General_Secretary').exists()
+
+#     def handle_no_permission(self):
+#         messages.error(self.request, 'No tienes permiso para acceder a esta vista.')
+#         return redirect('index')
+
+
+# def create_permissions():
+#     content_type = ContentType.objects.get_for_model(Attendance)
+#     Permission.objects.create(
+#         codename='can_view_all_attendances',
+#         name='Can view all attendances',
+#         content_type=content_type
+#     )

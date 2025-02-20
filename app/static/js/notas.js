@@ -8,96 +8,147 @@ document.addEventListener('DOMContentLoaded', function () {
   // Función para eliminar una nota
   window.deleteItem = function(id) {
     Swal.fire({
-        title: '¿Estás seguro?',
-        text: "Esta acción no se puede deshacer",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Sí, eliminar',
-        cancelButtonText: 'Cancelar'
+      title: '¿Estás seguro?',
+      text: "Esta acción no se puede deshacer",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminar',
+      cancelButtonText: 'Cancelar'
     }).then((result) => {
-        if (result.value) {
-
-            // Enviar la solicitud POST para eliminar
-            fetch(`/asys/notas/delete/${id}/`, {
-                method: 'POST',
-                headers: {
-                    'X-CSRFToken': csrfToken,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    action: 'delete'
-                })
-            })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    Swal.fire(
-                        'Eliminado!',
-                        'El registro ha sido eliminado.',
-                        'success'
-                    ).then(() => {
-                        location.reload(); // Recargar la página o DataTable
-                    });
-                } else {
-                    Swal.fire(
-                        'Error!',
-                        'Ocurrió un error al eliminar el registro: ' + (data.error || 'Error desconocido'),
-                        'error'
-                    );
-                }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                Swal.fire(
-                    'Error!',
-                    'Ocurrió un error al eliminar el registro.',
-                    'error'
-                );
-            });
-        }
-    });
-};       
-
-
-  // Función para manejar la confirmación y eliminación
-  document.addEventListener("DOMContentLoaded", function () {
-    const csrfToken = getCSRFToken(); // Ahora usa la función para obtenerlo dinámicamente
-
-    // Manejo del envío del formulario (Crear / Editar)
-    document.getElementById("notaForm").addEventListener("submit", function (event) {
-      event.preventDefault();
-      const formData = new FormData(this);
-      const actionUrl = this.getAttribute("action");
-
-      fetch(actionUrl, {
-          method: "POST",
-          body: formData,
+      if (result.value) {
+        fetch(`/asys/notas/delete/${id}/`, {
+          method: 'POST',
           headers: {
-              "X-CSRFToken": csrfToken,
-              "X-Requested-With": "XMLHttpRequest",
+            'X-CSRFToken': csrfToken,
+            'X-Requested-With': 'XMLHttpRequest',
+            'Content-Type': 'application/json',
           },
-      })
-      .then(response => response.json())
-      .then(data => {
+          body: JSON.stringify({
+            action: 'delete'
+          })
+        })
+        .then(response => response.json())
+        .then(data => {
           if (data.success) {
-              Swal.fire("Éxito", "Nota guardada correctamente", "success").then(() => location.reload());
+            Swal.fire(
+              'Eliminado!',
+              'El registro ha sido eliminado.',
+              'success'
+            ).then(() => {
+              location.reload();
+            });
           } else {
-              Swal.fire("Error", "No se pudo guardar la nota", "error");
+            Swal.fire(
+              'Error!',
+              'Ocurrió un error al eliminar el registro: ' + (data.error || 'Error desconocido'),
+              'error'
+            );
           }
-      })
-      .catch(error => {
-          console.error("Error:", error);
-          Swal.fire("Error", "Ocurrió un error al guardar la nota", "error");
-      });
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          Swal.fire(
+            'Error!',
+            'Ocurrió un error al eliminar el registro.',
+            'error'
+          );
+        });
+      }
+    });
+  };
+
+  // Función para cargar los datos de la nota en el modal
+  window.loadNoteData = function(id) {
+    fetch(`/asys/notas/get/${id}/`, {  // Cambiamos para usar la URL correcta
+        method: 'GET',
+        headers: {
+            'X-Requested-With': 'XMLHttpRequest'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            document.getElementById('notaId').value = id;
+            document.getElementById('id_titulo').value = data.nota.titulo;
+            document.getElementById('id_contenido').value = data.nota.contenido;
+            document.getElementById('notaModalTitle').textContent = 'Editar Nota';
+            document.getElementById('notaForm').setAttribute('data-action', 'update');
+        } else {
+            Swal.fire('Error', data.error || 'No se pudo cargar la nota', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        Swal.fire('Error', 'No se pudo cargar la nota', 'error');
+    });
+};
+
+  // Event listeners para los botones de editar
+  document.querySelectorAll('.edit-btn').forEach(button => {
+    button.addEventListener('click', function() {
+      const noteId = this.getAttribute('data-id');
+      loadNoteData(noteId);
+    });
+  });
+
+  // Event listener para el botón de agregar nota
+  const addButton = document.querySelector('[data-bs-target="#notaModal"]:not(.edit-btn)');
+  if (addButton) {
+    addButton.addEventListener('click', function() {
+      document.getElementById('notaForm').reset();
+      document.getElementById('notaId').value = '';
+      document.getElementById('notaModalTitle').textContent = 'Agregar Nota';
+      document.getElementById('notaForm').setAttribute('data-action', 'create');
+    });
+  }
+
+
+// Manejo del envío del formulario
+document.getElementById("notaForm").addEventListener("submit", function (event) {
+  event.preventDefault();
+  const formData = new FormData(this);
+  const isUpdate = this.getAttribute('data-action') === 'update';
+  
+  if (isUpdate) {
+      formData.append('action', 'update');
+  }
+
+  fetch(this.getAttribute("action"), {
+      method: "POST",
+      body: formData,
+      headers: {
+          "X-CSRFToken": csrfToken,
+          "X-Requested-With": "XMLHttpRequest"
+      }
+  })
+  .then(response => response.json())
+  .then(data => {
+      if (data.success) {
+          // Cerrar el modal
+          const modalElement = document.getElementById('notaModal');
+          const modalInstance = bootstrap.Modal.getInstance(modalElement);
+          modalInstance.hide();
+          
+          Swal.fire({
+              title: "Éxito",
+              text: isUpdate ? "Nota actualizada correctamente" : "Nota creada correctamente",
+              icon: "success"
+          }).then(() => {
+              location.reload();
+          });
+      } else {
+          Swal.fire("Error", data.error || "No se pudo procesar la nota", "error");
+      }
+  })
+  .catch(error => {
+      console.error("Error:", error);
+      Swal.fire("Error", "Ocurrió un error al procesar la nota", "error");
   });
 });
 
-
-
-  // Agregar event listeners a los botones de eliminar
+  // Función para agregar event listeners a los botones de eliminar
   function addDeleteListeners() {
     document.querySelectorAll('.delete-link').forEach(button => {
       button.addEventListener('click', async function(e) {
@@ -113,7 +164,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Manejo de "Ver más"
   const verMasButton = document.getElementById('ver-mas');
-  
   if (verMasButton) {
     verMasButton.addEventListener('click', async function(event) {
       event.preventDefault();
@@ -149,25 +199,24 @@ document.addEventListener('DOMContentLoaded', function () {
           colDiv.className = 'col-md-4 mb-4';
           
           colDiv.innerHTML = `
-  <div class="card h-100 shadow-sm" data-id="${nota.pk}">
-    <div class="card-header d-flex justify-content-between align-items-center">
-      <strong>${nota.fields.titulo.toUpperCase()}</strong>
-      <small class="text-muted">${nota.fields.fecha_creacion}</small>
-    </div>
-    <div class="card-body">
-      <p class="card-text">${nota.fields.contenido}</p>
-    </div>
-    <div class="card-footer d-flex justify-content-between">
-      <button class="btn btn-primary btn-sm edit-btn" data-id="${nota.pk}">
-        <i class="fas fa-edit"></i> Editar
-      </button>
-      <button class="btn btn-danger btn-sm delete-link" data-id="${nota.pk}">
-        <i class="fas fa-trash-alt"></i> Eliminar
-      </button>
-    </div>
-  </div>
-`;
-
+            <div class="card h-100 shadow-sm" data-id="${nota.pk}">
+              <div class="card-header d-flex justify-content-between align-items-center">
+                <strong>${nota.fields.titulo.toUpperCase()}</strong>
+                <small class="text-muted">${nota.fields.fecha_creacion}</small>
+              </div>
+              <div class="card-body">
+                <p class="card-text">${nota.fields.contenido}</p>
+              </div>
+              <div class="card-footer d-flex justify-content-between">
+                <button class="btn btn-primary btn-sm edit-btn" data-id="${nota.pk}" data-bs-toggle="modal" data-bs-target="#notaModal">
+                  <i class="fas fa-edit"></i> Editar
+                </button>
+                <button class="btn btn-danger btn-sm delete-link" data-id="${nota.pk}">
+                  <i class="fas fa-trash-alt"></i> Eliminar
+                </button>
+              </div>
+            </div>
+          `;
           
           container.appendChild(colDiv);
         });
@@ -176,6 +225,14 @@ document.addEventListener('DOMContentLoaded', function () {
         
         // Actualizar los event listeners para los nuevos botones
         addDeleteListeners();
+        
+        // Agregar event listeners para los nuevos botones de editar
+        document.querySelectorAll('.edit-btn').forEach(button => {
+          button.addEventListener('click', function() {
+            const noteId = this.getAttribute('data-id');
+            loadNoteData(noteId);
+          });
+        });
 
       } catch (error) {
         console.error('Error:', error);

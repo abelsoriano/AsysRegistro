@@ -47,6 +47,8 @@ urlpatterns = [
     # Notas
     path('notas/list', NotaView.as_view(), name='nota_list'),
     path('notas/delete/<int:pk>/', nota_delete, name='nota_delete'),
+    path('notas/get/<int:id>/', NotaView.as_view(), name='nota_get'),
+    
 
     #lista de tareas
     path('tareas/', TareaListView.as_view(), name='tareas-list'),

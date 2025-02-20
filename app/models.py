@@ -27,12 +27,6 @@ class Estado(models.Model):
         db_table = "estado"
         ordering = ["id"]
 
-# class SeccionIglesia(models.Model):
-#     nombre = models.CharField(max_length=50, choices=secciones_choices, default='JOVENES', unique=True)
-    
-#     def __str__(self):
-#         return self.get_nombre_display()
-    
 
 class Cargo(models.Model):
     """Cargos dinámicos para cada sección"""

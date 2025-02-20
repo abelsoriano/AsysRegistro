@@ -118,7 +118,7 @@ class BaseAttendanceCreateView(LoginRequiredMixin, SuccessMessageMixin, CreateVi
             return paginator.page(paginator.num_pages)
 
 
-class AttendanceCreateViewGeneral(GeneralAccessMixin, BaseAttendanceCreateView):
+class AttendanceCreateViewGeneral(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia_general')
     
     def post(self, request, *args, **kwargs):
@@ -320,7 +320,7 @@ class BaseAttendanceListView(ListView):
             entry['weekday_name'] = weekdays_mapping.get(entry['weekday_name'], 'Desconocido')
         return queryset
 
-class AttendanceListJovenes( BaseAttendanceListView):
+class AttendanceListJovenes(BaseAttendanceListView):
     attendance_type = AttendanceType.YOUTH
     permission_required = 'app.can_view_joven_attendances'
 
@@ -340,7 +340,7 @@ class AttendanceListJovenes( BaseAttendanceListView):
         })
         return context
 
-class AttendanceListCaballeros(CaballerosAccessMixin, BaseAttendanceListView):
+class AttendanceListCaballeros(BaseAttendanceListView):
     attendance_type = AttendanceType.GENTLEMEN
     permission_required = 'app.can_view_caballero_attendances'
 
@@ -361,7 +361,7 @@ class AttendanceListCaballeros(CaballerosAccessMixin, BaseAttendanceListView):
         return context
 
 
-class AttendanceListDamas(DamasAccessMixin, BaseAttendanceListView):
+class AttendanceListDamas(BaseAttendanceListView):
     attendance_type = AttendanceType.LADIES
     permission_required = 'app.can_view_dama_attendances'
 
@@ -382,7 +382,7 @@ class AttendanceListDamas(DamasAccessMixin, BaseAttendanceListView):
         return context
 
 
-class AttendanceListGeneral(GeneralAccessMixin, BaseAttendanceListView):
+class AttendanceListGeneral(BaseAttendanceListView):
     attendance_type = AttendanceType.GENERAL
     permission_required = 'app_name.can_view_all_attendances'
 

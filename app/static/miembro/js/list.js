@@ -80,7 +80,7 @@ $(function() {
         detalleEmpleado.find('#ingreso-empleado').text(`Fecha de Ingreso: ${data.fecha_ingreso}`);
         detalleEmpleado.find('#correo-empleado').text(`Correo: ${data.email}`);
         detalleEmpleado.find('#estado-empleado').text(`Estado: ${data.state.name}`);
-        detalleEmpleado.find('#cargo-empleado').text(`Cargo: ${data.cargo.name}`);
+        detalleEmpleado.find('#cargo-empleado').text(`Cargo: ${data.cargo.nombre}`);
         detalleEmpleado.find('#category-empleado').text(`Categoria: ${data.category}`);
 
         detalleEmpleado.fadeIn(300);

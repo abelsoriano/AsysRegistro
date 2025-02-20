@@ -205,6 +205,7 @@ class ServicioForm(ModelForm):
             
         return instance
 
+#Asistencia Form
 class AsistenciaForm(forms.ModelForm):
     class Meta:
         model = Attendance
@@ -213,7 +214,7 @@ class AsistenciaForm(forms.ModelForm):
 # Define un formset utilizando el form anterior
 AsistenciaFormSet = modelformset_factory(Attendance, form=AsistenciaForm, extra=0)
 
-
+#Tareas Form
 class TareaForm(forms.ModelForm):
     class Meta:
         model = Tarea
@@ -245,7 +246,9 @@ class TareaForm(forms.ModelForm):
         if fecha is None:
             raise forms.ValidationError("La fecha es requerida")
         return fecha
-        
+ 
+
+#Notas Form       
 class NotaForm(forms.ModelForm):
     class Meta:
         model = Nota
@@ -254,6 +257,7 @@ class NotaForm(forms.ModelForm):
             'titulo': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese el título'}),
             'contenido': forms.Textarea(attrs={'class': 'form-control', 'placeholder': 'Ingrese el contenido'}),
         }
+        
 
 class EstadoForm(forms.ModelForm):
     class Meta:
