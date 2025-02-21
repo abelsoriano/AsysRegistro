@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from app.models import Tarea
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app.forms import TareaForm
-
+from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -19,7 +19,8 @@ class TareaListView(LoginRequiredMixin, ListView):
     context_object_name = 'tareas'
 
     def get_queryset(self):
-        return Tarea.objects.filter(usuario_asignado=self.request.user).order_by('fecha')
+        # Obtener las primeras 5 tareas
+        return Tarea.objects.filter(usuario_asignado=self.request.user).order_by('fecha')[:4]
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -64,6 +65,31 @@ def completar_tarea(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
+
+def cargar_mas_tareas(request):
+    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
+        page = int(request.GET.get('page', 1))  # Obtener el número de página
+        tareas = Tarea.objects.filter(usuario_asignado=request.user).order_by('fecha')
+        paginator = Paginator(tareas, 5)  # 5 tareas por página
+        tareas_pagina = paginator.get_page(page)
+
+        # Convertir las tareas a JSON
+        tareas_data = [
+            {
+                'id': tarea.id,
+                'nombre': tarea.nombre,
+                'descripcion': tarea.descripcion,
+                'fecha': tarea.fecha.strftime('%d/%m/%Y %H:%M'),
+                'completado': tarea.completado
+            }
+            for tarea in tareas_pagina
+        ]
+
+        return JsonResponse({
+            'tareas': tareas_data,
+            'has_next': tareas_pagina.has_next()
+        })
+    return JsonResponse({'error': 'Solicitud no válida'}, status=400)
 
 
 # @require_http_methods(["GET"])

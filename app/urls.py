@@ -55,6 +55,7 @@ urlpatterns = [
     path('editar/<int:pk>/', TareaUpdateView.as_view(), name='tarea-editar'),
     path('obtener/<int:pk>/', obtener_tarea, name='tarea-obtener'),
     path('completar/<int:pk>/', completar_tarea, name='tarea-completar'),
+    path('cargar-mas-tareas/', cargar_mas_tareas, name='cargar-mas-tareas'),
 
     #Cargo y Estado
     path('crearEstado/', ModelEstadoCreateView.as_view(), name='create-estado'),

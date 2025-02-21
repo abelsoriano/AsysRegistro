@@ -6,45 +6,57 @@
 <!-- Bootstrap CSS -->
 <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"/>
 
-<!-- jQuery, Popper.js, and Bootstrap JS -->
-
-
-<div class="container mt-4">
-    <div class="row">
-        <div class="col-md-8">
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#tareaModal" onclick="crearTarea()">
+<div class="form-container">
+    
+    <!-- Columna de la imagen con el botón -->
+    <div class="image-side">
+        <h3>Mis Tareas</h3>
+        <div class="image-content">
+            <!-- Aquí va la imagen de fondo -->
+        </div>
+        <div class="button-container">
+            <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#tareaModal" onclick="crearTarea()">
                 Crear nueva tarea
             </button>
         </div>
     </div>
+    
+    <!-- Columna del formulario y lista de tareas -->
+    <div class="form-side">
+        <div class="col-md-8">
+            <!-- Listado de tareas -->
+            <div class="mt-3">
+                <div class="list-group" id="lista-tareas">
+                    {% for tarea in tareas %}
+                    <div class="list-group-item {% if tarea.completado %}bg-light{% endif %}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="flex-grow-1">
+                                <h5 class="mb-1 {% if tarea.completado %}text-muted{% endif %}">{{ tarea.nombre }}</h5>
+                                <p class="mb-1 {% if tarea.completado %}text-muted{% endif %}">
+                                    {{ tarea.descripcion|default:"Sin descripción" }}
+                                </p>
+                                <small>Fecha: {{ tarea.fecha|date:"d/m/Y H:i" }}</small>
+                            </div>
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm {% if tarea.completado %}btn-success{% else %}btn-outline-success{% endif %}" onclick="toggleCompletado({{ tarea.id }}, {{ tarea.completado|lower }})">
+                                    <i class="fas fa-check"></i>
+                                </button>
+                                <button type="button" class="btn btn-sm btn-outline-primary" onclick="editarTarea({{ tarea.id }})">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="alert alert-info">No tienes tareas asignadas.</div>
+                    {% endfor %}
+                </div>
 
-    <!-- Listado de tareas -->
-    <div class="mt-3">
-        <h3>Mis Tareas</h3>
-        <div class="list-group">
-            {% for tarea in tareas %}
-            <div class="list-group-item {% if tarea.completado %}bg-light{% endif %}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <div class="flex-grow-1">
-                        <h5 class="mb-1 {% if tarea.completado %}text-muted{% endif %}">{{ tarea.nombre }}</h5>
-                        <p class="mb-1 {% if tarea.completado %}text-muted{% endif %}">
-                            {{ tarea.descripcion|default:"Sin descripción" }}
-                        </p>
-                        <small>Fecha: {{ tarea.fecha|date:"d/m/Y H:i" }}</small>
-                    </div>
-                    <div class="btn-group">
-                        <button type="button" class="btn btn-sm {% if tarea.completado %}btn-success{% else %}btn-outline-success{% endif %}" onclick="toggleCompletado({{ tarea.id }}, {{ tarea.completado|lower }})">
-                            <i class="fas fa-check"></i>
-                        </button>
-                        <button type="button" class="btn btn-sm btn-outline-primary" onclick="editarTarea({{ tarea.id }})">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </div>
+                <!-- Botón "Ver más" -->
+                <div class="text-center mt-3">
+                    <button id="ver-mas" class="btn btn-primary" onclick="cargarMasTareas()">Ver más</button>
                 </div>
             </div>
-            {% empty %}
-            <div class="alert alert-info">No tienes tareas asignadas.</div>
-            {% endfor %}
         </div>
     </div>
 </div>
@@ -79,6 +91,61 @@
         </div>
     </div>
 </div>
+
+<script>
+    let paginaActual = 1; // Iniciar en la primera página
+
+    function cargarMasTareas() {
+        paginaActual++; // Incrementar el número de página
+        fetch(`/asys/cargar-mas-tareas/?page=${paginaActual}`, {
+            headers: {
+                "X-Requested-With": "XMLHttpRequest",
+            },
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.tareas.length > 0) {
+                // Agregar las nuevas tareas a la lista
+                const listaTareas = document.getElementById('lista-tareas');
+                data.tareas.forEach(tarea => {
+                    const tareaHTML = `
+                        <div class="list-group-item ${tarea.completado ? 'bg-light' : ''}">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div class="flex-grow-1">
+                                    <h5 class="mb-1 ${tarea.completado ? 'text-muted' : ''}">${tarea.nombre}</h5>
+                                    <p class="mb-1 ${tarea.completado ? 'text-muted' : ''}">
+                                        ${tarea.descripcion || 'Sin descripción'}
+                                    </p>
+                                    <small>Fecha: ${tarea.fecha}</small>
+                                </div>
+                                <div class="btn-group">
+                                    <button type="button" class="btn btn-sm ${tarea.completado ? 'btn-success' : 'btn-outline-success'}" onclick="toggleCompletado(${tarea.id}, ${tarea.completado})">
+                                        <i class="fas fa-check"></i>
+                                    </button>
+                                    <button type="button" class="btn btn-sm btn-outline-primary" onclick="editarTarea(${tarea.id})">
+                                        <i class="fas fa-edit"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    listaTareas.insertAdjacentHTML('beforeend', tareaHTML);
+                });
+
+                // Ocultar el botón "Ver más" si no hay más tareas
+                if (!data.has_next) {
+                    document.getElementById('ver-mas').style.display = 'none';
+                }
+            } else {
+                // Ocultar el botón "Ver más" si no hay más tareas
+                document.getElementById('ver-mas').style.display = 'none';
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+</script>
 
 
 <script>
