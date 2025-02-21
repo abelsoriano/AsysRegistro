@@ -409,3 +409,77 @@ class PeriodoDirectivaForm(forms.ModelForm):
             'estado': forms.Select(attrs={'class': 'form-control'}),
         }
 
+class PresentacionNinoForm(forms.ModelForm):
+    class Meta:
+        model = PresentacionNino
+        fields = '__all__'
+        exclude = ['fecha_registro']
+        widgets = {
+            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
+            'fecha_presentacion': forms.DateInput(attrs={'type': 'date'}),
+            'observaciones': forms.Textarea(attrs={'rows': 3}),
+            'testigos': forms.Textarea(attrs={'rows': 3}),
+        }
+
+
+class PresentacionNinoForm(forms.ModelForm):
+    class Meta:
+        model = PresentacionNino
+        fields = '__all__'
+        exclude = ['fecha_registro']
+        widgets = {
+            'nombre_nino': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Ingrese el nombre completo'
+            }),
+            'fecha_nacimiento': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'lugar_nacimiento': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Lugar de nacimiento'
+            }),
+            'nombre_padre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre completo del padre'
+            }),
+            'nombre_madre': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre completo de la madre'
+            }),
+            'direccion': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Dirección completa'
+            }),
+            'telefono': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Número de teléfono'
+            }),
+            'email': forms.EmailInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'correo@ejemplo.com'
+            }),
+            'fecha_presentacion': forms.DateInput(attrs={
+                'class': 'form-control',
+                'type': 'date'
+            }),
+            'pastor_oficiante': forms.TextInput(attrs={
+                'class': 'form-control',
+                'placeholder': 'Nombre del pastor'
+            }),
+            'testigos': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Nombres de los testigos'
+            }),
+            'observaciones': forms.Textarea(attrs={
+                'class': 'form-control',
+                'rows': 3,
+                'placeholder': 'Observaciones adicionales'
+            }),
+            'acta_nacimiento': forms.FileInput(attrs={
+                'class': 'form-control',
+                'accept': '.pdf,.jpg,.jpeg,.png'
+            }),
+        }

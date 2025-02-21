@@ -38,7 +38,9 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Libs
-    'widget_tweaks',
+     'widget_tweaks',
+    'crispy_forms',
+    'crispy_bootstrap4',  # Este debe ir después de crispy_forms
     'bootstrap4',
     'django_select2',
     'livereload',
@@ -49,6 +51,10 @@ INSTALLED_APPS = [
     'login.apps.LoginConfig'
 
 ]
+
+# Configuración de crispy_forms
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap4"  
+CRISPY_TEMPLATE_PACK = "bootstrap4"  
 
 
 MIDDLEWARE = [

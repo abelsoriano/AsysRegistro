@@ -9,6 +9,7 @@ from app.views.servicio.views import *
 from app.views.cambioDirectiva.views import *
 from app.views.tareas.views import *
 from app.views.cambioDirectiva.views import *
+from app.views.presentacionNino.view import *
 
 
 app_name = 'asys'
@@ -86,6 +87,12 @@ urlpatterns = [
     path('periodos/<int:pk>/eliminar/', PeriodoDirectivaDeleteView.as_view(), name='periodo_directiva_delete'),
     path('api/periodos-activos/<str:seccion_id>/', get_periodos_activos, name='api_periodos_activos'),
     path('api/periodos-planeados/<str:seccion_id>/', get_periodos_planeados, name='api_periodos_planeados'),
+
+    #Presentacion de niño
+    path('presentacion/', PresentacionListView.as_view(), name='lista_presentaciones'),
+    path('presentacion/nueva/', PresentacionNinoCreateView.as_view(), name='nueva_presentacion'),
+    path('presentacion/<int:pk>/', PresentacionDetailView.as_view(), name='detalle_presentacion'),
+    path('presentacion/<int:pk>/eliminar/', PresentacionDeleteView.as_view(), name='eliminar_presentacion'),
 
 
 

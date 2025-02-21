@@ -355,6 +355,43 @@ class RegistroFinanzas(models.Model):
     def __str__(self):
         return f"Registro Financiero {self.periodo}"
 
+#Presentacion de niño
+class PresentacionNino(models.Model):
+    # Datos del niño
+    nombre_nino = models.CharField(max_length=100, verbose_name="Nombre del Niño")
+    fecha_nacimiento = models.DateField(verbose_name="Fecha de Nacimiento")
+    lugar_nacimiento = models.CharField(max_length=200, verbose_name="Lugar de Nacimiento")
+    acta_nacimiento = models.FileField(
+        upload_to='actas_nacimiento/', 
+        verbose_name="Acta de Nacimiento",
+        help_text="Puede subir el acta de nacimiento en formato PDF o imagen",
+        blank=True,
+        null=True
+    )
+    
+    # Datos de los padres
+    nombre_padre = models.CharField(max_length=100, verbose_name="Nombre del Padre")
+    nombre_madre = models.CharField(max_length=100, verbose_name="Nombre de la Madre")
+    direccion = models.CharField(max_length=200, verbose_name="Dirección")
+    telefono = models.CharField(max_length=15, verbose_name="Teléfono")
+    email = models.EmailField(blank=True, verbose_name="Correo Electrónico")
+    
+    # Datos de la ceremonia
+    fecha_presentacion = models.DateField(default=timezone.now, verbose_name="Fecha de Presentación")
+    pastor_oficiante = models.CharField(max_length=100, verbose_name="Pastor Oficiante")
+    
+    # Campos adicionales
+    testigos = models.TextField(blank=True, verbose_name="Testigos")
+    observaciones = models.TextField(blank=True, verbose_name="Observaciones")
+    
+    fecha_registro = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Registro")
+    
+    class Meta:
+        verbose_name = "Presentación de Niño"
+        verbose_name_plural = "Presentaciones de Niños"
+    
+    def __str__(self):
+        return f"Presentación de {self.nombre_nino} - {self.fecha_presentacion}"
 
 
 

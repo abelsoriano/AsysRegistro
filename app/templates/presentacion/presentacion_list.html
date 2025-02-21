@@ -1,0 +1,142 @@
+{# presentacion_list.html #}
+{% extends 'body.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="mb-0">
+            <i class="fas fa-list text-primary me-2"></i>
+            Lista de Presentaciones
+        </h2>
+        <a href="{% url 'asys:nueva_presentacion' %}" class="btn btn-primary">
+            <i class="fas fa-plus me-2"></i>Nueva Presentación
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Nombre del Niño</th>
+                            <th>Fecha de Presentación</th>
+                            <th>Pastor Oficiante</th>
+                            <th>Padres</th>
+                            <th>Teléfono</th>
+                            <th class="text-end">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for presentacion in presentaciones %}
+                        <tr>
+                            <td>{{ presentacion.nombre_nino }}</td>
+                            <td>{{ presentacion.fecha_presentacion }}</td>
+                            <td>{{ presentacion.pastor_oficiante }}</td>
+                            <td>{{ presentacion.nombre_padre }} y {{ presentacion.nombre_madre }}</td>
+                            <td>{{ presentacion.telefono }}</td>
+                            <td class="text-end">
+                                <div class="btn-group">
+                                    <a href="{% url 'asys:detalle_presentacion' presentacion.pk %}" 
+                                       class="btn btn-sm btn-info" 
+                                       title="Ver detalles">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                    <a href="#" 
+                                       class="btn btn-sm btn-warning" 
+                                       title="Editar">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'asys:eliminar_presentacion' presentacion.pk %}" 
+                                       class="btn btn-sm btn-danger" 
+                                       title="Eliminar">
+                                        <i class="fas fa-trash"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center py-4">
+                                <div class="text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>No hay presentaciones registradas</p>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    {% if is_paginated %}
+    <nav aria-label="Page navigation" class="mt-4">
+        <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1">&laquo; Primera</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}">Anterior</a>
+                </li>
+            {% endif %}
+
+            <li class="page-item active">
+                <span class="page-link">
+                    Página {{ page_obj.number }} de {{ page_obj.paginator.num_pages }}
+                </span>
+            </li>
+
+            {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}">Siguiente</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}">Última &raquo;</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+<!-- Modal de confirmación de eliminación -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="deleteModalLabel">Confirmar Eliminación</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                ¿Está seguro que desea eliminar este registro?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <a href="" class="btn btn-danger" id="deleteButton">Eliminar</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Script para el modal de eliminación -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar el modal de eliminación
+    const deleteModal = document.getElementById('deleteModal');
+    const deleteButton = document.getElementById('deleteButton');
+    
+    document.querySelectorAll('a[title="Eliminar"]').forEach(button => {
+        button.addEventListener('click', function(e) {
+            e.preventDefault();
+            deleteButton.href = this.href;
+            const modal = new bootstrap.Modal(deleteModal);
+            modal.show();
+        });
+    });
+});
+</script>
+{% endblock %}
