@@ -1,9 +1,4 @@
-/* Define el color y la animación para el enlace */
-.eliminar-link {
-  color: red; /* Color rojo para el enlace */
-  text-decoration: #dc3545;
-  transition: color 0.3s ease-in-out, transform 0.3s ease-in-out;
-}
+
 
 .eliminar-link:hover {
   color: darkred; /* Cambia a un rojo más oscuro al pasar el mouse */
@@ -17,19 +12,19 @@
 }
 
 
-.card-deck .card {
+/* .card-deck .card {
   transition: transform 0.3s, box-shadow 0.3s;
-}
+} */
 
-.card-deck .card:hover {
+/* .card-deck .card:hover {
   transform: translateY(-10px);
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
-}
+} */
 
-.card-header {
-  background-color: #ffc107; /* Cambia el color del encabezado si es necesario */
+/* .card-header {
+  background-color: #ccc3aa; 
   color: #fff;
-}
+} */
 
 .card-footer {
   background-color: transparent;

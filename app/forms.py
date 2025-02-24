@@ -409,19 +409,7 @@ class PeriodoDirectivaForm(forms.ModelForm):
             'estado': forms.Select(attrs={'class': 'form-control'}),
         }
 
-class PresentacionNinoForm(forms.ModelForm):
-    class Meta:
-        model = PresentacionNino
-        fields = '__all__'
-        exclude = ['fecha_registro']
-        widgets = {
-            'fecha_nacimiento': forms.DateInput(attrs={'type': 'date'}),
-            'fecha_presentacion': forms.DateInput(attrs={'type': 'date'}),
-            'observaciones': forms.Textarea(attrs={'rows': 3}),
-            'testigos': forms.Textarea(attrs={'rows': 3}),
-        }
-
-
+#Presentacion de Niño
 class PresentacionNinoForm(forms.ModelForm):
     class Meta:
         model = PresentacionNino
@@ -482,4 +470,14 @@ class PresentacionNinoForm(forms.ModelForm):
                 'class': 'form-control',
                 'accept': '.pdf,.jpg,.jpeg,.png'
             }),
+        }
+
+#Estudio Biblico
+class EstudioBiblicoForm(forms.ModelForm):
+    class Meta:
+        model = EstudioBiblico
+        fields = ['fecha', 'tema', 'maestro', 'descripcion', 'versiculo_clave', 'duracion']
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date'}),
+            'descripcion': forms.Textarea(attrs={'rows': 4}),
         }

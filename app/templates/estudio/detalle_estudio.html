@@ -1,0 +1,74 @@
+{% extends "body.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2 class="mb-0">Detalles del Estudio Bíblico</h2>
+        </div>
+        <div class="card-body">
+            <div class="row mb-4">
+                <div class="col-md-6">
+                    <h4>Información General</h4>
+                    <p><strong>Fecha:</strong> {{ estudio.fecha|date:"d/m/Y" }}</p>
+                    <p><strong>Tema:</strong> {{ estudio.tema }}</p>
+                    <p><strong>Maestro:</strong> {{ estudio.maestro.name }}</p>
+                    <p><strong>Duración:</strong> {{ estudio.duracion }} minutos</p>
+                </div>
+                <div class="col-md-6">
+                    <h4>Resumen de Asistencia</h4>
+                    <div class="d-flex justify-content-around text-center">
+                        <div class="p-3 bg-success text-white rounded">
+                            <h5>Presentes</h5>
+                            <h2>{{ total_presentes }}</h2>
+                        </div>
+                        <div class="p-3 bg-danger text-white rounded">
+                            <h5>Ausentes</h5>
+                            <h2>{{ total_ausentes }}</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <h4>Miembros Presentes</h4>
+                    <ul class="list-group">
+                        {% for asistencia in presentes %}
+                        <li class="list-group-item">
+                            {{ asistencia.miembro.name }}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                <div class="col-md-6">
+                    <h4>Miembros Ausentes</h4>
+                    <ul class="list-group">
+                        {% for asistencia in ausentes %}
+                        <li class="list-group-item">
+                            {{ asistencia.miembro.name }}
+                            {% if asistencia.reason %}
+                            <small class="text-muted d-block">
+                                Motivo: {{ asistencia.reason }}
+                            </small>
+                            {% endif %}
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <a href="{% url 'asys:registrar_asistencia' estudio.id %}" 
+                   class="btn btn-warning">
+                    <i class="fas fa-edit"></i> Editar Asistencia
+                </a>
+                <a href="{% url 'asys:lista_estudios' %}" 
+                   class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i> Volver a la Lista
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends "body.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <!-- Tarjeta para la información del estudio -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white">
+            <h2 class="card-title mb-0">Registrar Asistencia</h2>
+        </div>
+        <div class="card-body">
+            <h3 class="card-subtitle mb-2">Estudio: {{ estudio.tema }} - {{ estudio.fecha }}</h3>
+            <h4 class="card-text">Maestro: {{ estudio.maestro }}</h4>
+        </div>
+    </div>
+
+    <!-- Formulario de asistencia -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h4 class="card-title mb-0">Lista de Miembros</h4>
+        </div>
+        <div class="card-body">
+            <form method="post">
+                {% csrf_token %}
+                <table class="table table-hover table-bordered">
+                    <thead class="thead-light">
+                        <tr>
+                            <th scope="col">Miembro</th>
+                            <th scope="col">Presente</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for miembro in miembros %}
+                        <tr>
+                            <td>{{ miembro.name }}</td>
+                            <td>
+                                <input type="checkbox" 
+                                       name="presentes" 
+                                       value="{{ miembro.id }}"
+                                       {% if miembro.id in asistencias_ids %}checked{% endif %}
+                                       class="form-check-input">
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button type="submit" class="btn btn-success mt-3">
+                    <i class="fas fa-save"></i> Guardar Asistencia
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

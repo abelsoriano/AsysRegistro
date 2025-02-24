@@ -9,7 +9,7 @@ from django.utils import timezone
 from app.choices import *
 from setting.settings import MEDIA_URL
 from django.contrib.auth.models import User
-
+from django.core.validators import MinValueValidator
 
 class Estado(models.Model):
     name = models.CharField(max_length=50, verbose_name="Estado")
@@ -165,6 +165,8 @@ class AttendanceType(models.TextChoices):
     YOUTH = 'YTH', _('Jóvenes')
     LADIES = 'LDS', _('Damas')
     GENTLEMEN = 'GNT', _('Caballeros')
+    ESTUDIO = 'EST', 'Estudio Bíblico'
+    
 
 class Attendance(models.Model):
     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE, verbose_name="Miembro")
@@ -393,5 +395,28 @@ class PresentacionNino(models.Model):
     def __str__(self):
         return f"Presentación de {self.nombre_nino} - {self.fecha_presentacion}"
 
+class EstudioBiblico(models.Model):
+    fecha = models.DateField(default=timezone.now)
+    tema = models.CharField(max_length=200)
+    maestro = models.ForeignKey('Miembro', on_delete=models.PROTECT, limit_choices_to={'cargo__nombre': 'Maestro'}, related_name='estudios_impartidos' )
+    descripcion = models.TextField(blank=True)
+    versiculo_clave = models.CharField(max_length=200, blank=True)
+    duracion = models.PositiveIntegerField(help_text="Duración en minutos", validators=[MinValueValidator(1)])
+    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuario que registró")
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        verbose_name = "Estudio Bíblico"
+        verbose_name_plural = "Estudios Bíblicos"
+        ordering = ['-fecha']
 
+    def __str__(self):
+        return f"Estudio: {self.tema} - {self.fecha}"
+
+    def get_attendance_count(self):
+        return Attendance.objects.filter(
+            date=self.fecha,
+            attendance_type=AttendanceType.ESTUDIO,
+            present=True
+        ).count()

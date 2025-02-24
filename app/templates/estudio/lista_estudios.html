@@ -1,0 +1,55 @@
+{% extends "body.html" %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>Estudios Bíblicos</h2>
+        <a href="{% url 'asys:crear_estudio' %}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Nuevo Estudio
+        </a>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Fecha</th>
+                            <th>Tema</th>
+                            <th>Maestro</th>
+                            <th class="text-center">Asistencia</th>
+                            <th class="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for estudio in estudios %}
+                        <tr>
+                            <td>{{ estudio.fecha|date:"d/m/Y" }}</td>
+                            <td>{{ estudio.tema }}</td>
+                            <td>{{ estudio.maestro_nombre }}</td>
+                            <td class="text-center">
+                                <span class="badge badge-success">{{ estudio.total_presentes }} Presentes</span>
+                                <span class="badge badge-danger">{{ estudio.total_ausentes }} Ausentes</span>
+                            </td>
+                            <td class="text-center">
+                                <a href="{% url 'asys:detalle_estudio' estudio.id %}" 
+                                   class="btn btn-info btn-sm mx-1" 
+                                   title="Ver Detalles">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="{% url 'asys:registrar_asistencia' estudio.id %}" 
+                                   class="btn btn-warning btn-sm mx-1" 
+                                   title="Editar Asistencia">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

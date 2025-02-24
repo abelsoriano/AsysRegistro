@@ -10,6 +10,7 @@ from app.views.cambioDirectiva.views import *
 from app.views.tareas.views import *
 from app.views.cambioDirectiva.views import *
 from app.views.presentacionNino.view import *
+from app.views.estudio.views import *
 
 
 app_name = 'asys'
@@ -93,6 +94,12 @@ urlpatterns = [
     path('presentacion/nueva/', PresentacionNinoCreateView.as_view(), name='nueva_presentacion'),
     path('presentacion/<int:pk>/', PresentacionDetailView.as_view(), name='detalle_presentacion'),
     path('presentacion/<int:pk>/eliminar/', PresentacionDeleteView.as_view(), name='eliminar_presentacion'),
+
+    #Estudio Biblico
+    path('estudios/nuevo/', crear_estudio, name='crear_estudio'),
+    path('estudios/<int:estudio_id>/asistencia/', registrar_asistencia, name='registrar_asistencia'),
+    path('estudios/<int:estudio_id>/', detalle_estudio, name='detalle_estudio'),
+    path('estudios/', lista_estudios, name='lista_estudios'),
 
 
 
