@@ -1,6 +1,7 @@
 {% extends "body.html" %}
 
 {% block content %}
+
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Estudios Bíblicos</h2>
@@ -27,10 +28,10 @@
                         <tr>
                             <td>{{ estudio.fecha|date:"d/m/Y" }}</td>
                             <td>{{ estudio.tema }}</td>
-                            <td>{{ estudio.maestro_nombre }}</td>
-                            <td class="text-center">
-                                <span class="badge badge-success">{{ estudio.total_presentes }} Presentes</span>
-                                <span class="badge badge-danger">{{ estudio.total_ausentes }} Ausentes</span>
+                            <td>{{ estudio.maestro_nombre }} {{ estudio.maestro_lastname }}</td>
+                            <td class="text-center"> 
+                                <span style="color: green;">{{ estudio.total_presentes }} Presentes</span>
+                                <span style="color: red;">{{ estudio.total_ausentes }} Ausentes</span>
                             </td>
                             <td class="text-center">
                                 <a href="{% url 'asys:detalle_estudio' estudio.id %}" 

@@ -12,8 +12,9 @@
                     <h4>Información General</h4>
                     <p><strong>Fecha:</strong> {{ estudio.fecha|date:"d/m/Y" }}</p>
                     <p><strong>Tema:</strong> {{ estudio.tema }}</p>
-                    <p><strong>Maestro:</strong> {{ estudio.maestro.name }}</p>
+                    <p><strong>Maestro:</strong> {{ estudio.maestro.name }} {{ estudio.maestro.lastname }}</p>
                     <p><strong>Duración:</strong> {{ estudio.duracion }} minutos</p>
+                    <p><strong>Descripcion:</strong> {{ estudio.descripcion }}</p>
                 </div>
                 <div class="col-md-6">
                     <h4>Resumen de Asistencia</h4>

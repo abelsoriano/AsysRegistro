@@ -143,6 +143,7 @@ class Servicio(models.Model):
 
     def __str__(self):
         return f"Servicio {self.get_tipo_servicio_display()} - {self.fecha}"
+    
 
     def toJSON(self):
         item = model_to_dict(self)
@@ -395,6 +396,7 @@ class PresentacionNino(models.Model):
     def __str__(self):
         return f"Presentación de {self.nombre_nino} - {self.fecha_presentacion}"
 
+
 class EstudioBiblico(models.Model):
     fecha = models.DateField(default=timezone.now)
     tema = models.CharField(max_length=200)
@@ -414,9 +416,22 @@ class EstudioBiblico(models.Model):
     def __str__(self):
         return f"Estudio: {self.tema} - {self.fecha}"
 
-    def get_attendance_count(self):
-        return Attendance.objects.filter(
-            date=self.fecha,
-            attendance_type=AttendanceType.ESTUDIO,
-            present=True
-        ).count()
+    
+
+class AsistenciaEstudio(models.Model):
+    date = models.DateField(default=timezone.now, verbose_name="Fecha")
+    miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE, verbose_name="Miembro")
+    presente = models.BooleanField(default=True)
+    attendance_type = models.CharField(max_length=3, choices=AttendanceType.choices, default=AttendanceType.GENERAL, verbose_name="Tipo de Asistencia")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
+
+    class Meta:
+        verbose_name = "AsistenciaEstudio"
+        verbose_name_plural = "AsistenciaEstudios"
+        unique_together = ['miembro', 'date', 'attendance_type']
+        ordering = ['-date', 'miembro']
+        indexes = [
+            models.Index(fields=['date', 'attendance_type']),
+            models.Index(fields=['miembro', 'date']),
+            models.Index(fields=['presente', 'date']),
+        ]

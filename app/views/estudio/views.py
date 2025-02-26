@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from app.forms import EstudioBiblicoForm
-from app.models import Attendance, AttendanceType, EstudioBiblico, Miembro
+from app.models import AsistenciaEstudio, AttendanceType, EstudioBiblico, Miembro
 
 @login_required
 def crear_estudio(request):
@@ -34,34 +34,33 @@ def registrar_asistencia(request, estudio_id):
     miembros = Miembro.objects.all()
 
     if request.method == 'POST':
-        for miembro_id in request.POST.getlist('presentes'):
-            Attendance.objects.update_or_create(
+        # Obtiene la lista de miembros marcados como presentes
+        presentes_ids = request.POST.getlist('presentes')
+        todos_miembros_ids = [str(miembro.id) for miembro in miembros]
+        
+        # Crear o actualizar registros para todos los miembros
+        for miembro_id in todos_miembros_ids:
+            # Determinar si el miembro está presente
+            esta_presente = miembro_id in presentes_ids
+            
+            AsistenciaEstudio.objects.update_or_create(
                 miembro_id=miembro_id,
                 date=estudio.fecha,
                 attendance_type=AttendanceType.ESTUDIO,
                 defaults={
-                    'present': True,
+                    'presente': esta_presente,
                     'user': request.user,
                 }
             )
         
-        Attendance.objects.filter(
-            date=estudio.fecha,
-            attendance_type=AttendanceType.ESTUDIO
-        ).exclude(
-            miembro_id__in=request.POST.getlist('presentes')
-        ).update(
-            present=False,
-            user=request.user
-        )
-
         messages.success(request, 'Asistencia registrada exitosamente.')
         return redirect('asys:lista_estudios')
 
-    asistencias = Attendance.objects.filter(
+    # Obtener asistencias existentes para mostrar en el formulario
+    asistencias = AsistenciaEstudio.objects.filter(
         date=estudio.fecha,
         attendance_type=AttendanceType.ESTUDIO,
-        present=True
+        presente=True
     )
     asistencias_ids = set(asistencias.values_list('miembro_id', flat=True))
 
@@ -71,45 +70,52 @@ def registrar_asistencia(request, estudio_id):
         'asistencias_ids': asistencias_ids,
     })
 
+
 @login_required
 def lista_estudios(request):
-    estudios = EstudioBiblico.objects.values(
-        'fecha', 'tema', 'maestro', 'id'
-    ).annotate(
-        total_presentes=Count('maestro__attendance', 
-            filter=models.Q(
-                maestro__attendance__date=models.F('fecha'),
-                maestro__attendance__present=True,
-                maestro__attendance__attendance_type=AttendanceType.ESTUDIO
-            )
-        ),
-        total_ausentes=Count('maestro__attendance',
-            filter=models.Q(
-                maestro__attendance__date=models.F('fecha'),
-                maestro__attendance__present=False,
-                maestro__attendance__attendance_type=AttendanceType.ESTUDIO
-            )
-        )
-    ).order_by('-fecha', '-id')
-
-    # Obtener los detalles del maestro para cada estudio
+    estudios = EstudioBiblico.objects.all().order_by('-fecha', '-id')
+    
+    # Process attendance counts for each study
+    estudios_data = []
     for estudio in estudios:
-        estudio['maestro_nombre'] = Miembro.objects.get(id=estudio['maestro']).name
-
+        
+        presentes = AsistenciaEstudio.objects.filter(
+            date=estudio.fecha,
+            attendance_type=AttendanceType.ESTUDIO,
+            presente=True
+        ).count()
+        
+        ausentes = AsistenciaEstudio.objects.filter(
+            date=estudio.fecha,
+            attendance_type=AttendanceType.ESTUDIO,
+            presente=False
+        ).count()
+        
+        estudios_data.append({
+            'id': estudio.id,
+            'fecha': estudio.fecha,
+            'tema': estudio.tema,
+            'maestro': estudio.maestro.id,
+            'maestro_nombre': estudio.maestro.name,
+            'maestro_lastname': estudio.maestro.lastname,
+            'total_presentes': presentes,
+            'total_ausentes': ausentes
+        })
+    
     return render(request, 'estudio/lista_estudios.html', {
-        'estudios': estudios
+        'estudios': estudios_data
     })
 
 @login_required
 def detalle_estudio(request, estudio_id):
     estudio = get_object_or_404(EstudioBiblico, id=estudio_id)
-    asistencias = Attendance.objects.filter(
+    asistencias = AsistenciaEstudio.objects.filter(
         date=estudio.fecha,
         attendance_type=AttendanceType.ESTUDIO
     ).select_related('miembro')
 
-    presentes = asistencias.filter(present=True)
-    ausentes = asistencias.filter(present=False)
+    presentes = asistencias.filter(presente=True)
+    ausentes = asistencias.filter(presente=False)
 
     return render(request, 'estudio/detalle_estudio.html', {
         'estudio': estudio,
