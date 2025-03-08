@@ -115,5 +115,5 @@ def generar_miembro():
 
 
 if __name__ == '__main__':
-    for _ in range(20):  # Generar 20 miembros aleatorios con cargos aleatorios
+    for _ in range(30):  # Generar 20 miembros aleatorios con cargos aleatorios
         generar_miembro()

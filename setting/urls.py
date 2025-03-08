@@ -8,7 +8,7 @@ from setting import settings
 
 urlpatterns = [
     path('', LoginFormView.as_view(), name='login'),
-    path('login/', include('login.urls')),
+    path('', include('login.urls')),
     path('admin/', admin.site.urls),  # Corregido
     path('get_personas/', get_personas, name='get_personas'),
     path('select2/', include('django_select2.urls')),

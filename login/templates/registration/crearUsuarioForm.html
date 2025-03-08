@@ -1,0 +1,201 @@
+{% extends "body.html" %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8 col-lg-12">
+            <div class="card shadow-lg border-0 rounded-lg">
+                <div class="card-header bg-gradient-primary text-white text-center py-4">
+                    <h2 class="fw-bold mb-0">Crear una cuenta</h2>
+                    <p class="text-white-50 mb-0">Complete el formulario para registrarse</p>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                    
+                    <form method="post" class="needs-validation" novalidate>
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_username" class="form-label fw-bold">Nombre de usuario <span class="text-danger">*</span></label>
+                                {{ form.username|safe }}
+                                {% if form.username.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.username.errors }}</div>
+                                {% endif %}
+                                <small class="form-text text-muted">Su nombre de usuario único para iniciar sesión</small>
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="id_email" class="form-label fw-bold">Email <span class="text-danger">*</span></label>
+                                {{ form.email|safe }}
+                                {% if form.email.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.email.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="id_nombre" class="form-label fw-bold">Nombre</label>
+                                {{ form.nombre|safe }}
+                                {% if form.nombre.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.nombre.errors }}</div>
+                                {% endif %}
+                            </div>
+                            
+                            <div class="col-md-6 mb-3">
+                                <label for="id_apellido" class="form-label fw-bold">Apellido</label>
+                                {{ form.apellido|safe }}
+                                {% if form.apellido.errors %}
+                                    <div class="invalid-feedback d-block">{{ form.apellido.errors }}</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="id_password1" class="form-label fw-bold">Contraseña <span class="text-danger">*</span></label>
+                            {{ form.password1|safe }}
+                            {% if form.password1.errors %}
+                                <div class="invalid-feedback d-block">{{ form.password1.errors }}</div>
+                            {% else %}
+                                <div class="password-strength-meter mt-2">
+                                    <div class="progress" style="height: 5px;">
+                                        <div class="progress-bar bg-danger" role="progressbar" style="width: 0%;" id="password-strength"></div>
+                                    </div>
+                                    <small class="form-text text-muted" id="password-strength-text">Ingrese una contraseña segura</small>
+                                </div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4">
+                            <label for="id_password2" class="form-label fw-bold">Confirmar contraseña <span class="text-danger">*</span></label>
+                            {{ form.password2|safe }}
+                            {% if form.password2.errors %}
+                                <div class="invalid-feedback d-block">{{ form.password2.errors }}</div>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="mb-4 form-check">
+                            <input type="checkbox" class="form-check-input" id="terms" required>
+                            <label class="form-check-label" for="terms">
+                                Acepto los <a href="#" class="text-decoration-none">términos y condiciones</a>
+                            </label>
+                        </div>
+                        
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-primary btn-lg">Crear cuenta</button>
+                        </div>
+                        
+                        <div class="text-center mt-4">
+                            <p>¿Ya tienes una cuenta? <a href="{% url 'login' %}" class="text-decoration-none">Iniciar sesión</a></p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Estilos adicionales -->
+<style>
+    .bg-gradient-primary {
+        background: linear-gradient(135deg, #2980b9, #3498db);
+    }
+    
+    .form-control:focus {
+        border-color: #3498db;
+        box-shadow: 0 0 0 0.25rem rgba(52, 152, 219, 0.25);
+    }
+    
+    .btn-primary {
+        background-color: #2980b9;
+        border-color: #2980b9;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-primary:hover {
+        background-color: #3498db;
+        border-color: #3498db;
+        transform: translateY(-2px);
+    }
+    
+    .card {
+        transition: all 0.3s ease;
+    }
+    
+    .card:hover {
+        transform: translateY(-5px);
+    }
+</style>
+
+<!-- Scripts adicionales -->
+<script>
+    // Validación de formularios
+    (function() {
+        'use strict';
+        
+        // Obtener todos los formularios a los que queremos aplicar estilos de validación personalizados
+        var forms = document.querySelectorAll('.needs-validation');
+        
+        // Bucle para prevenir el envío si hay campos inválidos
+        Array.prototype.slice.call(forms).forEach(function(form) {
+            form.addEventListener('submit', function(event) {
+                if (!form.checkValidity() || !document.getElementById('terms').checked) {
+                    event.preventDefault();
+                    event.stopPropagation();
+                }
+                form.classList.add('was-validated');
+            }, false);
+        });
+        
+        // Medidor de fortaleza de contraseña
+        document.getElementById('id_password1').addEventListener('input', function() {
+            var password = this.value;
+            var strength = 0;
+            var strengthBar = document.getElementById('password-strength');
+            var strengthText = document.getElementById('password-strength-text');
+            
+            if (password.length >= 8) strength += 1;
+            if (password.match(/[a-z]+/)) strength += 1;
+            if (password.match(/[A-Z]+/)) strength += 1;
+            if (password.match(/[0-9]+/)) strength += 1;
+            if (password.match(/[$@#&!]+/)) strength += 1;
+            
+            switch (strength) {
+                case 0:
+                case 1:
+                    strengthBar.className = 'progress-bar bg-danger';
+                    strengthBar.style.width = '20%';
+                    strengthText.textContent = 'Muy débil';
+                    break;
+                case 2:
+                    strengthBar.className = 'progress-bar bg-warning';
+                    strengthBar.style.width = '40%';
+                    strengthText.textContent = 'Débil';
+                    break;
+                case 3:
+                    strengthBar.className = 'progress-bar bg-info';
+                    strengthBar.style.width = '60%';
+                    strengthText.textContent = 'Buena';
+                    break;
+                case 4:
+                    strengthBar.className = 'progress-bar bg-primary';
+                    strengthBar.style.width = '80%';
+                    strengthText.textContent = 'Fuerte';
+                    break;
+                case 5:
+                    strengthBar.className = 'progress-bar bg-success';
+                    strengthBar.style.width = '100%';
+                    strengthText.textContent = 'Muy fuerte';
+                    break;
+            }
+        });
+    })();
+</script>
+{% endblock content %}

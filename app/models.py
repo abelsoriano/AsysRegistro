@@ -7,6 +7,7 @@ from django.db.models.signals import post_save
 from django.forms import model_to_dict
 from django.utils import timezone
 from app.choices import *
+from setting import settings
 from setting.settings import MEDIA_URL
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
@@ -136,7 +137,7 @@ class Servicio(models.Model):
     lectura = models.TextField(max_length=50, verbose_name="LECTURA DE LA PALABRA")
     devocional = models.TextField(max_length=50, verbose_name="DEVOCIONAL")
     director_cultural = models.ForeignKey(Persona, on_delete=models.PROTECT, related_name='servicios_dirigidos', verbose_name="DIRECTOR DEL CULTURAL")
-    participantes = models.ManyToManyField(Persona, related_name="eventos_participados", blank=True, verbose_name="PARTICIPANTES DEL CULTURAL")
+    participantes = models.ManyToManyField(Persona, related_name="eventos_participados", blank=True, verbose_name="PARTICIPANTES DEL CULTURA")
     mensaje = models.TextField(max_length=50, verbose_name="MENSAJE DE LA PALABRA")
     ofrenda = models.CharField(max_length=13, verbose_name="OFRENDA")
     descripcion = models.TextField(blank=True, null=True, verbose_name="DESCRIPCIÓN")
@@ -174,7 +175,7 @@ class Attendance(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Fecha")
     present = models.BooleanField(default=False, verbose_name="Presente")
     day_of_week = models.CharField(max_length=10, blank=True, editable=False, verbose_name="Día de la Semana")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
     attendance_type = models.CharField(max_length=3, choices=AttendanceType.choices, default=AttendanceType.GENERAL, verbose_name="Tipo de Asistencia")
     reason = models.TextField(blank=True, null=True, verbose_name="Motivo de Inasistencia")
     created_at = models.DateTimeField(auto_now_add=True, verbose_name="Fecha de Creación")
@@ -261,7 +262,7 @@ class Tarea(models.Model):
     nombre = models.CharField(max_length=200, verbose_name="Titulo de la actividad")
     descripcion = models.TextField(blank=True, null=True)
     fecha = models.DateTimeField(verbose_name="Ingresa la fecha de la actividad")
-    usuario_asignado = models.ForeignKey(User, on_delete=models.CASCADE)
+    usuario_asignado = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     completado = models.BooleanField(default=False, verbose_name="¿Tarea completada?")
 
     def __str__(self):
@@ -404,7 +405,7 @@ class EstudioBiblico(models.Model):
     descripcion = models.TextField(blank=True)
     versiculo_clave = models.CharField(max_length=200, blank=True)
     duracion = models.PositiveIntegerField(help_text="Duración en minutos", validators=[MinValueValidator(1)])
-    user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Usuario que registró")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Usuario que registró")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -423,7 +424,7 @@ class AsistenciaEstudio(models.Model):
     miembro = models.ForeignKey(Miembro, on_delete=models.CASCADE, verbose_name="Miembro")
     presente = models.BooleanField(default=True)
     attendance_type = models.CharField(max_length=3, choices=AttendanceType.choices, default=AttendanceType.GENERAL, verbose_name="Tipo de Asistencia")
-    user = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, blank=True, null=True, verbose_name="Usuario que registró")
 
     class Meta:
         verbose_name = "AsistenciaEstudio"

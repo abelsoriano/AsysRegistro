@@ -28,6 +28,7 @@ urlpatterns = [
     path('servicio/list/', ServicioListView.as_view(), name='service_list'),
     path('servicio/update/<int:pk>/', ServiceUpdate.as_view(), name='service_update'),
     path('servicio/delete/<int:pk>/', ServicioDeleteView.as_view(), name='servicio_delete'),
+    path('servicio/detail/<int:pk>/', ServicioDetailView.as_view(), name='servicio_detail'),
     
 
     # Url page Asistencia
@@ -57,7 +58,7 @@ urlpatterns = [
     path('editar/<int:pk>/', TareaUpdateView.as_view(), name='tarea-editar'),
     path('obtener/<int:pk>/', obtener_tarea, name='tarea-obtener'),
     path('completar/<int:pk>/', completar_tarea, name='tarea-completar'),
-    path('cargar-mas-tareas/', cargar_mas_tareas, name='cargar-mas-tareas'),
+    # path('cargar-mas-tareas/', cargar_mas_tareas, name='cargar-mas-tareas'),
 
     #Cargo y Estado
     path('crearEstado/', ModelEstadoCreateView.as_view(), name='create-estado'),

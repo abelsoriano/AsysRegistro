@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Libs
-     'widget_tweaks',
+    'widget_tweaks',
     'crispy_forms',
     'crispy_bootstrap4',  # Este debe ir después de crispy_forms
     'bootstrap4',
@@ -149,13 +149,17 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
 
+#Esto para la creacion de usuario
+AUTH_USER_MODEL = 'login.UsuarioPersonalizado' 
+
 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
-LOGIN_REDIRECT_URL = '/login/home/'
+LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'
-LOGIN_URL = 'login'
+MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
 # AUTH_USER_MODEL = 'user.User'
 
 MEDIA_URL = '/media/'

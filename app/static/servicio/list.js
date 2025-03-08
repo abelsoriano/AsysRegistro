@@ -90,7 +90,8 @@ $(function () {
             {
                 "data": null,
                 render: function(data, type, row) {
-                    var buttons = '<a href="/asys/servicio/update/' + row.id + '/" class="btn btn-warning btn-xs"><i class="fas fa-edit"></i></a> ';
+                    var buttons = '<a href="/asys/servicio/detail/' + row.id + '/" class="btn btn-info btn-xs mr-1"><i class="fas fa-eye"></i></a> ';
+                    buttons += '<a href="/asys/servicio/update/' + row.id + '/" class="btn btn-warning btn-xs mr-1"><i class="fas fa-edit"></i></a> ';
                     buttons += '<a href="javascript:void(0);" onclick="deleteServicio(' + row.id + ')" class="btn btn-danger btn-xs"><i class="fas fa-trash"></i></a>';
                     return buttons;
                 }

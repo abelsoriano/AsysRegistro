@@ -11,18 +11,17 @@
     {% include 'header.html' %}
 
     <!-- Contenido Principal -->
-    <div>
-        <div class="row">
-            <div class="col-12">
-                <!-- Aquí va el contenido específico de cada página -->
-                {% block content %}
-                {% endblock content %}
-            </div>
-        </div>
-    </div>
+
+
+            
+         <!-- Aquí va el contenido específico de cada página -->
+        {% block content %}
+        {% endblock content %}
+            
+  
+
 
     <!-- Footer -->
-    {% comment %} {% include 'footer.html' %} {% endcomment %}
 {% endblock %}
 
 {% block javascript %}

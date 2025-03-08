@@ -5,7 +5,6 @@ from django.urls import reverse_lazy
 from app.models import Tarea
 from django.contrib.auth.mixins import LoginRequiredMixin
 from app.forms import TareaForm
-from django.core.paginator import Paginator
 from django.views.decorators.http import require_http_methods
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -19,8 +18,8 @@ class TareaListView(LoginRequiredMixin, ListView):
     context_object_name = 'tareas'
 
     def get_queryset(self):
-        # Obtener las primeras 5 tareas
-        return Tarea.objects.filter(usuario_asignado=self.request.user).order_by('fecha')[:4]
+        # Obtener todas las tareas del usuario
+        return Tarea.objects.filter(usuario_asignado=self.request.user).order_by('fecha')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -34,6 +33,22 @@ class TareaListView(LoginRequiredMixin, ListView):
         if form.is_valid():
             tarea = form.save(commit=False)
             tarea.usuario_asignado = request.user
+
+            # Verificar si ya existe una tarea en la misma fecha
+            fecha = form.cleaned_data['fecha']
+            tareas_conflictivas = Tarea.objects.filter(
+                fecha__date=fecha.date(),
+                usuario_asignado=request.user
+            )
+
+            if tareas_conflictivas.exists():
+                if is_ajax:
+                    return JsonResponse({
+                        'success': False,
+                        'errors': f"Ya existe una tarea programada para esa fecha: {tareas_conflictivas[0].nombre}"
+                    })
+                return redirect('asys:tareas-list')
+
             tarea.save()
             
             if is_ajax:
@@ -65,34 +80,6 @@ def completar_tarea(request, pk):
     except Exception as e:
         return JsonResponse({'success': False, 'error': str(e)}, status=400)
 
-
-def cargar_mas_tareas(request):
-    if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
-        page = int(request.GET.get('page', 1))  # Obtener el número de página
-        tareas = Tarea.objects.filter(usuario_asignado=request.user).order_by('fecha')
-        paginator = Paginator(tareas, 5)  # 5 tareas por página
-        tareas_pagina = paginator.get_page(page)
-
-        # Convertir las tareas a JSON
-        tareas_data = [
-            {
-                'id': tarea.id,
-                'nombre': tarea.nombre,
-                'descripcion': tarea.descripcion,
-                'fecha': tarea.fecha.strftime('%d/%m/%Y %H:%M'),
-                'completado': tarea.completado
-            }
-            for tarea in tareas_pagina
-        ]
-
-        return JsonResponse({
-            'tareas': tareas_data,
-            'has_next': tareas_pagina.has_next()
-        })
-    return JsonResponse({'error': 'Solicitud no válida'}, status=400)
-
-
-# @require_http_methods(["GET"])
 def obtener_tarea(request, pk):
     if request.headers.get('X-Requested-With') == 'XMLHttpRequest':
         try:
@@ -101,7 +88,7 @@ def obtener_tarea(request, pk):
             data = {
                 "nombre": tarea.nombre,
                 "descripcion": tarea.descripcion,
-               "fecha": tarea.fecha.strftime('%Y-%m-%dT%H:%M'),
+                "fecha": tarea.fecha.strftime('%Y-%m-%dT%H:%M'),
                 "usuario_asignado": tarea.usuario_asignado.id if tarea.usuario_asignado else None,
             }
             return JsonResponse(data)
@@ -152,4 +139,3 @@ class TareaUpdateView(LoginRequiredMixin, UpdateView):
                 'errors': form.errors
             })
         return super().form_invalid(form)
-

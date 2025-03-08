@@ -1,0 +1,120 @@
+{% extends 'body.html' %}
+{% load static %}
+
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'servicio/detail.css' %}">
+<div class="card">
+    <div class="card-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h3><i class="fas fa-church mr-2"></i> {{ servicio.get_tipo_servicio_display }} - {{ servicio.fecha|date:"d/m/Y" }}</h3>
+            </div>
+            <div class="col-md-4 text-right">
+                <a href="{% url 'asys:service_list' %}" class="btn btn-secondary mr-2">
+                    <i class="fas fa-arrow-left"></i> Volver
+                </a>
+                <a href="{% url 'asys:service_update' servicio.id %}" class="btn btn-primary">
+                    <i class="fas fa-edit"></i> Editar
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="info-group">
+                    <h4 class="info-title"><i class="fas fa-info-circle mr-2"></i>Información General</h4>
+                    <div class="info-item">
+                        <span class="label">Tipo de Servicio:</span>
+                        <span class="value">{{ servicio.get_tipo_servicio_display }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Fecha:</span>
+                        <span class="value"><i class="fa-solid fa-calendar-days"></i> {{ servicio.fecha|date:"d/m/Y" }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Dirección del Culto:</span>
+                        <span class="value"><i class="fa-solid fa-fire-flame-curved"></i> {{ servicio.direccion }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Ofrenda:</span>
+                        <span class="value ofrenda-value"><i class="fas fa-donate mr-1"></i> ${{ servicio.ofrenda }}</span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="info-group">
+                    <h4 class="info-title"><i class="fas fa-users mr-2"></i>Personas</h4>
+                    <div class="info-item">
+                        <span class="label">Director Cultural:</span>
+                        <span class="value"><i class="fas fa-user-tie mr-1"></i> {{ servicio.director_cultural }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Participantes del cultural:</span>
+                        <div class="value participantes-list">
+                            {% if servicio.participantes.all %}
+                                <div class="mt-2">
+                                {% for participante in servicio.participantes.all %}
+                                    <li><i class="fas fa-user mr-1"></i> {{ participante }}</li>
+                                {% endfor %}
+                                </div>
+                            {% else %}
+                                <span class="text-muted"><i class="fas fa-info-circle mr-1"></i> No hay participantes registrados</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="info-group">
+                    <h4 class="info-title"><i class="fas fa-book-open mr-2"></i>Contenido del Servicio</h4>
+                    <div class="info-item">
+                        <span class="label"><i class="fas fa-book mr-1"></i> Lectura de la Palabra:</span>
+                        <div class="value text-content">{{ servicio.lectura }}</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="label"><i class="fas fa-pray mr-1"></i> Devocional:</span>
+                        <div class="value text-content">{{ servicio.devocional }}</div>
+                    </div>
+                    <div class="info-item">
+                        <span class="label"><i class="fas fa-comment mr-1"></i> Mensaje de la Palabra:</span>
+                        <div class="value text-content">{{ servicio.mensaje }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% if servicio.descripcion %}
+        <div class="row mt-4">
+            <div class="col-md-12">
+                <div class="info-group">
+                    <h4 class="info-title"><i class="fas fa-sticky-note mr-2"></i>Descripción Adicional</h4>
+                    <div class="info-item">
+                        <div class="value text-content">{{ servicio.descripcion }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+        
+        <div class="row mt-4">
+            <div class="col-12 text-right">
+                <button id="printDetail" class="btn btn-info">
+                    <i class="fas fa-print mr-1"></i> Imprimir
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% block javascript %}
+    <!-- Aquí va el JavaScript específico de esta página -->
+    <script src="{% static 'servicio/datailServicio.js' %}"></script>
+{% endblock %}
+
+
+{% endblock %}

@@ -2,7 +2,6 @@ from datetime import timedelta, datetime
 import json
 from django.http import JsonResponse
 from django.utils.translation import gettext as _
-from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_http_methods
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count, Q
@@ -14,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
+from app.mixins import GroupRequiredMixin
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -22,8 +21,6 @@ from django.views.generic import *
 
 from app.forms import AsistenciaForm
 from app.models import *
-
-from django.shortcuts import get_object_or_404
 
 from app.signals import *
 
@@ -140,7 +137,7 @@ class AttendanceCreateViewGeneral(BaseAttendanceCreateView):
         })
         return context
 
-
+# @group_required_with_message('jovenes', message="Solo los administradores pueden acceder a esta página.")
 class AttendanceCreateViewJovenes(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia')
     
@@ -163,7 +160,8 @@ class AttendanceCreateViewJovenes(BaseAttendanceCreateView):
         })
         return context
 
-class AttendanceCreateViewCaballeros(BaseAttendanceCreateView):
+class AttendanceCreateViewCaballeros(GroupRequiredMixin, BaseAttendanceCreateView):
+    group_name = 'caballeros' 
     success_url = reverse_lazy('asys:list_asistencia_caballeros')
     
     def post(self, request, *args, **kwargs):

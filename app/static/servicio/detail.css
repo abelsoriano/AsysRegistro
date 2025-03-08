@@ -1,0 +1,177 @@
+/* Estilos mejorados para la vista de detalle de servicio */
+.card {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+}
+
+.card-header {
+    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+    color: white;
+    border-bottom: none;
+    border-radius: 8px 8px 0 0 !important;
+    padding: 15px 20px;
+}
+
+.card-header h3 {
+    font-weight: 600;
+    margin-bottom: 0;
+}
+
+.card-body {
+    padding: 25px;
+}
+
+.info-group {
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+    border-left: 4px solid #2193b0;
+    transition: all 0.3s ease;
+}
+
+.info-group:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+.info-title {
+    color: #2193b0;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e0e0e0;
+    position: relative;
+}
+
+.info-title::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    width: 50px;
+    height: 3px;
+    background: linear-gradient(135deg, #2193b0, #6dd5ed);
+}
+
+.info-item {
+    margin-bottom: 18px;
+    position: relative;
+}
+
+.info-item:last-child {
+    margin-bottom: 0;
+}
+
+.info-item .label {
+    font-weight: 600;
+    color: #495057;
+    display: block;
+    margin-bottom: 8px;
+    font-size: 0.95rem;
+}
+
+.info-item .value {
+    color: #212529;
+    font-size: 1.05rem;
+}
+
+.text-content {
+    background-color: white;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    min-height: 80px;
+    white-space: pre-line;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.05);
+    line-height: 1.6;
+}
+
+.participantes-list ul {
+    margin: 0;
+    padding-left: 0;
+    list-style-type: none;
+}
+
+.participantes-list li {
+    margin-bottom: 6px;
+    padding: 8px 12px;
+    background-color: #e9f7fc;
+    border-radius: 4px;
+    display: inline-block;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    transition: all 0.2s ease;
+}
+
+.participantes-list li:hover {
+    background-color: #d1edf8;
+}
+
+/* Estilos para los botones */
+.btn {
+    border-radius: 6px;
+    font-weight: 500;
+    padding: 8px 16px;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.btn-secondary {
+    background-color: #6c757d;
+    border-color: #6c757d;
+}
+
+.btn-primary {
+    background-color: #2193b0;
+    border-color: #2193b0;
+}
+
+/* Responsive ajustes */
+@media (max-width: 768px) {
+    .card-header .row {
+        flex-direction: column;
+    }
+    
+    .card-header .col-md-4 {
+        text-align: left !important;
+        margin-top: 15px;
+    }
+    
+    .card-header .btn {
+        margin-bottom: 10px;
+    }
+}
+
+/* Estilo para la ofrenda - formato de moneda */
+.ofrenda-value {
+    font-weight: 600;
+    color: #28a745;
+}
+
+/* Estilos adicionales para imprimir */
+@media print {
+    .card {
+        box-shadow: none;
+    }
+    
+    .btn {
+        display: none;
+    }
+    
+    .info-group {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        box-shadow: none;
+        border-left: 2px solid #2193b0;
+    }
+}

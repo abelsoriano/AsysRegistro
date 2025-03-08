@@ -3,66 +3,8 @@
 {% load static%}
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
-
-    <link href="{% static 'stiloAsistencia.css' %}" rel="stylesheet">
-    <style>
-        /* Estilos adicionales para las pestañas */
-        .tabs {
-            display: flex;
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid #e9ecef;
-            padding-bottom: 0.5rem;
-        }
-        
-        .tab-button {
-            padding: 0.75rem 1.5rem;
-            background-color: #f8f9fa;
-            border: 1px solid #dee2e6;
-            border-bottom: none;
-            border-radius: 0.5rem 0.5rem 0 0;
-            margin-right: 0.5rem;
-            cursor: pointer;
-            font-weight: 600;
-            color: #6c757d;
-            transition: all 0.3s ease;
-        }
-        
-        .tab-button.active {
-            background-color: #4361ee;
-            color: white;
-            border-color: #4361ee;
-        }
-        
-        .tab-button:hover:not(.active) {
-            background-color: #e9ecef;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* Estilo adicional para el gráfico de participaciones */
-        .chart-colors-5 .chart-title i {
-            color: #4ade80;
-        }
-        
-        /* Añadimos un título general para el dashboard */
-        .dashboard-title {
-            text-align: center;
-            margin-bottom: 1.5rem;
-            color: #4361ee;
-            font-size: 1.8rem;
-            font-weight: 700;
-            border-bottom: 2px solid #e9ecef;
-            padding-bottom: 0.5rem;
-        }
-    </style>
+    <script src="{% static 'js/chart.js' %}"></script>
+    <link href="{% static 'css/stiloAsistencia.css' %}" rel="stylesheet">
 </head>
 
 <body>
@@ -285,6 +227,16 @@
     </div>
 
     <script>
+        //Total de Miembro
+        const miembroTotal = {{total_miembros}};
+        const cultoTotal = {{total_cultos}};
+
+
+        //Oportunidades
+        const totalOportunidades = {{ total_oportunidades }};
+       
+
+
         // Datos para el gráfico de inasistencias
         const inasistenciasLabels = {{ inasistencias_labels|safe }};
         const inasistenciasData = {{ inasistencias_data|safe }};
@@ -296,6 +248,7 @@
         // Datos para el gráfico de participaciones
         const nombresLabels = {{ nombres_labels|safe }};
         const nombresData = {{ nombres_data|safe }};
+       
         
         // Función para mostrar/ocultar pestañas
         function showTab(tabName) {
@@ -399,18 +352,17 @@
         });
         
         // Datos de ejemplo para los gráficos restantes
-        // Tendencia de asistencia
-        const tendenciaLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct'];
-        const tendenciaData = [78, 82, 75, 70, 85, 80, 83, 79, 88, 82];
+        const tendenciaLabels = JSON.parse('{{ tendencia_labels|safe }}');
+        const tendenciaData = JSON.parse('{{ tendencia_data|safe }}');
         
         // Distribución por grupos
-        const gruposLabels = ['Jóvenes', 'Adultos', 'Niños', 'Ancianos', 'Familias'];
-        const gruposData = [25, 40, 15, 10, 10];
+        const gruposLabels = JSON.parse('{{ grupos_labels|safe }}');
+        const gruposData = JSON.parse('{{ grupos_data|safe }}');
         
         // Tipos de participación
-        const tiposParticipacionLabels = ['Dirección', 'Devocional', 'Mensaje', 'Música', 'Otros'];
+        const tiposParticipacionLabels = ['Dirección', 'Devocional', 'Mensaje', 'DIRECTOR DEL CULTURAL', 'PARTICIPANTES DEL CULTURA'];
         const tiposParticipacionData = [30, 25, 20, 15, 10];
-        
+
         // Tendencia de participaciones
         const tendenciaParticipacionesLabels = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct'];
         const tendenciaParticipacionesData = [45, 52, 48, 60, 55, 70, 65, 58, 62, 75];
@@ -419,15 +371,15 @@
         const generoLabels = ['Hombres', 'Mujeres'];
         const generoData = [45, 55];
         
-        // Actualizar estadísticas de resumen
-        document.getElementById('totalMiembros').textContent = '150'; // Ejemplo
-        document.getElementById('totalCultos').textContent = '48'; // Ejemplo
-        document.getElementById('asistenciaPromedio').textContent = '80%'; // Ejemplo
+        // Actualizar estadísticas de resume
+        document.getElementById('totalMiembros').textContent = miembroTotal;
+        document.getElementById('totalCultos').textContent = cultoTotal; 
+        document.getElementById('asistenciaPromedio').textContent = {{asistencia_promedio}};
         document.getElementById('ultimoCulto').textContent = '15 Feb'; // Ejemplo
         
-        document.getElementById('totalOportunidades').textContent = '120'; // Ejemplo
-        document.getElementById('totalParticipantes').textContent = '45'; // Ejemplo
-        document.getElementById('participanteMasActivo').textContent = nombresLabels[0] || 'N/A'; // El primero del top 10
+        document.getElementById('totalOportunidades').textContent = {{ total_oportunidades }}; 
+        document.getElementById('totalParticipantes').textContent = {{total_participantes}}; 
+        document.getElementById('participanteMasActivo').textContent = nombresLabels[0] || 'N/A'; 
         document.getElementById('ultimaOportunidad').textContent = '20 Feb'; // Ejemplo
         
         // Gráfico de Tendencia de Asistencia
