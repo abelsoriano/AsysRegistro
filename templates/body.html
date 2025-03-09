@@ -6,25 +6,48 @@
 {% endblock head %}
 
 {% block body %}
-
     <!-- Header -->
     {% include 'header.html' %}
+    
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
+
+    <script>
+        // Función para manejar errores de acceso denegado
+        function handleAccessDenied(response) {
+            if (response.status === 403) {
+                response.json().then(data => {
+                    // Mostrar alerta con SweetAlert
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Acceso denegado',
+                        text: data.error,
+                        footer: '<a href="">Si necesita permiso consulte al administrador<a>',
+                        confirmButtonText: 'Volver al inicio'
+                    }).then(() => {
+                        // Redirigir a la página de inicio después de cerrar la alerta
+                        window.location.href = "{% url 'index' %}";
+                    });
+                });
+            }
+        }
+       
+    </script>
 
     <!-- Contenido Principal -->
-
-
-            
-         <!-- Aquí va el contenido específico de cada página -->
-        {% block content %}
-        {% endblock content %}
-            
-  
-
+    {% block content %}
+    {% endblock content %}
 
     <!-- Footer -->
 {% endblock %}
 
 {% block javascript %}
-    <!-- Aquí va el JavaScript específico de esta página -->
 
 {% endblock %}

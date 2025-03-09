@@ -1,0 +1,202 @@
+{% extends 'body.html' %}
+
+
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
+        <h6 class="m-0 font-weight-bold text-primary">Lista de Usuarios</h6>
+        <div class="dropdown no-arrow">
+            <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink"
+                data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
+            </a>
+            <div class="dropdown-menu dropdown-menu-end shadow animated--fade-in"
+                aria-labelledby="dropdownMenuLink">
+                <div class="dropdown-header">Opciones:</div>
+                <a class="dropdown-item" href="#" id="exportarCSV">
+                    <i class="fas fa-file-csv fa-sm fa-fw me-2 text-gray-400"></i>Exportar CSV
+                </a>
+                <a class="dropdown-item" href="#" id="exportarPDF">
+                    <i class="fas fa-file-pdf fa-sm fa-fw me-2 text-gray-400"></i>Exportar PDF
+                </a>
+            </div>
+        </div>
+    </div>
+    <div class="card-header bg-light py-3">
+        <form method="GET" action="{% url 'lista_usuarios' %}" class="row g-3">
+            <div class="col-md-8">
+                <div class="input-group">
+                    <input type="text" class="form-control" placeholder="Buscar por nombre, apellido, email..."
+                        name="busqueda" value="{{ busqueda }}">
+                    <button class="btn btn-primary" type="submit">
+                        <i class="fas fa-search fa-sm"></i>
+                    </button>
+                    {% if busqueda %}
+                    <a href="{% url 'lista_usuarios' %}" class="btn btn-outline-secondary">
+                        <i class="fas fa-times fa-sm"></i>
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="col-md-4 text-md-end">
+                <select class="form-select" id="filter-group">
+                    <option value="">Todos los grupos</option>
+                    {% for group in user.groups.all %}
+                    <option value="{{ group.id }}">{{ group.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </form>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable" width="100%" cellspacing="0">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Usuario</th>
+                        <th>Nombre completo</th>
+                        <th>Email</th>
+                        <th>Grupo</th>
+                        <th>Estado</th>
+                        <th>Fecha registro</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for usuario in usuarios %}
+                    <tr>
+                        <td>{{ usuario.id }}</td>
+                        <td>{{ usuario.username }}</td>
+                        <td>{{ usuario.nombre }} {{ usuario.apellido }}</td>
+                        <td>{{ usuario.email }}</td>
+                        <td>
+                            {% for grupo in usuario.groups.all %}
+                            <span class="badge bg-info text-white">{{ grupo.name }}</span>
+                            {% empty %}
+                            <span class="badge bg-secondary">Sin grupo</span>
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% if usuario.is_active %}
+                            <span class="badge bg-success">Activo</span>
+                            {% else %}
+                            <span class="badge bg-danger">Inactivo</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ usuario.date_joined|date:"d/m/Y H:i" }}</td>
+                        <td>
+                            <div class="d-flex">
+                                <a href="#" class="btn btn-sm btn-info me-1" title="Ver detalles">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                {% if perms.auth.change_user %}
+                                <a href="{% url 'editar_usuario' pk=usuario.id %}" class="btn btn-sm btn-warning me-1" title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                                {% endif %}
+                                {% if perms.auth.delete_user %}
+                                <button type="button" class="btn btn-sm btn-danger" 
+                                    data-bs-toggle="modal" 
+                                    data-bs-target="#deleteModal" 
+                                    data-usuario-id="{{ usuario.id }}"
+                                    data-usuario-nombre="{{ usuario.username }}"
+                                    title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center py-4">
+                            <div class="text-center p-4">
+                                <i class="fas fa-users fa-3x text-gray-300 mb-3"></i>
+                                <p class="mb-0">No se encontraron usuarios</p>
+                                {% if busqueda %}
+                                <p class="text-muted">Intenta con otra búsqueda</p>
+                                <a href="{% url 'lista_usuarios' %}" class="btn btn-sm btn-outline-primary mt-2">
+                                    Ver todos los usuarios
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Paginación -->
+        {% if is_paginated %}
+        <nav aria-label="Page navigation" class="mt-4">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="?page=1{% if busqueda %}&busqueda={{ busqueda }}{% endif %}" aria-label="Primera página">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Primera página">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if page_obj.number == num %}
+                    <li class="page-item active">
+                        <a class="page-link" href="?page={{ num }}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if busqueda %}&busqueda={{ busqueda }}{% endif %}" aria-label="Última página">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link" href="#" aria-label="Última página">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+</div>
+    
+{% endblock content %}
+    

@@ -15,14 +15,15 @@ class UsuarioPersonalizado(AbstractUser):
         verbose_name='groups',
         blank=True,
         help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.',
-        related_name="usuario_personalizado_groups",  # Nombre único
+        related_name="usuario_personalizado_groups",  
         related_query_name="usuario_personalizado",
     )
+    
     user_permissions = models.ManyToManyField(
         'auth.Permission',
         verbose_name='user permissions',
         blank=True,
         help_text='Specific permissions for this user.',
-        related_name="usuario_personalizado_user_permissions",  # Nombre único
+        related_name="usuario_personalizado_user_permissions", 
         related_query_name="usuario_personalizado",
     )

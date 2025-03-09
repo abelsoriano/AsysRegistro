@@ -103,8 +103,4 @@ urlpatterns = [
     path('estudios/', lista_estudios, name='lista_estudios'),
 
 
-
-
-
-
 ]

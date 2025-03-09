@@ -13,7 +13,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.http import JsonResponse
 from django.urls import reverse_lazy
-from app.mixins import GroupRequiredMixin
+from app.mixins import *
 
 from django.views.decorators.csrf import csrf_exempt
 
@@ -137,7 +137,7 @@ class AttendanceCreateViewGeneral(BaseAttendanceCreateView):
         })
         return context
 
-# @group_required_with_message('jovenes', message="Solo los administradores pueden acceder a esta página.")
+
 class AttendanceCreateViewJovenes(BaseAttendanceCreateView):
     success_url = reverse_lazy('asys:list_asistencia')
     
@@ -160,7 +160,7 @@ class AttendanceCreateViewJovenes(BaseAttendanceCreateView):
         })
         return context
 
-class AttendanceCreateViewCaballeros(GroupRequiredMixin, BaseAttendanceCreateView):
+class AttendanceCreateViewCaballeros(BaseAttendanceCreateView):
     group_name = 'caballeros' 
     success_url = reverse_lazy('asys:list_asistencia_caballeros')
     
@@ -318,7 +318,7 @@ class BaseAttendanceListView(ListView):
             entry['weekday_name'] = weekdays_mapping.get(entry['weekday_name'], 'Desconocido')
         return queryset
 
-class AttendanceListJovenes(BaseAttendanceListView):
+class AttendanceListJovenes(GrupoJovenesMixin, BaseAttendanceListView):
     attendance_type = AttendanceType.YOUTH
     permission_required = 'app.can_view_joven_attendances'
 
@@ -338,7 +338,7 @@ class AttendanceListJovenes(BaseAttendanceListView):
         })
         return context
 
-class AttendanceListCaballeros(BaseAttendanceListView):
+class AttendanceListCaballeros(GrupoCaballerosMixin, BaseAttendanceListView):
     attendance_type = AttendanceType.GENTLEMEN
     permission_required = 'app.can_view_caballero_attendances'
 

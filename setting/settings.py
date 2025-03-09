@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 import os.path
 from pathlib import Path
-
+from django.contrib.messages import constants as messages
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -21,10 +21,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-!0_o8yti7x5_q^8a67hk1(^m&pbeun6rs!1#b*6motzx$9we51'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WA
+# RNING: don't run with debug turned on in production!
 DEBUG = True
 
-# ALLOWED_HOSTS = ['1c54-200-26-184-161.ngrok-free.app']
+ALLOWED_HOSTS = ['*'] 
+handler403 = 'app.views.custom_permission_denied_view'
+
+
+
+
 # CSRF_TRUSTED_ORIGINS = ['https://1c54-200-26-184-161.ngrok-free.app']
 
 # Application definition
@@ -36,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    
 
     # Libs
     'widget_tweaks',
@@ -43,7 +50,6 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',  # Este debe ir después de crispy_forms
     'bootstrap4',
     'django_select2',
-    'livereload',
 
 
     # Apps
@@ -59,13 +65,13 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'livereload.middleware.LiveReloadScript',
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',  
 ]
 
 ROOT_URLCONF = 'setting.urls'
@@ -130,6 +136,9 @@ TIME_ZONE = 'America/Santo_Domingo'
 USE_I18N = True
 
 USE_TZ = True
+STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')     
+STATICFILES_DIRS = [BASE_DIR / "static"] 
 
 # Configuración de Select2
 DJANGO_SELECT2_AJAX = True
@@ -140,25 +149,29 @@ CACHES = {
         'LOCATION': 'unique-snowflake',
     }
 }
+
 SELECT2_CACHE_BACKEND = 'default'
 
-STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles/')
 
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-]
 
 #Esto para la creacion de usuario
 AUTH_USER_MODEL = 'login.UsuarioPersonalizado' 
 
-
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' 
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_REDIRECT_URL = '/home/'
 LOGOUT_REDIRECT_URL = '/login/'
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
+
+MESSAGE_TAGS = {
+    messages.DEBUG: 'alert alert-info',
+    messages.INFO: 'alert alert-info',
+    messages.SUCCESS: 'alert alert-success',
+    messages.WARNING: 'alert alert-warning',
+    messages.ERROR: 'alert alert-danger',
+}
 
 # AUTH_USER_MODEL = 'user.User'
 

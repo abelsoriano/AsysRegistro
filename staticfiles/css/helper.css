@@ -1,0 +1,230 @@
+
+.card-miembro {
+    display: flex;
+    width: 50%;
+      margin: 10px;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+  }
+  
+  .card-body-miembro {
+      display: flex;
+      padding: 5px;
+      align-items: center;
+  }
+  
+  .card-img-container {
+      width: 500px;
+      height: 500px;
+      margin-right: 20px;
+      border-radius: 10px;
+      overflow: hidden;
+  }
+  
+  .card-img-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+  }
+  
+  .card-details {
+      margin: 8px 0;
+      color: #333;
+  }
+
+#detalle {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    z-index: 1050;
+    display: none;
+    max-width: 90%;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+#detalle::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(240, 235, 235, 0.966);
+    z-index: -1;
+}
+
+.close-button {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    padding: 0;
+    border: none;
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #45aac4;
+    cursor: pointer;
+    background: transparent;
+}
+
+#nombre-empleado {
+    font-size: 1.5em;
+    font-weight: bold;
+    color: #70c9c6;
+    margin-bottom: 15px;
+}
+
+
+/* .notificacion .card-body {
+padding: 10px;
+} */
+
+/* .notificacion .card-title {
+font-size: 18px;
+font-weight: bold;
+} */
+
+.notificacion .card-text {
+font-size: 14px;
+color: #444;
+}
+
+.notificacion .card-img-top {
+width: 100%;
+border-radius: 8px;
+}
+
+#detalle {
+position: fixed;
+z-index: 9999;
+background-color: #ffffff;
+border: 1px solid #ced4da;
+border-radius: 5px;
+box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+display: none;
+}
+
+.b-example-divider {
+height: 3rem;
+background-color: rgba(0, 0, 0, .1);
+border: solid rgba(0, 0, 0, .15);
+border-width: 1px 0;
+box-shadow: inset 0 .5em 1.5em rgba(0, 0, 0, .1), inset 0 .125em .5em rgba(0, 0, 0, .15);
+}
+
+/* Clor de Botones card headr*/
+.bg-LightSeaGreen {
+    background-color: #70c9c6 !important;
+}
+
+.btn-LightSeaGreen {
+    background-color: #5ab4b1 !important;
+}
+
+
+#card-body {
+    width: 100vw; /* 95% del ancho de la ventana */
+    margin: 0 auto; /* Centra la sección horizontalmente */
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.1); /* Añade sombra */
+    border-radius: 20px; /* Añade bordes redondeados para mejor apariencia */
+    padding: 20px; /* Añade padding para separación interna */
+    background-color: rgb(189, 17, 17); /* Asegura que el fondo sea blanco para que la sombra sea visible */
+}
+
+.container {
+    width: 100%; /* Asegura que el contenedor interno ocupe el 100% del ancho de la sección */
+}
+
+.d-flex.align-items-center.p-2.my-3.text-white.bg-LightSeaGreen.rounded.shadow-sm {
+    width: 100%; /* Asegura que este div ocupe el 100% del ancho del contenedor */
+}
+
+.my-3.p-3.bg-body.rounded.shadow-sm {
+    width: 100%; /* Asegura que este div ocupe el 100% del ancho del contenedor */
+}
+
+.table {
+    width: 100%; /* Asegura que la tabla ocupe el 100% del ancho del contenedor */
+}
+
+ /* Esto es para el form*/
+
+.custom-textarea {
+    border-radius: 5px;
+    border: 1px solid #ced4da;
+    padding: 10px;
+    font-size: 14px;
+}
+
+.custom-input {
+    color: white;
+    background-color: #ffc107; /* color bg-warning */
+    border: none;
+}
+
+/* static/css/styles.css */
+.card-header {
+    font-weight: bold;
+}
+
+.blockquote-footer {
+    font-size: 0.85rem;
+}
+
+
+/*esto es para la imagen*/
+body {
+    font-family: "Open Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", Helvetica, Arial, sans-serif; 
+}
+
+.styled-swal-popup {
+    background: #f9f9f9;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.styled-swal-confirm-btn, .styled-swal-cancel-btn {
+    font-size: 16px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+}
+
+.styled-swal-confirm-btn {
+    background-color: #28a745;
+}
+
+.styled-swal-confirm-btn:hover {
+    background-color: #218838;
+}
+
+.styled-swal-cancel-btn {
+    background-color: #6c757d;
+}
+
+.styled-swal-cancel-btn:hover {
+    background-color: #5a6268;
+}
+
+.form-check-input {
+    width: 18px;
+    height: 18px;
+    accent-color: #28a745;
+    margin-right: 8px;
+}
+
+.select2-container--default .select2-selection--multiple {
+    border: 1px solid #ced4da; /* Coincide con el estilo de Bootstrap */
+    border-radius: 4px;
+    padding: 0.375rem 0.75rem; /* Ajusta el padding para que se parezca a un input */
+    min-height: 38px; /* Asegúrate de que tenga la misma altura */
+}

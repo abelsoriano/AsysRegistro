@@ -59,6 +59,15 @@
                         </div>
                         
                         <div class="mb-3">
+                            <label for="id_grupo" class="form-label fw-bold">Grupo de usuario <span class="text-danger">*</span></label>
+                            {{ form.grupo|safe }}
+                            {% if form.grupo.errors %}
+                                <div class="invalid-feedback d-block">{{ form.grupo.errors }}</div>
+                            {% endif %}
+                            <small class="form-text text-muted">Seleccione el grupo al que pertenecerá este usuario</small>
+                        </div>
+                        
+                        <div class="mb-3">
                             <label for="id_password1" class="form-label fw-bold">Contraseña <span class="text-danger">*</span></label>
                             {{ form.password1|safe }}
                             {% if form.password1.errors %}
