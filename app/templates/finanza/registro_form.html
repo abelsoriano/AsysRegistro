@@ -1,0 +1,98 @@
+{% extends 'body.html' %}
+
+{% block title %}
+    {% if object.id %}Editar{% else %}Nuevo{% endif %} Registro Financiero
+{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'asys:registro_list' %}">Registros Financieros</a></li>
+            <li class="breadcrumb-item active" aria-current="page">
+                {% if object.id %}Editar{% else %}Nuevo{% endif %} Registro
+            </li>
+        </ol>
+    </nav>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">
+                {% if object.id %}Editar{% else %}Nuevo{% endif %} Registro Financiero
+            </h5>
+        </div>
+        <div class="card-body">
+            <form method="post" novalidate>
+                {% csrf_token %}
+                
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                        {{ error }}
+                    {% endfor %}
+                </div>
+                {% endif %}
+                
+                <div class="row">
+                    <!-- Fecha -->
+                    <div class="col-md-4 mb-3">
+                        <label for="{{ form.fecha.id_for_label }}" class="form-label">Fecha:</label>
+                        {{ form.fecha.errors }}
+                        <input type="date" name="{{ form.fecha.name }}" id="{{ form.fecha.id_for_label }}" 
+                               class="form-control {% if form.fecha.errors %}is-invalid{% endif %}"
+                               value="{{ form.fecha.value|date:'Y-m-d' }}">
+                        {% if form.fecha.help_text %}
+                        <small class="form-text text-muted">{{ form.fecha.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Diezmo -->
+                    <div class="col-md-4 mb-3">
+                        <label for="{{ form.diezmo.id_for_label }}" class="form-label">Diezmo ($):</label>
+                        {{ form.diezmo.errors }}
+                        <input type="number" step="0.01" name="{{ form.diezmo.name }}" id="{{ form.diezmo.id_for_label }}" 
+                               class="form-control {% if form.diezmo.errors %}is-invalid{% endif %}"
+                               value="{{ form.diezmo.value|default:'0.00' }}">
+                        {% if form.diezmo.help_text %}
+                        <small class="form-text text-muted">{{ form.diezmo.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Ofrenda -->
+                    <div class="col-md-4 mb-3">
+                        <label for="{{ form.ofrenda.id_for_label }}" class="form-label">Ofrenda ($):</label>
+                        {{ form.ofrenda.errors }}
+                        <input type="number" step="0.01" name="{{ form.ofrenda.name }}" id="{{ form.ofrenda.id_for_label }}" 
+                               class="form-control {% if form.ofrenda.errors %}is-invalid{% endif %}"
+                               value="{{ form.ofrenda.value|default:'0.00' }}">
+                        {% if form.ofrenda.help_text %}
+                        <small class="form-text text-muted">{{ form.ofrenda.help_text }}</small>
+                        {% endif %}
+                    </div>
+                    
+                    <!-- Notas -->
+                    <div class="col-12 mb-3">
+                        <label for="{{ form.notas.id_for_label }}" class="form-label">Notas:</label>
+                        {{ form.notas.errors }}
+                        <textarea name="{{ form.notas.name }}" id="{{ form.notas.id_for_label }}" 
+                                  class="form-control {% if form.notas.errors %}is-invalid{% endif %}" 
+                                  rows="4">{{ form.notas.value|default:'' }}</textarea>
+                        {% if form.notas.help_text %}
+                        <small class="form-text text-muted">{{ form.notas.help_text }}</small>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-4">
+                    <a href="{% url 'asys:registro_list' %}" class="btn btn-secondary">
+                        <i class="fa fa-times"></i> Cancelar
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fa fa-save"></i> Guardar
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

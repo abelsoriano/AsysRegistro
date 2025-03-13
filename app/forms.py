@@ -481,3 +481,15 @@ class EstudioBiblicoForm(forms.ModelForm):
             'fecha': forms.DateInput(attrs={'type': 'date'}),
             'descripcion': forms.Textarea(attrs={'rows': 4}),
         }
+
+#Registro Financiero
+class RegistroFinancieroForm(forms.ModelForm):
+    class Meta:
+        model = RegistroFinanciero
+        fields = ['fecha', 'diezmo', 'ofrenda', 'notas']
+        widgets = {
+            'fecha': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
+            'diezmo': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'ofrenda': forms.NumberInput(attrs={'class': 'form-control', 'step': '0.01'}),
+            'notas': forms.Textarea(attrs={'class': 'form-control', 'rows': 3}),
+        }

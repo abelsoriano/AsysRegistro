@@ -318,9 +318,11 @@ class BaseAttendanceListView(ListView):
             entry['weekday_name'] = weekdays_mapping.get(entry['weekday_name'], 'Desconocido')
         return queryset
 
-class AttendanceListJovenes(GrupoJovenesMixin, BaseAttendanceListView):
+class AttendanceListJovenes(GroupRequiredMixin, BaseAttendanceListView, LoginRequiredMixin):
+    group_name = 'jovenes' 
     attendance_type = AttendanceType.YOUTH
-    permission_required = 'app.can_view_joven_attendances'
+    
+    
 
     def get_queryset(self):
         queryset = self.get_base_queryset()
@@ -338,9 +340,9 @@ class AttendanceListJovenes(GrupoJovenesMixin, BaseAttendanceListView):
         })
         return context
 
-class AttendanceListCaballeros(GrupoCaballerosMixin, BaseAttendanceListView):
+class AttendanceListCaballeros(GroupRequiredMixin, BaseAttendanceListView):
     attendance_type = AttendanceType.GENTLEMEN
-    permission_required = 'app.can_view_caballero_attendances'
+    group_name = 'caballeros' 
 
     def get_queryset(self):
         queryset = self.get_base_queryset()
@@ -359,9 +361,9 @@ class AttendanceListCaballeros(GrupoCaballerosMixin, BaseAttendanceListView):
         return context
 
 
-class AttendanceListDamas(BaseAttendanceListView):
+class AttendanceListDamas(GroupRequiredMixin, BaseAttendanceListView):
     attendance_type = AttendanceType.LADIES
-    permission_required = 'app.can_view_dama_attendances'
+    group_name = 'damas' 
 
     def get_queryset(self):
         queryset = self.get_base_queryset()
@@ -380,9 +382,9 @@ class AttendanceListDamas(BaseAttendanceListView):
         return context
 
 
-class AttendanceListGeneral(BaseAttendanceListView):
+class AttendanceListGeneral(GroupRequiredMixin, BaseAttendanceListView):
     attendance_type = AttendanceType.GENERAL
-    permission_required = 'app_name.can_view_all_attendances'
+    group_name = 'general' 
 
     def get_queryset(self):
         queryset = self.get_base_queryset()

@@ -9,37 +9,17 @@
     <!-- Header -->
     {% include 'header.html' %}
     
-
+{% comment %} Esto es para la notificacion o mensaje de alerta {% endcomment %}
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-{{ message.tags }}" role="alert">
                 {{ message }}
+                <a href="#"> Sí necesita permiso comuníquese con el Administrador</a>
             </div>
         {% endfor %}
     {% endif %}
+<!-- ================================================================== --> 
 
-
-    <script>
-        // Función para manejar errores de acceso denegado
-        function handleAccessDenied(response) {
-            if (response.status === 403) {
-                response.json().then(data => {
-                    // Mostrar alerta con SweetAlert
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Acceso denegado',
-                        text: data.error,
-                        footer: '<a href="">Si necesita permiso consulte al administrador<a>',
-                        confirmButtonText: 'Volver al inicio'
-                    }).then(() => {
-                        // Redirigir a la página de inicio después de cerrar la alerta
-                        window.location.href = "{% url 'index' %}";
-                    });
-                });
-            }
-        }
-       
-    </script>
 
     <!-- Contenido Principal -->
     {% block content %}

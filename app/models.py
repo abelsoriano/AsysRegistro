@@ -2,10 +2,12 @@ from datetime import date
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
 from django.db.models.signals import post_save
 from django.forms import model_to_dict
 from django.utils import timezone
+
 from app.choices import *
 from setting import settings
 from setting.settings import MEDIA_URL
@@ -417,7 +419,6 @@ class EstudioBiblico(models.Model):
     def __str__(self):
         return f"Estudio: {self.tema} - {self.fecha}"
 
-    
 
 class AsistenciaEstudio(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Fecha")
@@ -436,3 +437,24 @@ class AsistenciaEstudio(models.Model):
             models.Index(fields=['miembro', 'date']),
             models.Index(fields=['presente', 'date']),
         ]
+
+
+class RegistroFinanciero(models.Model):
+    fecha = models.DateField(default=timezone.now)
+    diezmo = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    ofrenda = models.DecimalField(max_digits=10, decimal_places=2, default=0)
+    notas = models.TextField(blank=True, null=True)
+    
+    def __str__(self):
+        return f"{self.fecha} - Diezmo: ${self.diezmo} - Ofrenda: ${self.ofrenda}"
+    
+    def get_absolute_url(self):
+        return reverse('finanzas:registro_detalle', args=[str(self.id)])
+    
+    def get_total(self):
+        return self.diezmo + self.ofrenda
+    
+    class Meta:
+        verbose_name = "Registro Financiero"
+        verbose_name_plural = "Registros Financieros"
+        ordering = ['-fecha']

@@ -27,6 +27,10 @@
         <form method="GET" action="{% url 'lista_usuarios' %}" class="row g-3">
             <div class="col-md-8">
                 <div class="input-group">
+                    <a href="{% url 'registro' %}" class="btn btn text-white bg-LightSeaGreen">
+                        <i class="fas fa-user"> </i> Crear usuario
+                    </a>
+
                     <input type="text" class="form-control" placeholder="Buscar por nombre, apellido, email..."
                         name="busqueda" value="{{ busqueda }}">
                     <button class="btn btn-primary" type="submit">

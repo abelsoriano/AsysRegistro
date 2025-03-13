@@ -1,4 +1,6 @@
 from django.urls import path
+
+from app.views.financiero.views import*
 from . import views
 from app.views.asistencia import views
 from app.views.asistencia.views import *
@@ -11,6 +13,7 @@ from app.views.tareas.views import *
 from app.views.cambioDirectiva.views import *
 from app.views.presentacionNino.view import *
 from app.views.estudio.views import *
+
 
 
 app_name = 'asys'
@@ -101,6 +104,13 @@ urlpatterns = [
     path('estudios/<int:estudio_id>/asistencia/', registrar_asistencia, name='registrar_asistencia'),
     path('estudios/<int:estudio_id>/', detalle_estudio, name='detalle_estudio'),
     path('estudios/', lista_estudios, name='lista_estudios'),
+
+     # URLs para RegistroFinanciero
+    path('registros/', RegistroFinancieroListView.as_view(), name='registro_list'),
+    path('registros/<int:pk>/', RegistroFinancieroDetailView.as_view(), name='registro_detalle'),
+    path('registros/nuevo/', RegistroFinancieroCreateView.as_view(), name='registro_create'),
+    path('registros/<int:pk>/editar/', RegistroFinancieroUpdateView.as_view(), name='registro_update'),
+    path('registros/<int:pk>/eliminar/', RegistroFinancieroDeleteView.as_view(), name='registro_delete'),
 
 
 ]

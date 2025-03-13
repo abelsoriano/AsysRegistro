@@ -2,7 +2,7 @@ from django.views.generic.edit import CreateView
 from django.views.generic import ListView, DetailView, DeleteView
 from django.urls import reverse_lazy
 from django.contrib.messages.views import SuccessMessageMixin
-from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
 from app.models import PresentacionNino
 from app.forms import PresentacionNinoForm
 
@@ -14,7 +14,7 @@ class PresentacionNinoCreateView(SuccessMessageMixin, CreateView):
     success_message = "Presentación registrada exitosamente"
 
 
-class PresentacionListView(ListView):
+class PresentacionListView(LoginRequiredMixin, ListView):
     model = PresentacionNino
     template_name = 'presentacion/presentacion_list.html'
     context_object_name = 'presentaciones'

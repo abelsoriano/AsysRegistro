@@ -13,7 +13,7 @@ from app.forms import NotaForm
 from app.models import Nota
 
 
-class NotaView(CreateView, ListView):
+class NotaView(LoginRequiredMixin, CreateView, ListView):
     model = Nota
     form_class = NotaForm
     template_name = 'notas/listaNota.html'

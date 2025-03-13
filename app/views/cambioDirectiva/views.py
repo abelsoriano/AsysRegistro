@@ -6,6 +6,7 @@ from django.views import View
 from django.views.generic import ListView, CreateView, UpdateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from app.mixins import GroupRequiredMixin
 from app.models import *
 from app.forms import PeriodoDirectivaForm, ProcesoTransicionForm, CandidatoTransicionForm
 from django.db.models import F
@@ -13,8 +14,9 @@ from django.db import transaction
 from django.db.models.signals import post_save
 from django.dispatch import receiver
 
-class ProcesoTransicionListView(LoginRequiredMixin, ListView):
+class ProcesoTransicionListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     model = ProcesoTransicion
+    group_name = 'damas'
     template_name = 'directiva/proceso_transicion_list.html'
     context_object_name = 'procesos'
 

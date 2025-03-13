@@ -19,7 +19,7 @@ from django.views.generic import *
 from django.views.generic import RedirectView
 
 from app.models import Attendance, AttendanceType, Miembro,  Servicio
-import login
+from django.contrib.auth import login
 from login import models
 from login.form import EditarUsuarioForm, RegistroForm
 import setting.settings as setting
@@ -166,7 +166,7 @@ def extraer_nombres(texto):
     nombres = re.findall(r'\b[A-ZÁÉÍÓÚ][a-záéíóú]+\b(?:\s[A-ZÁÉÍÓÚ][a-záéíóú]+\b)*', texto)
     return nombres
 
-
+@login_required
 def dashboard_unificado(request):
     # Lógica de asistencia
     inasistencias_miembros = (

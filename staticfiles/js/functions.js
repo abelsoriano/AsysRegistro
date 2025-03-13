@@ -95,41 +95,67 @@ function alert_action(title, content, callback, cancel) {
 }
 
 
+
 // Capturar clics en enlaces con la clase "ajax-link"
-document.addEventListener('click', function(e) {
-    if (e.target.classList.contains('ajax-link')) {
-        e.preventDefault();
-        fetch(e.target.href, {
-            method: 'GET',
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                handleAccessDenied(response);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
+// document.addEventListener('click', function(e) {
+//     if (e.target.classList.contains('ajax-link') || e.target.parentElement.classList.contains('ajax-link')) {
+//         e.preventDefault();
+//         const link = e.target.classList.contains('ajax-link') ? e.target : e.target.parentElement;
+        
+//         console.log("Haciendo clic en:", link.href);
+        
+//         fetch(link.href, {
+//             method: 'GET',
+//             headers: {
+//                 'X-Requested-With': 'XMLHttpRequest'
+//             }
+//         })
+//         .then(response => {
+//             console.log("Código de estado:", response.status);
+//             console.log("Headers:", response.headers);
+//             return response.text();
+//         })
+//         .then(text => {
+//             console.log("Respuesta:", text);
+//             try {
+//                 // Intenta analizar como JSON
+//                 const json = JSON.parse(text);
+//                 console.log("JSON parseado:", json);
+                
+//                 // Si hay un error, muéstralo
+//                 if (json.error) {
+//                     alert("Error: " + json.error);
+//                 }
+//             } catch (e) {
+//                 // Si no es JSON, es probablemente HTML
+//                 console.log("No es JSON, probablemente HTML");
+//                 document.getElementById('content').innerHTML = text;
+//             }
+//         })
+//         .catch(error => {
+//             console.error('Error en fetch:', error);
+//             alert("Error al cargar: " + error);
+//         });
+//     }
+// });
 
 // Capturar envíos de formularios con la clase "ajax-form"
-document.addEventListener('submit', function(e) {
-    if (e.target.classList.contains('ajax-form')) {
-        e.preventDefault();
-        fetch(e.target.action, {
-            method: e.target.method,
-            body: new FormData(e.target),
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest'
-            }
-        })
-        .then(response => {
-            if (!response.ok) {
-                handleAccessDenied(response);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    }
-});
+// document.addEventListener('submit', function(e) {
+//     if (e.target.classList.contains('ajax-form')) {
+//         e.preventDefault();
+//         fetch(e.target.action, {
+//             method: e.target.method,
+//             body: new FormData(e.target),
+//             headers: {
+//                 'X-Requested-With': 'XMLHttpRequest'
+//             }
+//         })
+//         .then(response => {
+//             if (!response.ok) {
+//                 handleAccessDenied(response);
+//             }
+//         })
+//         .catch(error => console.error('Error:', error));
+//     }
+// });
+

@@ -1,0 +1,59 @@
+{% extends 'body.html' %}
+
+{% block title %}Detalle de Registro Financiero{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'asys:registro_list' %}">Registros Financieros</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Detalle</li>
+        </ol>
+    </nav>
+    
+    <div class="card">
+        <div class="card-header">
+            <h5 class="card-title mb-0">Registro Financiero - {{ registro.fecha|date:"d/m/Y" }}</h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Fecha:</h6>
+                    <p>{{ registro.fecha|date:"d/m/Y" }}</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Diezmo:</h6>
+                    <p>${{ registro.diezmo }}</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Ofrenda:</h6>
+                    <p>${{ registro.ofrenda }}</p>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <h6 class="text-muted">Total:</h6>
+                    <p class="fw-bold">${{ registro.get_total }}</p>
+                </div>
+                {% if registro.notas %}
+                <div class="col-12 mb-3">
+                    <h6 class="text-muted">Notas:</h6>
+                    <p>{{ registro.notas|linebreaks }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="card-footer d-flex justify-content-between">
+            <a href="{% url 'asys:registro_list' %}" class="btn btn-secondary">
+                <i class="fa fa-arrow-left"></i> Volver
+            </a>
+            <div>
+                <a href="{% url 'asys:registro_update' registro.id %}" class="btn btn-warning">
+                    <i class="fa fa-edit"></i> Editar
+                </a>
+                <a href="{% url 'asys:registro_delete' registro.id %}" class="btn btn-danger">
+                    <i class="fa fa-trash"></i> Eliminar
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
