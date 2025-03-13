@@ -10,14 +10,18 @@
     {% include 'header.html' %}
     
 {% comment %} Esto es para la notificacion o mensaje de alerta {% endcomment %}
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}" role="alert">
-                {{ message }}
-                <a href="#"> Sí necesita permiso comuníquese con el Administrador</a>
-            </div>
-        {% endfor %}
-    {% endif %}
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}" role="alert">
+            {{ message }}
+            {% if 'alert-danger' in message.tags %}
+                <a href="{% url 'asys:contacto' %}">Si necesita permiso, comuníquese con el Administrador</a>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% endif %}
+
+
 <!-- ================================================================== --> 
 
 

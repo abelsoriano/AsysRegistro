@@ -13,6 +13,7 @@ class GroupRequiredMixin(UserPassesTestMixin):
     group_name = None  # Nombre del grupo requerido
     permission_denied_message = 'No tienes permiso para acceder a esta página.'
     
+    
     def test_func(self):
         # Verificar si el usuario está autenticado y pertenece al grupo
         return (
@@ -25,7 +26,7 @@ class GroupRequiredMixin(UserPassesTestMixin):
         messages.error(self.request, self.permission_denied_message)
         
         # Redirigir a la página de inicio (o cualquier otra página)
-        return HttpResponseRedirect(reverse('index'))  # Cambia 'index' por la URL a la que deseas redirigir
+        return HttpResponseRedirect(reverse('index')) 
         
 
 # class GrupoJovenesMixin:

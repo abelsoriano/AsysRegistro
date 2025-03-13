@@ -103,7 +103,7 @@ urlpatterns = [
     path('estudios/nuevo/', crear_estudio, name='crear_estudio'),
     path('estudios/<int:estudio_id>/asistencia/', registrar_asistencia, name='registrar_asistencia'),
     path('estudios/<int:estudio_id>/', detalle_estudio, name='detalle_estudio'),
-    path('estudios/', lista_estudios, name='lista_estudios'),
+    path('estudios/', ListaEstudiosView.as_view(), name='lista_estudios'),
 
      # URLs para RegistroFinanciero
     path('registros/', RegistroFinancieroListView.as_view(), name='registro_list'),

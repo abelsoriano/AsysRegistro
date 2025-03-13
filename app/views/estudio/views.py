@@ -1,12 +1,15 @@
 # views.py
-from django.db.models import Count
-from django.db import models  # Importa el módulo models
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import ListView
 from django.db.models import Q, F, Count  
+from django.http import HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.urls import reverse
 
 from app.forms import EstudioBiblicoForm
+from app.mixins import GroupRequiredMixin
 from app.models import AsistenciaEstudio, AttendanceType, EstudioBiblico, Miembro
 
 @login_required
@@ -71,40 +74,43 @@ def registrar_asistencia(request, estudio_id):
     })
 
 
-@login_required
-def lista_estudios(request):
-    estudios = EstudioBiblico.objects.all().order_by('-fecha', '-id')
-    
-    # Process attendance counts for each study
-    estudios_data = []
-    for estudio in estudios:
-        
-        presentes = AsistenciaEstudio.objects.filter(
-            date=estudio.fecha,
-            attendance_type=AttendanceType.ESTUDIO,
-            presente=True
-        ).count()
-        
-        ausentes = AsistenciaEstudio.objects.filter(
-            date=estudio.fecha,
-            attendance_type=AttendanceType.ESTUDIO,
-            presente=False
-        ).count()
-        
-        estudios_data.append({
-            'id': estudio.id,
-            'fecha': estudio.fecha,
-            'tema': estudio.tema,
-            'maestro': estudio.maestro.id,
-            'maestro_nombre': estudio.maestro.name,
-            'maestro_lastname': estudio.maestro.lastname,
-            'total_presentes': presentes,
-            'total_ausentes': ausentes
-        })
-    
-    return render(request, 'estudio/lista_estudios.html', {
-        'estudios': estudios_data
-    })
+class ListaEstudiosView(LoginRequiredMixin, GroupRequiredMixin, ListView):
+    model = EstudioBiblico
+    template_name = 'estudio/lista_estudios.html'
+    context_object_name = 'estudios'
+    group_name = 'damas'  # Nombre del grupo requerido
+
+    def get_queryset(self):
+        estudios = EstudioBiblico.objects.all().order_by('-fecha', '-id')
+        estudios_data = []
+        for estudio in estudios:
+            presentes = AsistenciaEstudio.objects.filter(
+                date=estudio.fecha,
+                attendance_type=AttendanceType.ESTUDIO,
+                presente=True
+            ).count()
+
+            ausentes = AsistenciaEstudio.objects.filter(
+                date=estudio.fecha,
+                attendance_type=AttendanceType.ESTUDIO,
+                presente=False
+            ).count()
+
+            estudios_data.append({
+                'id': estudio.id,
+                'fecha': estudio.fecha,
+                'tema': estudio.tema,
+                'maestro': estudio.maestro.id,
+                'maestro_nombre': estudio.maestro.name,
+                'maestro_lastname': estudio.maestro.lastname,
+                'total_presentes': presentes,
+                'total_ausentes': ausentes
+            })
+        return estudios_data
+
+    def handle_no_permission(self):
+        messages.error(self.request, self.permission_denied_message)
+        return HttpResponseRedirect(reverse('index'))
 
 @login_required
 def detalle_estudio(request, estudio_id):

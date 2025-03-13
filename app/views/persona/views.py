@@ -8,6 +8,7 @@ from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 from app.forms import MemberForm
+from app.mixins import GroupRequiredMixin
 from app.models import Miembro
 from django.http import JsonResponse
 
@@ -137,8 +138,9 @@ class MembersUpdate(UpdateView):
 
 logger = logging.getLogger(__name__)
 
-class MembersDelete(DeleteView):
+class MembersDelete(GroupRequiredMixin, DeleteView):
     model = Miembro
+    context_object_name = 'administrador'
     template_name = 'persona/delete.html'
     success_url = reverse_lazy('asys:miembro_list')
     url_redirect = success_url

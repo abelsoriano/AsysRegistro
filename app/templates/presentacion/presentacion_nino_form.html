@@ -7,23 +7,23 @@
     <div class="row justify-content-center">
         <div class="col-lg-10">
             <div class="card shadow-lg border-0">
-                <div class="card-header text-white  bg-LightSeaGreen" >
+                <div class="card-header text-white bg-LightSeaGreen">
                     <h3 class="mb-0">Registro de Presentación de Niño</h3>
                 </div>
                 <div class="card-body p-4">
                     <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
                         {% csrf_token %}
-                        
+
                         <!-- Sección Datos del Niño -->
                         <div class="card mb-4">
                             <div class="card-header bg-light">
                                 <h5 class="mb-0">
-                                    <i class="fas fa-baby text-info  me-2"></i>
+                                    <i class="fas fa-baby text-info me-2"></i>
                                     Datos del Niño
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6">{{ form.nombre_nino|as_crispy_field }}</div>
                                     <div class="col-md-6">{{ form.fecha_nacimiento|as_crispy_field }}</div>
                                     <div class="col-12">{{ form.lugar_nacimiento|as_crispy_field }}</div>
@@ -41,7 +41,7 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6">{{ form.nombre_padre|as_crispy_field }}</div>
                                     <div class="col-md-6">{{ form.nombre_madre|as_crispy_field }}</div>
                                     <div class="col-12">{{ form.direccion|as_crispy_field }}</div>
@@ -60,7 +60,7 @@
                                 </h5>
                             </div>
                             <div class="card-body">
-                                <div class="row">
+                                <div class="row g-3">
                                     <div class="col-md-6">{{ form.fecha_presentacion|as_crispy_field }}</div>
                                     <div class="col-md-6">{{ form.pastor_oficiante|as_crispy_field }}</div>
                                     <div class="col-12">{{ form.testigos|as_crispy_field }}</div>
@@ -83,32 +83,4 @@
         </div>
     </div>
 </div>
-
-<!-- Agregar validación del lado del cliente -->
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    // Validación del archivo
-    const actaInput = document.querySelector('input[type="file"]');
-    actaInput.addEventListener('change', function() {
-        const file = this.files[0];
-        if (file) {
-            const fileSize = file.size / 1024 / 1024; // en MB
-            if (fileSize > 5) {
-                alert('El archivo es demasiado grande. El tamaño máximo permitido es 5MB.');
-                this.value = '';
-            }
-        }
-    });
-
-    // Validación del formulario
-    const form = document.querySelector('form');
-    form.addEventListener('submit', function(event) {
-        if (!form.checkValidity()) {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-        form.classList.add('was-validated');
-    });
-});
-</script>
 {% endblock %}
