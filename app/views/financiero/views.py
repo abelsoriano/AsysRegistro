@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.messages.views import SuccessMessageMixin
 from django.db.models import Sum
 from django.utils import timezone
-import datetime
+from django.views.generic import TemplateView
 
 from app.models import RegistroFinanciero
 from app.forms import RegistroFinancieroForm
@@ -86,3 +86,29 @@ class RegistroFinancieroDeleteView(LoginRequiredMixin, SuccessMessageMixin, Dele
     template_name = 'finanza/registro_confirm_delete.html'
     success_url = reverse_lazy('asys:registro_list')
     success_message = "Registro financiero eliminado con éxito"
+
+
+class ContactoView(TemplateView):
+    template_name = 'contacto.html'
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        
+        # Puedes personalizar esta información con tus propios datos
+        context['info_contacto'] = {
+            'nombre': 'PercyTechnology/Organización',
+            'direccion': 'Calle Principal #123, Santo Domingo, Republica Dominicana',
+            'telefono': '+1809 986-6178',
+            'email': 'ing.abelsoriano@gmail.com',
+            'horario': 'Lunes a Viernes: 9:00 AM - 5:00 PM'
+        }
+        
+        # Redes sociales
+        context['redes_sociales'] = [
+            {'nombre': 'Facebook', 'url': 'https://facebook.com/tuorganizacion', 'icono': 'fa-facebook'},
+            {'nombre': 'Instagram', 'url': 'https://instagram.com/tuorganizacion', 'icono': 'fa-instagram'},
+            {'nombre': 'Twitter', 'url': 'https://twitter.com/tuorganizacion', 'icono': 'fa-twitter'},
+            {'nombre': 'YouTube', 'url': 'https://youtube.com/tuorganizacion', 'icono': 'fa-youtube'},
+        ]
+        
+        return context

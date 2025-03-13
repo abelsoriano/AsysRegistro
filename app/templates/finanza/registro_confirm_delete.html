@@ -6,7 +6,7 @@
 <div class="container mt-4">
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'finanzas:registro_list' %}">Registros Financieros</a></li>
+            <li class="breadcrumb-item"><a href="{% url 'asys:registro_list' %}">Registros Financieros</a></li>
             <li class="breadcrumb-item active" aria-current="page">Eliminar</li>
         </ol>
     </nav>
@@ -24,7 +24,7 @@
             <p class="mb-0">Esta acción no se puede deshacer.</p>
         </div>
         <div class="card-footer d-flex justify-content-between">
-            <a href="{% url 'finanzas:registro_list' %}" class="btn btn-secondary">
+            <a href="{% url 'asys:registro_list' %}" class="btn btn-secondary">
                 <i class="fa fa-arrow-left"></i> Cancelar
             </a>
             <form method="post">

@@ -112,5 +112,8 @@ urlpatterns = [
     path('registros/<int:pk>/editar/', RegistroFinancieroUpdateView.as_view(), name='registro_update'),
     path('registros/<int:pk>/eliminar/', RegistroFinancieroDeleteView.as_view(), name='registro_delete'),
 
+     # URL para página de contacto
+    path('contacto/', ContactoView.as_view(), name='contacto'),
+
 
 ]

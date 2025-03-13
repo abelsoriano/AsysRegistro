@@ -8,14 +8,14 @@
     
     <!-- Botón para agregar nuevo registro -->
     <div class="mb-4">
-        <a href="{% url 'asys:registro_create' %}" class="btn btn-primary">
+        <a href="{% url 'asys:registro_create' %}" class="btn text-white  bg-LightSeaGreen">
             <i class="fa fa-plus"></i> Agregar Nuevo Registro
         </a>
     </div>
     
     <!-- Filtros de fechas -->
     <div class="card mb-4">
-        <div class="card-header">
+        <div class="card-header text-white  bg-LightSeaGreen">
             <h5 class="card-title mb-0">Filtros</h5>
         </div>
         <div class="card-body">
@@ -37,7 +37,7 @@
     
     <!-- Tabla de registros -->
     <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center">
+        <div class="card-header d-flex justify-content-between align-items-center text-white  bg-LightSeaGreen">
             <h5 class="card-title mb-0">Listado de Registros</h5>
             <span>Total: {{ registros.count }} registro(s)</span>
         </div>

@@ -18,6 +18,7 @@ from django.utils.decorators import method_decorator
 from django.views.generic import *
 from django.views.generic import RedirectView
 
+from app.mixins import GroupRequiredMixin
 from app.models import Attendance, AttendanceType, Miembro,  Servicio
 from django.contrib.auth import login
 from login import models
@@ -52,6 +53,11 @@ def registro(request):
         if form.is_valid():
             # Guardar el usuario sin commit para poder modificarlo antes de guardar
             user = form.save(commit=False)
+            
+            # Asignar explícitamente los valores de nombre y apellido
+            user.nombre = form.cleaned_data.get('nombre')
+            user.apellido = form.cleaned_data.get('apellido')
+            
             user.save()  # Ahora guardamos para que tenga un ID
             
             # Obtenemos el grupo seleccionado del formulario y lo asignamos
@@ -72,11 +78,11 @@ def registro(request):
     
     return render(request, 'registration/crearUsuarioForm.html', {'form': form})
 
-
 @method_decorator(login_required, name='dispatch')
 @method_decorator(permission_required('auth.view_user', raise_exception=True), name='dispatch')
-class ListaUsuariosView(ListView):
+class ListaUsuariosView(GroupRequiredMixin, ListView):
     model = models.UsuarioPersonalizado
+    group_name = 'administrador' 
     template_name = 'lista_usuarios.html'
     context_object_name = 'usuarios'
     paginate_by = 10  # Paginación de 10 usuarios por página

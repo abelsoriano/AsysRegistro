@@ -60,5 +60,6 @@ class EditarUsuarioForm(forms.ModelForm):
         usuario = super().save(commit=commit)
         if commit:
             usuario.groups.clear()
-            usuario.groups.add(*self.cleaned_data['grupos'])
+            for grupo in self.cleaned_data['grupos']:
+                usuario.groups.add(grupo)
         return usuario

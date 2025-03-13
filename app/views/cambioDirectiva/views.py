@@ -16,6 +16,7 @@ from django.dispatch import receiver
 
 class ProcesoTransicionListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     model = ProcesoTransicion
+    group_name = 'general' 
     group_name = 'damas'
     template_name = 'directiva/proceso_transicion_list.html'
     context_object_name = 'procesos'

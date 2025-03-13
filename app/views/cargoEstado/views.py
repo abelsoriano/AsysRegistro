@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import *
 from app.forms import EstadoForm, CargoForm
+from app.mixins import GroupRequiredMixin
 from app.models import Estado, Cargo
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
@@ -12,6 +13,7 @@ from django.views.decorators.http import require_http_methods
 
 class ModelEstadoCreateView(CreateView):
     model = Estado
+    group_name = 'general' 
     form_class = EstadoForm
     template_name = 'cargoEstado/estadoList.html'
     success_url = reverse_lazy('asys:list-estado')
@@ -43,8 +45,10 @@ class ModelEstadoCreateView(CreateView):
         context['action'] = 'add'
         return context
     
-class ModelEstadoList(ListView):
+class ModelEstadoList(GroupRequiredMixin, ListView):
+    group_name = 'general'
     model = Estado
+      
     template_name='cargoEstado/estadoList.html'
 
     @method_decorator(login_required)
@@ -169,8 +173,9 @@ def delete_estado(request, id):
 
 
 # Este bloque es para la parte de cargo
-class CargoList(ListView):
+class CargoList(GroupRequiredMixin, ListView):
     model = Cargo
+    group_name = 'general' 
     template_name='cargoEstado/cargoFormList.html'
 
     @method_decorator(login_required)

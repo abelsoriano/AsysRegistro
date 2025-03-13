@@ -1,0 +1,133 @@
+{% extends 'body.html' %}
+
+{% block title %}Información de Contacto{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="mb-4 text-center">Información de Contacto</h1>
+    
+    <div class="row">
+        <!-- Información de contacto -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Datos de Contacto</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-building fa-2x me-3 text-primary"></i>
+                        <div>
+                            <strong class="d-block">Organización</strong>
+                            {{ info_contacto.nombre }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-map-marker-alt fa-2x me-3 text-primary"></i>
+                        <div>
+                            <strong class="d-block">Dirección</strong>
+                            {{ info_contacto.direccion }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-phone fa-2x me-3 text-primary"></i>
+                        <div>
+                            <strong class="d-block">Teléfono</strong>
+                            {{ info_contacto.telefono }}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-envelope fa-2x me-3 text-primary"></i>
+                        <div>
+                            <strong class="d-block">Correo Electrónico</strong>
+                            <a href="mailto:{{ info_contacto.email }}">{{ info_contacto.email }}</a>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex align-items-center mb-3">
+                        <i class="fa fa-clock fa-2x me-3 text-primary"></i>
+                        <div>
+                            <strong class="d-block">Horario de Atención</strong>
+                            {{ info_contacto.horario }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Redes sociales -->
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Redes Sociales</h5>
+                </div>
+                <div class="card-body">
+                    <p class="mb-4">Síguenos en nuestras redes sociales para estar al tanto de nuestras actividades y eventos:</p>
+                    
+                    <div class="row">
+                        {% for red in redes_sociales %}
+                        <div class="col-md-6 mb-3">
+                            <a href="{{ red.url }}" target="_blank" class="btn btn-outline-primary w-100">
+                                <i class="fab {{ red.icono }} me-2"></i> {{ red.nombre }}
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Formulario de contacto (opcional) -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Envíanos un mensaje</h5>
+                </div>
+                <div class="card-body">
+                    <form>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombre" class="form-label">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" placeholder="Tu nombre">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="email" class="form-label">Correo electrónico</label>
+                                <input type="email" class="form-control" id="email" placeholder="tucorreo@ejemplo.com">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="asunto" class="form-label">Asunto</label>
+                                <input type="text" class="form-control" id="asunto" placeholder="Asunto de tu mensaje">
+                            </div>
+                            <div class="col-12 mb-3">
+                                <label for="mensaje" class="form-label">Mensaje</label>
+                                <textarea class="form-control" id="mensaje" rows="4" placeholder="Escribe tu mensaje aquí..."></textarea>
+                            </div>
+                            <div class="col-12 text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa fa-paper-plane me-2"></i> Enviar mensaje
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mapa (opcional - usa un placeholder) -->
+        <div class="col-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Nuestra ubicación</h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d12345.67890!2d-0.0!3d0.0!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMDDCsDAwJzAwLjAiTiAwMcKwMDAnMDAuMCJF!5e0!3m2!1ses!2s!4v1615000000000!5m2!1ses!2s" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
