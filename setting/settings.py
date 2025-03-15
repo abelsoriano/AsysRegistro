@@ -23,7 +23,7 @@ SECRET_KEY = 'django-insecure-!0_o8yti7x5_q^8a67hk1(^m&pbeun6rs!1#b*6motzx$9we51
 
 # SECURITY WA
 # RNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*'] 
 handler403 = 'app.views.custom_permission_denied_view'
