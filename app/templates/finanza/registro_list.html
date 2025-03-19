@@ -1,140 +1,141 @@
-{% extends 'body.html' %}
+    {% extends 'body.html' %}
 
-{% block title %}Registros Financieros{% endblock %}
+    {% block title %}Registros Financieros{% endblock %}
 
-{% block content %}
-<div class="container mt-4">
-    <h1 class="mb-4">Registros Financieros</h1>
-    
-    <!-- Botón para agregar nuevo registro -->
-    <div class="mb-4">
-        <a href="{% url 'asys:registro_create' %}" class="btn text-white  bg-LightSeaGreen">
-            <i class="fa fa-plus"></i> Agregar Nuevo Registro
-        </a>
-    </div>
-    
-    <!-- Filtros de fechas -->
-    <div class="card mb-4">
-        <div class="card-header text-white  bg-LightSeaGreen">
-            <h5 class="card-title mb-0">Filtros</h5>
+    {% block content %}
+    <div class="container mt-4">
+        <h1 class="mb-4">Registros Financieros</h1>
+        {% load humanize %}
+        
+        <!-- Botón para agregar nuevo registro -->
+        <div class="mb-4">
+            <a href="{% url 'asys:registro_create' %}" class="btn text-white  bg-LightSeaGreen">
+                <i class="fa fa-plus"></i> Agregar Nuevo Registro
+            </a>
         </div>
-        <div class="card-body">
-            <form method="get" class="row g-3">
-                <div class="col-md-5">
-                    <label for="fecha_inicio" class="form-label">Fecha inicio:</label>
-                    <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ filtros.fecha_inicio }}">
-                </div>
-                <div class="col-md-5">
-                    <label for="fecha_fin" class="form-label">Fecha fin:</label>
-                    <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ filtros.fecha_fin }}">
-                </div>
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    
-    <!-- Tabla de registros -->
-    <div class="card mb-4">
-        <div class="card-header d-flex justify-content-between align-items-center text-white  bg-LightSeaGreen">
-            <h5 class="card-title mb-0">Listado de Registros</h5>
-            <span>Total: {{ registros.count }} registro(s)</span>
-        </div>
-        <div class="card-body">
-            {% if registros %}
-            <div class="table-responsive">
-                <table class="table table-striped table-hover">
-                    <thead>
-                        <tr>
-                            <th>Fecha</th>
-                            <th>Diezmo</th>
-                            <th>Ofrenda</th>
-                            <th>Total</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for registro in registros %}
-                        <tr>
-                            <td>{{ registro.fecha|date:"d/m/Y" }}</td>
-                            <td>${{ registro.diezmo }}</td>
-                            <td>${{ registro.ofrenda }}</td>
-                            <td>${{ registro.get_total }}</td>
-                            <td>
-                                <a href="{% url 'asys:registro_detalle' registro.id %}" class="btn btn-sm btn-info" title="Ver detalles">
-                                    <i class="fa fa-eye"></i>
-                                </a>
-                                <a href="{% url 'asys:registro_update' registro.id %}" class="btn btn-sm btn-warning" title="Editar">
-                                    <i class="fa fa-edit"></i>
-                                </a>
-                                <a href="{% url 'asys:registro_delete' registro.id %}" class="btn btn-sm btn-danger" title="Eliminar">
-                                    <i class="fa fa-trash"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                    <tfoot>
-                        <tr class="table-info fw-bold">
-                            <td>TOTALES</td>
-                            <td>${{ totales.total_diezmo|default:"0.00" }}</td>
-                            <td>${{ totales.total_ofrenda|default:"0.00" }}</td>
-                            <td>${{ total_general|default:"0.00" }}</td>
-                            <td></td>
-                        </tr>
-                    </tfoot>
-                </table>
+        
+        <!-- Filtros de fechas -->
+        <div class="card mb-4">
+            <div class="card-header text-white  bg-LightSeaGreen">
+                <h5 class="card-title mb-0">Filtros</h5>
             </div>
-            {% else %}
-            <div class="alert alert-info">
-                No hay registros financieros. <a href="{% url 'asys:registro_create' %}">Crear uno nuevo</a>.
+            <div class="card-body">
+                <form method="get" class="row g-3">
+                    <div class="col-md-5">
+                        <label for="fecha_inicio" class="form-label">Fecha inicio:</label>
+                        <input type="date" id="fecha_inicio" name="fecha_inicio" class="form-control" value="{{ filtros.fecha_inicio }}">
+                    </div>
+                    <div class="col-md-5">
+                        <label for="fecha_fin" class="form-label">Fecha fin:</label>
+                        <input type="date" id="fecha_fin" name="fecha_fin" class="form-control" value="{{ filtros.fecha_fin }}">
+                    </div>
+                    <div class="col-md-2 d-flex align-items-end">
+                        <button type="submit" class="btn btn-secondary w-100">Filtrar</button>
+                    </div>
+                </form>
             </div>
-            {% endif %}
         </div>
-    </div>
-    
-    <!-- Paginación -->
-    {% if is_paginated %}
-    <nav aria-label="Paginación">
-        <ul class="pagination justify-content-center">
-            {% if page_obj.has_previous %}
-            <li class="page-item">
-                <a class="page-link" href="?page=1{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Primera">
-                    <span aria-hidden="true">&laquo;&laquo;</span>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Anterior">
-                    <span aria-hidden="true">&laquo;</span>
-                </a>
-            </li>
-            {% endif %}
-            
-            {% for num in page_obj.paginator.page_range %}
-                {% if num == page_obj.number %}
-                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
-                {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+        
+        <!-- Tabla de registros -->
+        <div class="card mb-4">
+            <div class="card-header d-flex justify-content-between align-items-center text-white  bg-LightSeaGreen">
+                <h5 class="card-title mb-0">Listado de Registros</h5>
+                <span>Total: {{ registros.count }} registro(s)</span>
+            </div>
+            <div class="card-body">
+                {% if registros %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Diezmo</th>
+                                <th>Ofrenda</th>
+                                <th>Total</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for registro in registros %}
+                            <tr>
+                                <td>{{ registro.fecha|date:"d/m/Y" }}</td>
+                                <td>${{ registro.diezmo|floatformat:2|intcomma }}</td>
+                                <td>${{ registro.ofrenda|floatformat:2|intcomma }}</td>
+                                <td>${{ registro.get_total|floatformat:2|intcomma }}</td>
+                                <td>
+                                    <a href="{% url 'asys:registro_detalle' registro.id %}" class="btn btn-sm btn-info" title="Ver detalles">
+                                        <i class="fa fa-eye"></i>
+                                    </a>
+                                    <a href="{% url 'asys:registro_update' registro.id %}" class="btn btn-sm btn-warning" title="Editar">
+                                        <i class="fa fa-edit"></i>
+                                    </a>
+                                    <a href="{% url 'asys:registro_delete' registro.id %}" class="btn btn-sm btn-danger" title="Eliminar">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        <tfoot>
+                            <tr class="table-info fw-bold">
+                                <td>TOTALES</td>
+                                <td>${{ totales.total_diezmo|floatformat:2|intcomma|default:"0.00" }}</td>
+                                <td>${{ totales.total_ofrenda|floatformat:2|intcomma|default:"0.00" }}</td>
+                                <td>${{ total_general|floatformat:2|intcomma|default:"0.00" }}</td>
+                                <td></td>
+                            </tr>
+                        </tfoot>
+                    </table>                
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No hay registros financieros. <a href="{% url 'asys:registro_create' %}">Crear uno nuevo</a>.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+        
+        <!-- Paginación -->
+        {% if is_paginated %}
+        <nav aria-label="Paginación">
+            <ul class="pagination justify-content-center">
+                {% if page_obj.has_previous %}
                 <li class="page-item">
-                    <a class="page-link" href="?page={{ num }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}">{{ num }}</a>
+                    <a class="page-link" href="?page=1{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Primera">
+                        <span aria-hidden="true">&laquo;&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Anterior">
+                        <span aria-hidden="true">&laquo;</span>
+                    </a>
                 </li>
                 {% endif %}
-            {% endfor %}
-            
-            {% if page_obj.has_next %}
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Siguiente">
-                    <span aria-hidden="true">&raquo;</span>
-                </a>
-            </li>
-            <li class="page-item">
-                <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Última">
-                    <span aria-hidden="true">&raquo;&raquo;</span>
-                </a>
-            </li>
-            {% endif %}
-        </ul>
-    </nav>
-    {% endif %}
-</div>
-{% endblock %}
+                
+                {% for num in page_obj.paginator.page_range %}
+                    {% if num == page_obj.number %}
+                    <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+                    {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ num }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}">{{ num }}</a>
+                    </li>
+                    {% endif %}
+                {% endfor %}
+                
+                {% if page_obj.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Siguiente">
+                        <span aria-hidden="true">&raquo;</span>
+                    </a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}{% if filtros.fecha_inicio %}&fecha_inicio={{ filtros.fecha_inicio }}{% endif %}{% if filtros.fecha_fin %}&fecha_fin={{ filtros.fecha_fin }}{% endif %}" aria-label="Última">
+                        <span aria-hidden="true">&raquo;&raquo;</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+        {% endif %}
+    </div>
+    {% endblock %}

@@ -169,10 +169,10 @@ class ProcesoTransicionDetailView(LoginRequiredMixin, DetailView):
         
         return redirect('asys:proceso_transicion_detail', pk=kwargs['pk'])
     
-class RegistroFinanzasCreateView(LoginRequiredMixin, CreateView):
-    model = RegistroFinanzas
+class RegistroappCreateView(LoginRequiredMixin, CreateView):
+    model = Registroapp
     fields = ['periodo', 'total_miembros_recibidos', 'total_fondos_recibidos', 'observaciones']
-    template_name = 'directiva/registro_finanzas_form.html'
+    template_name = 'directiva/registro_app_form.html'
     success_url = reverse_lazy('asys:finalizar_list')
 
     def post(self, request, *args, **kwargs):
@@ -196,24 +196,24 @@ class RegistroFinanzasCreateView(LoginRequiredMixin, CreateView):
         context['proceso_id'] = proceso_id
         return context
 
-class RegistroFinanzasListView(LoginRequiredMixin, ListView):
-    model = RegistroFinanzas
-    template_name = 'directiva/registro_finanzas_list.html'
+class RegistroappListView(LoginRequiredMixin, ListView):
+    model = Registroapp
+    template_name = 'directiva/registro_app_list.html'
     context_object_name = 'registros'
 
     def get_queryset(self):
         proceso_id = self.kwargs.get('proceso_id')
-        return RegistroFinanzas.objects.filter(periodo__transicion_nuevo__id=proceso_id)
+        return Registroapp.objects.filter(periodo__transicion_nuevo__id=proceso_id)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['proceso_id'] = self.kwargs.get('proceso_id')
         return context
 
-class RegistroFinanzasUpdateView(LoginRequiredMixin, UpdateView):
-    model = RegistroFinanzas
+class RegistroappUpdateView(LoginRequiredMixin, UpdateView):
+    model = Registroapp
     fields = ['periodo', 'total_miembros_recibidos', 'total_fondos_recibidos', 'observaciones']
-    template_name = 'directiva/registro_finanzas_form.html'
+    template_name = 'directiva/registro_app_form.html'
     
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -223,10 +223,10 @@ class RegistroFinanzasUpdateView(LoginRequiredMixin, UpdateView):
     def get_success_url(self):
         return reverse_lazy('asys:finalizar_list', kwargs={'proceso_id': self.kwargs['proceso_id']})
 
-class RegistroFinanzasDeleteView(LoginRequiredMixin, View):
+class RegistroappDeleteView(LoginRequiredMixin, View):
     def post(self, request, *args, **kwargs):
-        # Obtiene el registro de finanzas a eliminar
-        registro = get_object_or_404(RegistroFinanzas, pk=self.kwargs['pk'])
+        # Obtiene el registro de app a eliminar
+        registro = get_object_or_404(Registroapp, pk=self.kwargs['pk'])
         # Elimina el registro
         registro.delete()
         # Redirige a la lista de registros financieros

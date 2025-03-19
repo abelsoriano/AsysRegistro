@@ -1,0 +1,2042 @@
+[
+    {
+        "model": "app.registrofinanciero",
+        "pk": 1,
+        "fields": {
+            "fecha": "2020-07-26",
+            "diezmo": 4985.00,
+            "ofrenda": 1350.00,
+            "notas": "Segundo servicio 11:30 am"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 2,
+        "fields": {
+            "fecha": "2020-08-02",
+            "diezmo": 9850.00,
+            "ofrenda": 775.00,
+            "notas": "Primer servicio de 9:00 am a 11:00 am"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 3,
+        "fields": {
+            "fecha": "2020-08-02",
+            "diezmo": 5000.00,
+            "ofrenda": 860.00,
+            "notas": "Segundo servicio 11:30 am-1:30 pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 4,
+        "fields": {
+            "fecha": "2020-08-09",
+            "diezmo": 7100.00,
+            "ofrenda": 605.00,
+            "notas": "Segundo servicio 11:30am- 1:30pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 5,
+        "fields": {
+            "fecha": "2020-08-16",
+            "diezmo": 6065.00,
+            "ofrenda": 586.00,
+            "notas": "Primer servicio 9:00am- 11:00am"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 6,
+        "fields": {
+            "fecha": "2020-08-26",
+            "diezmo": 0.00,
+            "ofrenda": 450.00,
+            "notas": "Segundo servicio 11.30am-1:30pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 7,
+        "fields": {
+            "fecha": "2020-08-30",
+            "diezmo": 10370.00,
+            "ofrenda": 980.00,
+            "notas": "Oportunidades. Genaro Nu±ez, Josefina Florentino, francisco Selmo"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 8,
+        "fields": {
+            "fecha": "2020-08-30",
+            "diezmo": 3665.00,
+            "ofrenda": 600.00,
+            "notas": "2do Servicio de 11:30 a 1:00"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 9,
+        "fields": {
+            "fecha": "2020-09-06",
+            "diezmo": 10700.00,
+            "ofrenda": 840.00,
+            "notas": "fue presentada la ni±a Suri Leidy, hija de sunny Soriano Kolvin M.\r\nTest: Claudia y Juan M.\r\nsunny acept≤ Al Se±or."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 10,
+        "fields": {
+            "fecha": "2020-09-06",
+            "diezmo": 14700.00,
+            "ofrenda": 495.00,
+            "notas": "Segundo Servicio"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 11,
+        "fields": {
+            "fecha": "2020-09-13",
+            "diezmo": 23150.00,
+            "ofrenda": 1016.00,
+            "notas": "Presentacion de la ni±a shanell de Cristela y Ariel.\r\n\r\n1re servicio. de 9:00 a 11:30"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 12,
+        "fields": {
+            "fecha": "2020-09-13",
+            "diezmo": 1600.00,
+            "ofrenda": 775.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 13,
+        "fields": {
+            "fecha": "2020-09-20",
+            "diezmo": 0.00,
+            "ofrenda": 700.00,
+            "notas": "En este dφa fue presentada la ni±a de Sa·l y Yohanna: Amanda Sofia."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 14,
+        "fields": {
+            "fecha": "2020-09-20",
+            "diezmo": 4950.00,
+            "ofrenda": 325.00,
+            "notas": "Coro de las ofrenda: Cristela. \r\n2do servicio de 11:30 a 1:00"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 15,
+        "fields": {
+            "fecha": "2020-09-27",
+            "diezmo": 11390.00,
+            "ofrenda": 810.00,
+            "notas": "fue celebrado el dφa nacional de la biblia, con preguntas y respuestas y premios."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 16,
+        "fields": {
+            "fecha": "2020-09-27",
+            "diezmo": 5200.00,
+            "ofrenda": 175.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 17,
+        "fields": {
+            "fecha": "2020-10-04",
+            "diezmo": 2500.00,
+            "ofrenda": 890.00,
+            "notas": "Genaro N, Teodoro D, Ramona H, Dairenis F"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 18,
+        "fields": {
+            "fecha": "2020-10-04",
+            "diezmo": 3900.00,
+            "ofrenda": 570.00,
+            "notas": "En este dφa fue presentada a Dios  la ni±a Esteisy hija de Estarling Marte y Rainely N·±ez..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 19,
+        "fields": {
+            "fecha": "2020-10-11",
+            "diezmo": 11330.00,
+            "ofrenda": 1255.00,
+            "notas": "Servicio de 9:00 a 12:00"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 20,
+        "fields": {
+            "fecha": "2020-10-18",
+            "diezmo": 4150.00,
+            "ofrenda": 1340.00,
+            "notas": "culto 9:00 a 12:00"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 21,
+        "fields": {
+            "fecha": "2020-10-25",
+            "diezmo": 10300.00,
+            "ofrenda": 1624.00,
+            "notas": "1624, se le entreg≤ a eventos ( ofrendas)"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 22,
+        "fields": {
+            "fecha": "2020-11-01",
+            "diezmo": 27595.00,
+            "ofrenda": 2756.00,
+            "notas": "Servicio desde 9:00 am a 12:00 pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 23,
+        "fields": {
+            "fecha": "2020-11-08",
+            "diezmo": 3300.00,
+            "ofrenda": 680.00,
+            "notas": "Servicio de 9:00 am a 12:00 pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 24,
+        "fields": {
+            "fecha": "2020-11-15",
+            "diezmo": 3400.00,
+            "ofrenda": 1347.00,
+            "notas": "En Θste dφa Juan Ram≤n public≤ su relaci≤n con Derileidy N·±ez"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 25,
+        "fields": {
+            "fecha": "2020-11-22",
+            "diezmo": 8005.00,
+            "ofrenda": 1285.00,
+            "notas": "Le entreguΘ a el grupo de eventos 3500 pesos para una actividad para la familia y el dφa del pastor."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 26,
+        "fields": {
+            "fecha": "2020-11-29",
+            "diezmo": 9510.00,
+            "ofrenda": 1926.00,
+            "notas": "Culto de la Familia a partir de la 4:00pm"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 27,
+        "fields": {
+            "fecha": "2020-12-06",
+            "diezmo": 20935.00,
+            "ofrenda": 1096.00,
+            "notas": "En este dφa se comprometieron los hermanos  Elizabeth Soriano y Ariel Soriano..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 28,
+        "fields": {
+            "fecha": "2020-12-13",
+            "diezmo": 12200.00,
+            "ofrenda": 925.00,
+            "notas": "En este dφa fue presentado el ni±o Ever. \r\nmadre: Mileni guzmßn Padre: yeronni Martφnez\r\ntestigos Grey y  Christopher"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 29,
+        "fields": {
+            "fecha": "2020-12-20",
+            "diezmo": 12835.00,
+            "ofrenda": 1230.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 30,
+        "fields": {
+            "fecha": "2020-12-27",
+            "diezmo": 21250.00,
+            "ofrenda": 1670.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 31,
+        "fields": {
+            "fecha": "2021-01-10",
+            "diezmo": 16985.00,
+            "ofrenda": 1340.00,
+            "notas": "Primer culto 2021"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 32,
+        "fields": {
+            "fecha": "2021-01-17",
+            "diezmo": 9000.00,
+            "ofrenda": 1760.00,
+            "notas": "En este dφa estuvieron con nosotros los hermanos del capotillo al justo del pastor Nelson Feliz"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 33,
+        "fields": {
+            "fecha": "2021-01-24",
+            "diezmo": 16737.00,
+            "ofrenda": 1813.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 34,
+        "fields": {
+            "fecha": "2021-01-31",
+            "diezmo": 11430.00,
+            "ofrenda": 2115.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 35,
+        "fields": {
+            "fecha": "2021-02-07",
+            "diezmo": 19875.00,
+            "ofrenda": 2080.00,
+            "notas": "Retiro congregacional:\r\nen este dφa acept≤ al se±or la madre de Juanibel Cßceres: Martina"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 36,
+        "fields": {
+            "fecha": "2021-02-14",
+            "diezmo": 15375.00,
+            "ofrenda": 1232.00,
+            "notas": "La ofrenda fue entregada al grupo de evento..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 37,
+        "fields": {
+            "fecha": "2021-02-21",
+            "diezmo": 4250.00,
+            "ofrenda": 1785.00,
+            "notas": "En este dφa fueron presentadas un par de ni±as, hijas de Evelin Moreno (Alaisha y Alisha). visitas:6\r\nEl diezmo: eventos"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 38,
+        "fields": {
+            "fecha": "2021-02-28",
+            "diezmo": 11470.00,
+            "ofrenda": 1496.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 39,
+        "fields": {
+            "fecha": "2021-03-07",
+            "diezmo": 30870.00,
+            "ofrenda": 992.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 40,
+        "fields": {
+            "fecha": "2021-03-14",
+            "diezmo": 7000.00,
+            "ofrenda": 1925.00,
+            "notas": "en este dφa pasaron a ser miembros activos por medio del bautismo en agua. \r\nCelina F. , Edgar F. , Berto P. y Juana R ."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 41,
+        "fields": {
+            "fecha": "2021-03-21",
+            "diezmo": 17520.00,
+            "ofrenda": 1450.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 42,
+        "fields": {
+            "fecha": "2021-03-28",
+            "diezmo": 2680.00,
+            "ofrenda": 1485.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 43,
+        "fields": {
+            "fecha": "2021-04-04",
+            "diezmo": 13600.00,
+            "ofrenda": 1260.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 44,
+        "fields": {
+            "fecha": "2021-04-11",
+            "diezmo": 20675.00,
+            "ofrenda": 1380.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 45,
+        "fields": {
+            "fecha": "2021-04-25",
+            "diezmo": 23060.00,
+            "ofrenda": 1075.00,
+            "notas": "En este dφa fue presentada la ni±a Alnelis, hija de Norelis M. y Alvaro S. Testigos  Norberto M. y Marcia M."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 46,
+        "fields": {
+            "fecha": "2021-05-02",
+            "diezmo": 14600.00,
+            "ofrenda": 2126.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 47,
+        "fields": {
+            "fecha": "2021-05-09",
+            "diezmo": 17750.00,
+            "ofrenda": 1459.00,
+            "notas": "una persona nos visit≤"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 48,
+        "fields": {
+            "fecha": "2021-05-16",
+            "diezmo": 8235.00,
+            "ofrenda": 2040.00,
+            "notas": "Este dφa fueron presentada las mellizas Odette y Arlette padres: Narciso Martφnez y Lisselot CΘspedes"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 49,
+        "fields": {
+            "fecha": "2021-05-30",
+            "diezmo": 12235.00,
+            "ofrenda": 816.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 50,
+        "fields": {
+            "fecha": "2021-06-27",
+            "diezmo": 14670.00,
+            "ofrenda": 591.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 51,
+        "fields": {
+            "fecha": "2021-04-07",
+            "diezmo": 31510.00,
+            "ofrenda": 0.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 52,
+        "fields": {
+            "fecha": "2021-11-07",
+            "diezmo": 5800.00,
+            "ofrenda": 1032.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 53,
+        "fields": {
+            "fecha": "2021-07-18",
+            "diezmo": 5050.00,
+            "ofrenda": 1460.00,
+            "notas": "Se tomo' 3460 pesos para celebrar el dφa del padre. (1460 de las ofrendas y 2000 del diezmo)"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 54,
+        "fields": {
+            "fecha": "2021-07-25",
+            "diezmo": 8400.00,
+            "ofrenda": 1135.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 55,
+        "fields": {
+            "fecha": "2021-01-08",
+            "diezmo": 15705.00,
+            "ofrenda": 1447.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 56,
+        "fields": {
+            "fecha": "2021-08-15",
+            "diezmo": 6040.00,
+            "ofrenda": 1295.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 57,
+        "fields": {
+            "fecha": "2021-08-08",
+            "diezmo": 34350.00,
+            "ofrenda": 1156.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 58,
+        "fields": {
+            "fecha": "2021-08-22",
+            "diezmo": 7250.00,
+            "ofrenda": 1040.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 59,
+        "fields": {
+            "fecha": "2021-08-29",
+            "diezmo": 22900.00,
+            "ofrenda": 1578.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 60,
+        "fields": {
+            "fecha": "2021-05-09",
+            "diezmo": 10050.00,
+            "ofrenda": 1600.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 61,
+        "fields": {
+            "fecha": "2021-09-19",
+            "diezmo": 2750.00,
+            "ofrenda": 935.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 62,
+        "fields": {
+            "fecha": "2021-09-26",
+            "diezmo": 14750.00,
+            "ofrenda": 2047.00,
+            "notas": "En este  dφa Eleuterio y Rosa celebraron su aniversario y fue presentado el ni±o Axel Gabriel. Padres Basilio y Rudnerdy"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 63,
+        "fields": {
+            "fecha": "2021-03-10",
+            "diezmo": 3832.00,
+            "ofrenda": 1225.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 64,
+        "fields": {
+            "fecha": "2021-10-17",
+            "diezmo": 7600.00,
+            "ofrenda": 1687.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 65,
+        "fields": {
+            "fecha": "2021-11-14",
+            "diezmo": 4220.00,
+            "ofrenda": 1525.00,
+            "notas": "De estos se le entreg≤ al grupo de eventos para una actividad con motivo al mes de la familia"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 66,
+        "fields": {
+            "fecha": "2021-11-22",
+            "diezmo": 3400.00,
+            "ofrenda": 1240.00,
+            "notas": "Celebraci≤n del mes de la familia..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 67,
+        "fields": {
+            "fecha": "2021-11-28",
+            "diezmo": 12350.00,
+            "ofrenda": 940.00,
+            "notas": "Dφa del pastor"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 68,
+        "fields": {
+            "fecha": "2021-05-12",
+            "diezmo": 21850.00,
+            "ofrenda": 1750.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 69,
+        "fields": {
+            "fecha": "2021-12-12",
+            "diezmo": 12591.00,
+            "ofrenda": 1079.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 70,
+        "fields": {
+            "fecha": "2021-12-19",
+            "diezmo": 21300.00,
+            "ofrenda": 1380.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 71,
+        "fields": {
+            "fecha": "2022-01-02",
+            "diezmo": 40650.00,
+            "ofrenda": 1850.00,
+            "notas": "visitantes:\r\nEn este dφa se entreg≤ al se±or Iharis G≤mez Taveras"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 72,
+        "fields": {
+            "fecha": "2022-09-01",
+            "diezmo": 23100.00,
+            "ofrenda": 1045.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 73,
+        "fields": {
+            "fecha": "2022-01-16",
+            "diezmo": 2030.00,
+            "ofrenda": 960.00,
+            "notas": "La sociedad de damas saliente entreg≤ 6590 pesos para el fondo general de la directiva pasada."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 74,
+        "fields": {
+            "fecha": "2022-01-23",
+            "diezmo": 9760.00,
+            "ofrenda": 1434.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 75,
+        "fields": {
+            "fecha": "2022-01-30",
+            "diezmo": 5750.00,
+            "ofrenda": 1500.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 76,
+        "fields": {
+            "fecha": "2022-06-02",
+            "diezmo": 40640.00,
+            "ofrenda": 1256.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 77,
+        "fields": {
+            "fecha": "2022-02-13",
+            "diezmo": 15650.00,
+            "ofrenda": 1300.00,
+            "notas": "En este dφa fue presentado el ni±o Dylan Joel. Padres: Jorge MΘndez y Fatima Martφnez."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 78,
+        "fields": {
+            "fecha": "2022-02-27",
+            "diezmo": 37700.00,
+            "ofrenda": 1710.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 79,
+        "fields": {
+            "fecha": "2022-06-03",
+            "diezmo": 38100.00,
+            "ofrenda": 1331.00,
+            "notas": "fue entregado 3000 pesos de la directiva de j≤venes 2020-2021 para el fondo general"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 80,
+        "fields": {
+            "fecha": "2022-03-13",
+            "diezmo": 5000.00,
+            "ofrenda": 2130.00,
+            "notas": "En este dφa fue presentada la ni±a Esperanza Zorrilla MΘndez, hija de Noemi MΘndez."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 81,
+        "fields": {
+            "fecha": "2022-03-20",
+            "diezmo": 12500.00,
+            "ofrenda": 1495.00,
+            "notas": "En este dφa fueron bautizados: Genara N., Catalina S., Gabino S. y Carina R.\r\nVisita: \r\nHermano: 5\r\nAmigos: 6"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 82,
+        "fields": {
+            "fecha": "2022-03-27",
+            "diezmo": 26125.00,
+            "ofrenda": 1379.00,
+            "notas": "En este dφa fue celebrada santa cena. \r\nJ≤venes:6\r\n Damas: 24   caballeros:16\r\nTotal:46"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 83,
+        "fields": {
+            "fecha": "2022-03-04",
+            "diezmo": 22350.00,
+            "ofrenda": 1416.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 84,
+        "fields": {
+            "fecha": "2022-10-04",
+            "diezmo": 1250.00,
+            "ofrenda": 1331.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 85,
+        "fields": {
+            "fecha": "2022-04-24",
+            "diezmo": 39912.00,
+            "ofrenda": 2000.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 86,
+        "fields": {
+            "fecha": "2022-08-05",
+            "diezmo": 3950.00,
+            "ofrenda": 1450.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 87,
+        "fields": {
+            "fecha": "2022-05-15",
+            "diezmo": 6900.00,
+            "ofrenda": 1680.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 88,
+        "fields": {
+            "fecha": "2022-05-22",
+            "diezmo": 6175.00,
+            "ofrenda": 1825.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 89,
+        "fields": {
+            "fecha": "2022-05-29",
+            "diezmo": 16960.00,
+            "ofrenda": 1650.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 90,
+        "fields": {
+            "fecha": "2022-06-05",
+            "diezmo": 32281.00,
+            "ofrenda": 1256.00,
+            "notas": "Del diezmo se le dio  12 para el pastor"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 91,
+        "fields": {
+            "fecha": "2022-12-06",
+            "diezmo": 18800.00,
+            "ofrenda": 1455.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 92,
+        "fields": {
+            "fecha": "2022-06-19",
+            "diezmo": 10630.00,
+            "ofrenda": 615.00,
+            "notas": "El pastor le entrego 35 mil a Basilio hoy..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 93,
+        "fields": {
+            "fecha": "2022-06-26",
+            "diezmo": 24805.00,
+            "ofrenda": 1268.00,
+            "notas": "EN este dφa Sele di≤ al Pastor 6000 pesos."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 94,
+        "fields": {
+            "fecha": "2022-07-03",
+            "diezmo": 14300.00,
+            "ofrenda": 686.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 95,
+        "fields": {
+            "fecha": "2022-10-07",
+            "diezmo": 28380.00,
+            "ofrenda": 1407.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 96,
+        "fields": {
+            "fecha": "2022-07-17",
+            "diezmo": 13230.00,
+            "ofrenda": 15969.00,
+            "notas": "Donada a una caridad para un enfermo..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 97,
+        "fields": {
+            "fecha": "2022-07-24",
+            "diezmo": 7215.00,
+            "ofrenda": 1745.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 98,
+        "fields": {
+            "fecha": "2022-07-31",
+            "diezmo": 24300.00,
+            "ofrenda": 1920.00,
+            "notas": "En este dφa fueron presentados dos ni±os.\r\nDorian Isaac: padres Isaac e Ishakel.\r\nJudith: padres Juan C y Anyelina."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 99,
+        "fields": {
+            "fecha": "2022-08-07",
+            "diezmo": 15400.00,
+            "ofrenda": 1561.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 100,
+        "fields": {
+            "fecha": "2022-08-21",
+            "diezmo": 14500.00,
+            "ofrenda": 2901.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 101,
+        "fields": {
+            "fecha": "2022-08-28",
+            "diezmo": 15300.00,
+            "ofrenda": 1760.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 102,
+        "fields": {
+            "fecha": "2022-11-09",
+            "diezmo": 43090.00,
+            "ofrenda": 1855.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 103,
+        "fields": {
+            "fecha": "2022-09-18",
+            "diezmo": 6400.00,
+            "ofrenda": 1966.00,
+            "notas": "Sele dio  al pastor 5000 pesos para un necesitado."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 104,
+        "fields": {
+            "fecha": "2022-09-25",
+            "diezmo": 16150.00,
+            "ofrenda": 1990.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 105,
+        "fields": {
+            "fecha": "2022-10-09",
+            "diezmo": 7335.00,
+            "ofrenda": 1587.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 106,
+        "fields": {
+            "fecha": "2022-10-16",
+            "diezmo": 25800.00,
+            "ofrenda": 2660.00,
+            "notas": "En este dφa fue presentada la ni±a Alaia M. Padres: Estarlin Batista y Naomi  Cabrera. Hoy Juan R. Frφas se reconcili≤."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 107,
+        "fields": {
+            "fecha": "2022-10-23",
+            "diezmo": 16050.00,
+            "ofrenda": 1835.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 108,
+        "fields": {
+            "fecha": "2022-10-30",
+            "diezmo": 11500.00,
+            "ofrenda": 2537.00,
+            "notas": "en este dφa fueron presentados 3 ni±os\r\nDiego Sebastißn, Esteisy Darolin Axuel Gustavo. Nietas de Juanibel Cßceres."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 109,
+        "fields": {
+            "fecha": "2022-06-11",
+            "diezmo": 11500.00,
+            "ofrenda": 2075.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 110,
+        "fields": {
+            "fecha": "2022-11-13",
+            "diezmo": 11150.00,
+            "ofrenda": 1188.00,
+            "notas": "En este dφa se comprometieron: Juana N·±ez R. (Nieve) Anderlin Guaba"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 111,
+        "fields": {
+            "fecha": "2022-11-20",
+            "diezmo": 4000.00,
+            "ofrenda": 1635.00,
+            "notas": "En este dφa fue presentado el Ni±o: Taylor Matias, Madre: Wilka Severino Del Orbe tambiΘn acepto a Cristo..."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 112,
+        "fields": {
+            "fecha": "2022-12-04",
+            "diezmo": 18400.00,
+            "ofrenda": 2075.00,
+            "notas": "En este dφa fueron presentados 3 ni±os y acept≤ al se±or la madre de uno de los ni±os"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 113,
+        "fields": {
+            "fecha": "2022-12-18",
+            "diezmo": 39450.00,
+            "ofrenda": 1480.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 114,
+        "fields": {
+            "fecha": "2022-12-25",
+            "diezmo": 16700.00,
+            "ofrenda": 2660.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 115,
+        "fields": {
+            "fecha": "2023-08-01",
+            "diezmo": 34050.00,
+            "ofrenda": 1710.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 116,
+        "fields": {
+            "fecha": "2023-01-22",
+            "diezmo": 14350.00,
+            "ofrenda": 1266.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 117,
+        "fields": {
+            "fecha": "2023-01-29",
+            "diezmo": 39785.00,
+            "ofrenda": 1935.00,
+            "notas": "En este día fue presentada una niña sobrina de Arismel"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 118,
+        "fields": {
+            "fecha": "2023-12-02",
+            "diezmo": 10450.00,
+            "ofrenda": 1640.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 119,
+        "fields": {
+            "fecha": "2023-02-19",
+            "diezmo": 3900.00,
+            "ofrenda": 1421.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 120,
+        "fields": {
+            "fecha": "2023-02-26",
+            "diezmo": 19700.00,
+            "ofrenda": 2440.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 121,
+        "fields": {
+            "fecha": "2023-03-05",
+            "diezmo": 13000.00,
+            "ofrenda": 7130.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 122,
+        "fields": {
+            "fecha": "2023-03-12",
+            "diezmo": 14050.00,
+            "ofrenda": 1687.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 123,
+        "fields": {
+            "fecha": "2023-03-19",
+            "diezmo": 8925.00,
+            "ofrenda": 1250.00,
+            "notas": "En este día fueron bautizados: Sixto, Hansel, Arismel y Edilieisy."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 124,
+        "fields": {
+            "fecha": "2023-03-26",
+            "diezmo": 25230.00,
+            "ofrenda": 1640.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 125,
+        "fields": {
+            "fecha": "2023-02-04",
+            "diezmo": 12000.00,
+            "ofrenda": 1650.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 126,
+        "fields": {
+            "fecha": "2023-04-16",
+            "diezmo": 17650.00,
+            "ofrenda": 2885.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 127,
+        "fields": {
+            "fecha": "2023-05-07",
+            "diezmo": 30900.00,
+            "ofrenda": 1511.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 128,
+        "fields": {
+            "fecha": "2023-05-14",
+            "diezmo": 8260.00,
+            "ofrenda": 1700.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 129,
+        "fields": {
+            "fecha": "2023-05-21",
+            "diezmo": 13770.00,
+            "ofrenda": 1630.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 130,
+        "fields": {
+            "fecha": "2023-05-28",
+            "diezmo": 22200.00,
+            "ofrenda": 2095.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 131,
+        "fields": {
+            "fecha": "2023-06-04",
+            "diezmo": 15400.00,
+            "ofrenda": 1445.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 132,
+        "fields": {
+            "fecha": "2023-11-06",
+            "diezmo": 5500.00,
+            "ofrenda": 925.00,
+            "notas": "En este día fue celebrado el día de las madres, por tal razón las damas no asistieron al culto de este día."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 133,
+        "fields": {
+            "fecha": "2023-06-18",
+            "diezmo": 7200.00,
+            "ofrenda": 1550.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 134,
+        "fields": {
+            "fecha": "2023-06-25",
+            "diezmo": 22380.00,
+            "ofrenda": 1835.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 135,
+        "fields": {
+            "fecha": "2023-02-07",
+            "diezmo": 29050.00,
+            "ofrenda": 2240.00,
+            "notas": "Retiro Congregacional"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 136,
+        "fields": {
+            "fecha": "2023-07-09",
+            "diezmo": 7300.00,
+            "ofrenda": 1780.00,
+            "notas": "En este día fue presentada la niña Thayra Nahir, Padres: Jorge Rafael De La Cruz Paredes y Paulina Soriano Arias."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 137,
+        "fields": {
+            "fecha": "2023-07-16",
+            "diezmo": 8750.00,
+            "ofrenda": 3568.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 138,
+        "fields": {
+            "fecha": "2023-07-23",
+            "diezmo": 8300.00,
+            "ofrenda": 2196.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 139,
+        "fields": {
+            "fecha": "2023-07-30",
+            "diezmo": 1700.00,
+            "ofrenda": 2441.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 140,
+        "fields": {
+            "fecha": "2023-08-13",
+            "diezmo": 10450.00,
+            "ofrenda": 970.00,
+            "notas": "En este d�a fue celebrado el d�a de los padres en una piscina, por tal raz�n los caballeros no estuvieron en la iglesia"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 141,
+        "fields": {
+            "fecha": "2023-08-20",
+            "diezmo": 12200.00,
+            "ofrenda": 2370.00,
+            "notas": "En este d�a acept� al Se�or Nayely y tambien fue presentada su hija. Testigos: Josmel y Martina"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 142,
+        "fields": {
+            "fecha": "2023-08-27",
+            "diezmo": 21000.00,
+            "ofrenda": 2210.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 143,
+        "fields": {
+            "fecha": "2023-03-09",
+            "diezmo": 23450.00,
+            "ofrenda": 1135.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 144,
+        "fields": {
+            "fecha": "2023-10-09",
+            "diezmo": 19750.00,
+            "ofrenda": 1245.00,
+            "notas": "En este dia Edgar Fel�z y Ruth Moreno comunicaron a la iglesia que ellos est�n orando para comprometerse en matrimonio."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 145,
+        "fields": {
+            "fecha": "2023-09-24",
+            "diezmo": 14050.00,
+            "ofrenda": 1685.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 146,
+        "fields": {
+            "fecha": "2023-08-10",
+            "diezmo": 14700.00,
+            "ofrenda": 2630.00,
+            "notas": "En este d�a se entrg� al se�or una j�ven que nos visit� llamada Manuela amiga de Claudia M"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 147,
+        "fields": {
+            "fecha": "2023-10-15",
+            "diezmo": 11405.00,
+            "ofrenda": 2350.00,
+            "notas": "Tema del mensare: A la Manera de Dios"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 148,
+        "fields": {
+            "fecha": "2023-10-22",
+            "diezmo": 0.00,
+            "ofrenda": 1576.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 149,
+        "fields": {
+            "fecha": "2023-05-11",
+            "diezmo": 24500.00,
+            "ofrenda": 1370.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 150,
+        "fields": {
+            "fecha": "2023-12-11",
+            "diezmo": 2000.00,
+            "ofrenda": 1895.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 151,
+        "fields": {
+            "fecha": "2023-11-26",
+            "diezmo": 4900.00,
+            "ofrenda": 1011.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 152,
+        "fields": {
+            "fecha": "2023-03-12",
+            "diezmo": 22380.00,
+            "ofrenda": 4910.00,
+            "notas": "En este d�a se entreg� al se�or Arabelle Amador, tuvimos 7 visitantes"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 153,
+        "fields": {
+            "fecha": "2023-10-12",
+            "diezmo": 20200.00,
+            "ofrenda": 1555.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 154,
+        "fields": {
+            "fecha": "2023-12-17",
+            "diezmo": 42650.00,
+            "ofrenda": 5005.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 155,
+        "fields": {
+            "fecha": "2023-12-24",
+            "diezmo": 4800.00,
+            "ofrenda": 1270.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 156,
+        "fields": {
+            "fecha": "2024-01-07",
+            "diezmo": 50300.00,
+            "ofrenda": 2348.00,
+            "notas": "En el d�a de hoy fue presentado el ni�a: Luna Anelys N��ez Castellano, Padres: Angel y Yamilca"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 157,
+        "fields": {
+            "fecha": "2024-01-14",
+            "diezmo": 5750.00,
+            "ofrenda": 1610.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 158,
+        "fields": {
+            "fecha": "2024-01-28",
+            "diezmo": 16100.00,
+            "ofrenda": 1706.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 159,
+        "fields": {
+            "fecha": "2024-02-04",
+            "diezmo": 25050.00,
+            "ofrenda": 1870.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 160,
+        "fields": {
+            "fecha": "2024-11-02",
+            "diezmo": 14550.00,
+            "ofrenda": 1580.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 161,
+        "fields": {
+            "fecha": "2024-02-18",
+            "diezmo": 3200.00,
+            "ofrenda": 1080.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 162,
+        "fields": {
+            "fecha": "2024-02-25",
+            "diezmo": 23808.00,
+            "ofrenda": 2615.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 163,
+        "fields": {
+            "fecha": "2024-03-03",
+            "diezmo": 21700.00,
+            "ofrenda": 2250.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 164,
+        "fields": {
+            "fecha": "2024-03-10",
+            "diezmo": 16100.00,
+            "ofrenda": 2574.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 165,
+        "fields": {
+            "fecha": "2024-03-17",
+            "diezmo": 5050.00,
+            "ofrenda": 2090.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 166,
+        "fields": {
+            "fecha": "2024-05-05",
+            "diezmo": 13500.00,
+            "ofrenda": 2000.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 167,
+        "fields": {
+            "fecha": "2024-05-12",
+            "diezmo": 10200.00,
+            "ofrenda": 2400.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 168,
+        "fields": {
+            "fecha": "2024-05-19",
+            "diezmo": 9300.00,
+            "ofrenda": 2110.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 169,
+        "fields": {
+            "fecha": "2024-05-26",
+            "diezmo": 23500.00,
+            "ofrenda": 2450.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 170,
+        "fields": {
+            "fecha": "2024-02-06",
+            "diezmo": 22410.00,
+            "ofrenda": 1375.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 171,
+        "fields": {
+            "fecha": "2024-06-16",
+            "diezmo": 2900.00,
+            "ofrenda": 2865.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 172,
+        "fields": {
+            "fecha": "2024-06-23",
+            "diezmo": 4800.00,
+            "ofrenda": 1660.00,
+            "notas": "En este dia fueron bautizados Jos�, Teresa y Mariyerlyn"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 173,
+        "fields": {
+            "fecha": "2024-06-30",
+            "diezmo": 30700.00,
+            "ofrenda": 3430.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 174,
+        "fields": {
+            "fecha": "2024-07-07",
+            "diezmo": 9000.00,
+            "ofrenda": 1380.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 175,
+        "fields": {
+            "fecha": "2024-07-21",
+            "diezmo": 1.00,
+            "ofrenda": 3505.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 176,
+        "fields": {
+            "fecha": "2024-07-28",
+            "diezmo": 14700.00,
+            "ofrenda": 2080.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 177,
+        "fields": {
+            "fecha": "2024-08-04",
+            "diezmo": 18000.00,
+            "ofrenda": 1770.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 178,
+        "fields": {
+            "fecha": "2024-08-11",
+            "diezmo": 12500.00,
+            "ofrenda": 2230.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 179,
+        "fields": {
+            "fecha": "2024-08-18",
+            "diezmo": 3700.00,
+            "ofrenda": 740.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 180,
+        "fields": {
+            "fecha": "2024-08-25",
+            "diezmo": 16700.00,
+            "ofrenda": 1310.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 181,
+        "fields": {
+            "fecha": "2024-01-09",
+            "diezmo": 38730.00,
+            "ofrenda": 3129.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 182,
+        "fields": {
+            "fecha": "2024-09-08",
+            "diezmo": 5070.00,
+            "ofrenda": 1905.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 183,
+        "fields": {
+            "fecha": "2024-09-15",
+            "diezmo": 15500.00,
+            "ofrenda": 2710.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 184,
+        "fields": {
+            "fecha": "2024-09-22",
+            "diezmo": 16300.00,
+            "ofrenda": 2135.00,
+            "notas": "2750 de ofrendas especial."
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 185,
+        "fields": {
+            "fecha": "2024-09-29",
+            "diezmo": 47300.00,
+            "ofrenda": 1435.00,
+            "notas": "Ofrendas especial 300"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 186,
+        "fields": {
+            "fecha": "2024-10-06",
+            "diezmo": 8500.00,
+            "ofrenda": 2145.00,
+            "notas": "Ofrendas especial: 700"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 187,
+        "fields": {
+            "fecha": "2024-10-13",
+            "diezmo": 8100.00,
+            "ofrenda": 1885.00,
+            "notas": "En el d�a de hoy fueron  presentados los ni�os: Anderson y Ashley, Padres Valerio Mendez y Damaris Beato"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 188,
+        "fields": {
+            "fecha": "2024-10-20",
+            "diezmo": 10400.00,
+            "ofrenda": 2395.00,
+            "notas": "En el d�a de hoy fue presentado el ni�o Mathew, Padres Ariel Mart�nez y Cris Guante"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 189,
+        "fields": {
+            "fecha": "2024-11-24",
+            "diezmo": 22540.00,
+            "ofrenda": 2015.00,
+            "notas": "En este d�a fue presentado el enemorado de Dainey Gustavo Adolfolfo De Jes�s"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 190,
+        "fields": {
+            "fecha": "2024-12-02",
+            "diezmo": 7500.00,
+            "ofrenda": 1485.00,
+            "notas": "En el D�a de hoy Carina present� su Novio"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 191,
+        "fields": {
+            "fecha": "2024-12-08",
+            "diezmo": 35550.00,
+            "ofrenda": 1661.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 192,
+        "fields": {
+            "fecha": "2024-12-15",
+            "diezmo": 9050.00,
+            "ofrenda": 2445.00,
+            "notas": "En el d�a de hoy se arrepinti� David y se present� la ni�a Danes, Padres: Rafaelina De Jes�s y David Castillo"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 193,
+        "fields": {
+            "fecha": "2024-12-22",
+            "diezmo": 12500.00,
+            "ofrenda": 1695.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 194,
+        "fields": {
+            "fecha": "2024-12-29",
+            "diezmo": 19600.00,
+            "ofrenda": 2926.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 195,
+        "fields": {
+            "fecha": "2025-05-01",
+            "diezmo": 32200.00,
+            "ofrenda": 1965.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 196,
+        "fields": {
+            "fecha": "2025-01-12",
+            "diezmo": 14780.00,
+            "ofrenda": 2340.00,
+            "notas": "La directiva de damas 2024 entreg� 23550 pesos"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 197,
+        "fields": {
+            "fecha": "2025-01-19",
+            "diezmo": 4400.00,
+            "ofrenda": 2056.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 198,
+        "fields": {
+            "fecha": "2025-01-26",
+            "diezmo": 8500.00,
+            "ofrenda": 2455.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 199,
+        "fields": {
+            "fecha": "2025-02-02",
+            "diezmo": 20425.00,
+            "ofrenda": 1645.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 200,
+        "fields": {
+            "fecha": "2025-02-09",
+            "diezmo": 17850.00,
+            "ofrenda": 1595.00,
+            "notas": "En este dia fueron bautizados Joshua Jer�z y Pelagio Mart�nez"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 201,
+        "fields": {
+            "fecha": "2025-02-16",
+            "diezmo": 9100.00,
+            "ofrenda": 2185.00,
+            "notas": "Se le entreg� ese diezmo al pastor"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 202,
+        "fields": {
+            "fecha": "2025-02-23",
+            "diezmo": 2200.00,
+            "ofrenda": 2360.00,
+            "notas": null
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 203,
+        "fields": {
+            "fecha": "2025-03-02",
+            "diezmo": 18650.00,
+            "ofrenda": 2820.00,
+            "notas": "En este d�a fue presentada la ni�a Alahia Lisbeth Soriano De Los Santos, Padres: Alfredo Soriano y Lisbeth De Los Santos"
+        }
+    },
+    {
+        "model": "app.registrofinanciero",
+        "pk": 204,
+        "fields": {
+            "fecha": "2025-09-03",
+            "diezmo": 10100.00,
+            "ofrenda": 2140.00,
+            "notas": null
+        }
+    }
+]

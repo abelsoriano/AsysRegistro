@@ -7,15 +7,17 @@ from django.db.models import Sum
 from django.utils import timezone
 from django.views.generic import TemplateView
 
+from app.mixins import GroupRequiredMixin
 from app.models import RegistroFinanciero
 from app.forms import RegistroFinancieroForm
 
 # Vistas para RegistroFinanciero
-class RegistroFinancieroListView(LoginRequiredMixin, ListView):
+class RegistroFinancieroListView(GroupRequiredMixin, LoginRequiredMixin, ListView):
     model = RegistroFinanciero
+    group_name = 'general'
     template_name = 'finanza/registro_list.html'
     context_object_name = 'registros'
-    paginate_by = 20
+    paginate_by = 20 
     
     def get_queryset(self):
         queryset = super().get_queryset()

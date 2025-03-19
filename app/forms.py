@@ -23,10 +23,10 @@ class MemberForm(forms.ModelForm):
             'lastname': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su apellido'}),
             'dni': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Ingrese su numero de identidad'}),
             'gender': forms.Select(attrs={'class': 'form-control'}),
-            'date_joined': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control ', 'type': 'date', 'placeholder': 'mm/dd/yyyy'}),
+            'date_joined': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'yyyy-mm-dd'}),
             'state': forms.Select(attrs={'class': 'form-control'}),
             'address': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Direccion'}),
-            'fecha_ingreso': DateInput(format='%d/%m/%Y', attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'mm/dd/yyyy'}),
+            'fecha_ingreso': forms.DateInput(format='%Y-%m-%d', attrs={'class': 'form-control', 'type': 'date', 'placeholder': 'yyyy-mm-dd'}),
             'phone': forms.TextInput(attrs={'class': 'form-control', 'type': 'phone','placeholder':  'Ingrese sin guión'}),
             'email': forms.EmailInput(attrs={'class': 'form-control', 'type': 'email', 'placeholder': 'email'}),
             # 'cargo': forms.Select(attrs={'class': 'form-control'}),
@@ -37,15 +37,19 @@ class MemberForm(forms.ModelForm):
 
     def clean_dni(self):
         dni = self.cleaned_data.get('dni')
-        if len(dni) != 13 or not dni.replace("-", "").isdigit():
-            raise forms.ValidationError("El campo Cedula debe contener 11 números.")
+        if dni:
+            if len(dni) != 13 or not dni.replace("-", "").isdigit():
+                raise forms.ValidationError("El campo Cedula debe contener 11 números.")
         return dni
+       
 
     def clean_phone(self):
         phone = self.cleaned_data.get('phone')
-        if len(phone) != 12 or not phone.replace("-", "").isdigit():
-            raise forms.ValidationError("El campo teléfono debe  contener 10 números.")
+        if phone:
+            if len(phone) != 12 or not phone.replace("-", "").isdigit():
+                raise forms.ValidationError("El campo teléfono debe  contener 10 números.")
         return phone
+        
 
     def save(self, commit=True):
         data = {}

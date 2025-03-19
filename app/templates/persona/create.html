@@ -121,8 +121,22 @@
           <label class="form-label">{{ form.image.label }}</label>
           {{ form.image }}
         </div>
+
+  
+          {% block botones %}
+
+          {% endblock %}
+      
+        <div class="col-md-12">
+          <button class="btn btn-LightSeaGreen text-white" type="submit">
+              <i class="fas fa-save"></i> Guardar
+          </button>
+          <a href="{{ list_url }}" class="btn btn-secondary">
+              <i class="fas fa-times"></i> Cancelar
+          </a>
+        </div>
+
       </div>
     </div>
   </div>
 {% endblock %}
-

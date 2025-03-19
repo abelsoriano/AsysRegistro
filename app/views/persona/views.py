@@ -77,14 +77,16 @@ class MembersCreate(CreateView):
                         data['success'] = True
                     else:
                         data['success'] = False
-                        data['errors'] = form.errors.as_json()
+                        data['errors'] = form.errors  # Se envían los errores correctamente
                 else:
-                    data['error'] = 'No ha ingresado a ninguna opción'
+                    data['error'] = 'Acción no reconocida.'
             except Exception as e:
-                data['error'] = str(e)
+                data['success'] = False
+                data['error'] = str(e)  # Captura el error y lo envía
             return JsonResponse(data)
         else:
             return super().post(request, *args, **kwargs)
+
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -140,7 +142,7 @@ logger = logging.getLogger(__name__)
 
 class MembersDelete(GroupRequiredMixin, DeleteView):
     model = Miembro
-    context_object_name = 'administrador'
+    group_name = 'administrador'
     template_name = 'persona/delete.html'
     success_url = reverse_lazy('asys:miembro_list')
     url_redirect = success_url
@@ -171,10 +173,3 @@ class MembersDelete(GroupRequiredMixin, DeleteView):
         return context
 
     
-
-
-
-
-
-
-

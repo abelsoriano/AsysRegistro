@@ -10,7 +10,7 @@ from django.utils import timezone
 
 from app.choices import *
 from setting import settings
-from setting.settings import MEDIA_URL
+from setting.settings import MEDIA_URL, STATIC_URL
 from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator
 
@@ -83,7 +83,7 @@ class Miembro(models.Model):
     def get_image(self):
         if self.image:
             return "{}{}".format(MEDIA_URL, self.image)
-        return "{}{}".format(MEDIA_URL, "img/empty.png")
+        return "{}{}".format(STATIC_URL, "img/defoult.jpg")
 
     def toJSON(self):
         data = model_to_dict(self)
@@ -349,8 +349,8 @@ class CandidatoTransicion(models.Model):
         item = model_to_dict(self)
         return item
 
-class RegistroFinanzas(models.Model):
-    """Registro de finanzas por período de directiva"""
+class Registroapp(models.Model):
+    """Registro de app por período de directiva"""
     periodo = models.ForeignKey(PeriodoDirectiva, on_delete=models.CASCADE)
     total_miembros_recibidos = models.IntegerField(default=0)
     total_fondos_recibidos = models.DecimalField(max_digits=10, decimal_places=2, default=0)
@@ -449,7 +449,7 @@ class RegistroFinanciero(models.Model):
         return f"{self.fecha} - Diezmo: ${self.diezmo} - Ofrenda: ${self.ofrenda}"
     
     def get_absolute_url(self):
-        return reverse('finanzas:registro_detalle', args=[str(self.id)])
+        return reverse('app:registro_detalle', args=[str(self.id)])
     
     def get_total(self):
         return self.diezmo + self.ofrenda

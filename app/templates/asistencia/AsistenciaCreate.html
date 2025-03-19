@@ -77,36 +77,61 @@
 </div>
 
 <style>
-.miembro-card {
-    transition: all 0.3s ease;
-}
-
-.miembro-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 2px 5px rgba(241, 196, 15, 0.2);
-}
-
-.miembro-card .card {
-    border: 1px solid #F1C40F;
-    border-radius: 4px;
-}
-
-.miembro-card .card-body {
-    padding: 0.5rem;
-}
-
-.form-check-input:checked {
-    background-color: #F1C40F;
-    border-color: #F1C40F;
-}
-
-#searchMiembro {
-    border-color: #F1C40F;
-}
-
-.hidden {
-    display: none !important;
-}
+    .miembro-card {
+        transition: all 0.3s ease;
+        flex: 0 0 16.666667%; /* Asegura que cada card ocupe 1/6 del ancho (2 columnas en total) */
+        max-width: 16.666667%; /* Limita el ancho máximo */
+        padding: 0 5px; /* Añade un pequeño espacio entre los cards */
+        box-sizing: border-box; /* Asegura que el padding no afecte el ancho total */
+    }
+    
+    .miembro-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 2px 5px rgba(241, 196, 15, 0.2);
+    }
+    
+    .miembro-card .card {
+        border: 1px solid #F1C40F;
+        border-radius: 4px;
+        height: 100%; /* Asegura que todos los cards tengan la misma altura */
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .miembro-card .card-body {
+        padding: 0.5rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        flex-grow: 1; /* Asegura que el card-body ocupe todo el espacio disponible */
+    }
+    
+    .miembro-card .form-check {
+        display: flex;
+        align-items: center; /* Alinea el checkbox y el texto verticalmente */
+        width: 100%; /* Asegura que el form-check ocupe todo el ancho */
+    }
+    
+    .miembro-card .form-check-label {
+        white-space: nowrap; /* Evita que el texto se divida en varias líneas */
+        overflow: hidden; /* Oculta el texto que se desborda */
+        text-overflow: ellipsis; /* Muestra puntos suspensivos si el texto es demasiado largo */
+        max-width: calc(100% - 25px); /* Limita el ancho del texto, dejando espacio para el checkbox */
+        margin-left: 5px; /* Añade un pequeño margen entre el checkbox y el texto */
+    }
+    
+    .form-check-input:checked {
+        background-color: #F1C40F;
+        border-color: #F1C40F;
+    }
+    
+    #searchMiembro {
+        border-color: #F1C40F;
+    }
+    
+    .hidden {
+        display: none !important;
+    }
 </style>
 
 {% block javascript %}
@@ -145,4 +170,5 @@ $(document).ready(function() {
     });
 });
 </script>
-{% endblock %}{% endblock %}
+{% endblock %}
+{% endblock %}

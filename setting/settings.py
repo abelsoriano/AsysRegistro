@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',  # Este debe ir después de crispy_forms
     'bootstrap4',
     'django_select2',
+    'django.contrib.humanize',
 
 
     # Apps
@@ -136,6 +137,10 @@ TIME_ZONE = 'America/Santo_Domingo'
 USE_I18N = True
 
 USE_TZ = True
+
+MEDIA_URL = '/media/'  # URL base para archivos multimedia
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')     
 STATICFILES_DIRS = [BASE_DIR / "static"] 
@@ -152,13 +157,15 @@ CACHES = {
 
 SELECT2_CACHE_BACKEND = 'default'
 
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
 
 
 #Esto para la creacion de usuario
 AUTH_USER_MODEL = 'login.UsuarioPersonalizado' 
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedStaticFilesStorage' 
-
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
 
 LOGIN_REDIRECT_URL = '/home/'
@@ -175,7 +182,8 @@ MESSAGE_TAGS = {
 
 # AUTH_USER_MODEL = 'user.User'
 
-MEDIA_URL = '/media/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 

@@ -1,48 +1,46 @@
-{% extends 'body.html' %} {% load widget_tweaks %} {% block content %}{% load static %}
+{% extends 'body.html' %}
+{% load widget_tweaks %}
+{% load static %}
 
+{% block content %}
 <main class="container-fluid">
-			<form class="was-validated" method="post" action="." enctype="multipart/form-data">
-				{% csrf_token %}
-				<div class="my-3 p-3 bg-body rounded shadow-sm" id="data">
-					<input type="hidden" name="action" value="{{ action }}"> {% if form.errors %}
-					<div class="alert alert-danger alert-dismissible">
-						<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-						<h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
-						<ul>
-							{% for field in form %} {% for error in field.errors %}
-							<li>{{ error }}</li>
-							{% endfor %} {% endfor %}
-						</ul>
-					</div>
-					{% endif %} {% block campos %} {% endblock %}
-				</div>
-                
+    <form class="was-validated" method="post" action="." enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="my-3 p-3 bg-body rounded shadow-sm" id="data">
+            <input type="hidden" name="action" value="{{ action }}">
+            {% if form.errors %}
+                <div class="alert alert-danger alert-dismissible">
+                    <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+                    <h5><i class="icon fas fa-ban"></i> Ha ocurrido un error al querer guardar el registro</h5>
+                    <ul>
+                        {% for field in form %}
+                            {% for error in field.errors %}
+                                <li>{{ error }}</li>
+                            {% endfor %}
+                        {% endfor %}
+                    </ul>
+                </div>
+            {% endif %}
+            {% block campos %}
+            {% endblock %}
+        </div>
 
-                {% block botones %}
-                <button class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar</button>
-				{% comment %} <button href="{{create_url}}" class="btn btn-LightSeaGreen text-white" type="submit"><i class="fas fa-save"></i> Guardar y agregar otro</button> {% endcomment %}
-				<a href="{{list_url}}" class="btn btn-danger btn-flat">
-					<i class="fas fa-times"></i> Cancelar
-				</a>
-
-                {% endblock %}
- 
-				
-            </form>
-		</div>
-	</div>
-
-
-
-</main><br>
-
-
+        {% block botones %}
+        <button class="btn btn-LightSeaGreen text-white" type="submit">
+            <i class="fas fa-save"></i> Guardar
+        </button>
+        <a href="{{ list_url }}" class="btn btn-secondary">
+            <i class="fas fa-times"></i> Cancelar
+        </a>
+        {% endblock %}
+    </form>
+</main>
+<br>
+{% endblock %}
 
 {% block javascript %}
-
 <script>
-	document.addEventListener('DOMContentLoaded', function () {
-
+    document.addEventListener('DOMContentLoaded', function () {
         const form = document.querySelector('form');
         form.addEventListener('submit', function (e) {
             e.preventDefault();
@@ -61,20 +59,19 @@
             .then(data => {
                 if (data.success) {
                     Swal.fire({
-                        title: 'Success!',
+                        title: 'Éxito!',
                         text: action === 'add' ? 'El registro ha sido creado exitosamente.' : 'El registro ha sido actualizado exitosamente.',
                         icon: 'success'
                     }).then(() => {
                         window.location.href = '{{ list_url }}';
                     });
-            } else {
-                let errorMessages = 'Se produjo un error al procesar su solicitud.';
-                if (data.errors) {
-                    const errors = data.errors;
-                    errorMessages = Object.keys(errors).map(field => {
-                        return `${field}: ${errors[field].join(', ')}`;
-                    }).join('\n');
-                }
+                } else {
+                    let errorMessages = 'Se produjo un error al procesar su solicitud.';
+                    if (data.errors) {
+                        errorMessages = Object.entries(data.errors).map(([field, messages]) => {
+                            return `${field.toUpperCase()}: ${messages.join(', ')}`;
+                        }).join('\n');
+                    }
                     Swal.fire({
                         title: 'Error!',
                         text: errorMessages,
@@ -85,19 +82,15 @@
             .catch(error => {
                 Swal.fire({
                     title: 'Error!',
-                    text: 'Se produjo un error al procesar su solicitud.',
+                    text: 'Se produjo un error en la conexión.',
                     icon: 'error'
                 });
             });
         });
 
-        // Input masks for DNI and phone
+        // Aplicar máscaras de input
         Inputmask("999-9999999-9").mask(document.querySelector('[name="dni"]'));
         Inputmask("999-999-9999").mask(document.querySelector('[name="phone"]'));
-
-
     });
-
 </script>
-
-{% endblock %} {% endblock %}
+{% endblock %}
